@@ -450,6 +450,13 @@ class VideoAutoCutter:
         proj_dir = self.config.output_dir / "deliverables" / f"{run_date}_{cid}"
         proj_dir.mkdir(parents=True, exist_ok=True)
 
+        from agency_engine.evolution_engine import load_learned_policy
+
+        learned = load_learned_policy()
+        tts_rate_str = f"+{int(learned.get('tts_rate_pct', 14))}%"
+        max_words_chunk = int(learned.get("caption_max_words", 5))
+        dm_kw = str(learned.get("dm_trigger_keyword", "비교표"))
+
         voice = (
             "ko-KR-SunHiNeural"
             if script_plan.get("selected_persona") == "friendly" or "피부과" in script_plan.get("industry", "")
@@ -473,7 +480,7 @@ class VideoAutoCutter:
                 scene_audio = tmp_dir / f"voice_{idx:02d}.mp3"
                 boundaries: List[Dict[str, Any]] = []
                 try:
-                    boundaries = asyncio.run(_synthesize_edge_tts_with_boundaries(scene["subtitle"], voice=voice, out_mp3=scene_audio, rate="+14%"))
+                    boundaries = asyncio.run(_synthesize_edge_tts_with_boundaries(scene["subtitle"], voice=voice, out_mp3=scene_audio, rate=tts_rate_str))
                     dur = self.probe_duration(scene_audio)
                     if dur < 0.8:
                         raise RuntimeError("TTS duration too short")
@@ -489,7 +496,11 @@ class VideoAutoCutter:
                 bg_jpg = tmp_dir / f"bg_{idx:02d}.jpg"
                 self._prepare_cover_bg(photos[idx % len(photos)] if photos else None, bg_jpg)
 
-                karaoke_steps = _build_karaoke_chunks(scene["subtitle"], boundaries, seg_dur, highlight_kw=scene["highlight_keyword"])
+                karaoke_steps = _build_karaoke_chunks(
+                    scene["subtitle"], boundaries, seg_dur,
+                    highlight_kw=scene["highlight_keyword"],
+                    max_words_per_chunk=max_words_chunk,
+                )
                 ov_concat_lines: List[str] = []
                 step_cursor = cursor
 

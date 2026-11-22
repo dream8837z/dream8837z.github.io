@@ -1,0 +1,50 @@
+name: Periodic External-Expert Self-Evolution & Upgrade (Mon/Thu KST 08:30)
+
+on:
+  schedule:
+    # 매주 월·목 KST 08:30 (UTC 일·수 23:30) — 09:00 프로덕션 실행 30분 전 자율학습·업그레이드
+    - cron: "30 23 * * 0,3"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-expert-evolution
+  cancel-in-progress: false
+
+jobs:
+  evolve-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - run: pip install pillow imageio-ffmpeg edge-tts
+
+      - name: Run 3-Expert Periodic Audit & Bounded Autonomous Policy Upgrade
+        working-directory: autopilot/shortform-agency-autopilot
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python -m agency_engine evolve
+
+      - name: Verification Gate (Auto-Reject Upgrade if Any Test Fails)
+        working-directory: autopilot/shortform-agency-autopilot
+        run: python -m unittest tests.test_agency_autopilot.TestHooksLibrary tests.test_agency_autopilot.TestScriptPlanner tests.test_agency_autopilot.TestAgencyEconomics tests.test_agency_autopilot.TestEndToEndAgencyPipeline.test_autonomous_evolution_cycle_stays_within_safe_bounds -v
+
+      - name: Commit Evolved Policy & Learning Ledger to Main
+        run: |
+          git config user.name "autopilot-evolution-bot"
+          git config user.email "autopilot-evolution-bot@users.noreply.github.com"
+          git add autopilot/shortform-agency-autopilot/data/learned_policy.json autopilot/shortform-agency-autopilot/data/evolution_history.json
+          git diff --cached --quiet || git commit -m "chore(evolution): autonomous expert policy self-upgrade [skip ci]"
+          git push origin HEAD
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: expert-evolution-report
+          path: autopilot/shortform-agency-autopilot/output/evolution/
+          retention-days: 30

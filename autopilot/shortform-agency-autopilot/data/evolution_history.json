@@ -1,0 +1,43 @@
+[
+  {
+    "generation": 1,
+    "policy_version": 2,
+    "evolved_at_kst": "2026-11-23T00:48:13+09:00",
+    "applied_trend": "TR-2026-Q4-01",
+    "trend_title": "초고밀도 1.5초 4단어 카라오케 + 데이터 선제 타격",
+    "telemetry_snapshot": {
+      "projects_evaluated": 3,
+      "avg_retention_score": 99.0,
+      "avg_compression_pct": 32.4,
+      "crm_leads": 1,
+      "crm_projected_mrr_krw": 2500000
+    },
+    "expert_reviews": [
+      {
+        "expert": "Viral Shorts Algorithm & Trend Director",
+        "score": 92,
+        "finding": "현재 TTS 속도 +14% / 청크 최대 5단어. 4단어 초단문 카라오케 및 최신 손실회피/비교 가중치 상향 권장."
+      },
+      {
+        "expert": "B2B Performance Marketing & Funnel Director",
+        "score": 90,
+        "finding": "누적 리드 1건 (예상 MRR 2,500,000원). DM 트리거 키워드 로테이션으로 댓글 피로도 방지 및 전환율 극대화 권장."
+      },
+      {
+        "expert": "Broadcast AV & Retention Systems Director",
+        "score": 94,
+        "finding": "평균 압축률 -32.4%, -14 LUFS·48kHz 방송 규격 유지 중. 정책 파라미터 안전 범위(Bounded Guardrails) 내 자율 학습 승인."
+      }
+    ],
+    "llm_advisor_used": false,
+    "changes": {
+      "tts_rate_pct": "14% -> 16%",
+      "caption_max_words": "5 -> 4",
+      "dm_trigger_keyword": "비교표 -> 체크리스트",
+      "boosted_categories": {
+        "loss_warning": 0.06,
+        "comparison": 0.05
+      }
+    }
+  }
+]

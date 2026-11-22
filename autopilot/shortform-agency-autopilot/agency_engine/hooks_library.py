@@ -241,6 +241,9 @@ class HooksLibrary:
         return [asdict(h) for h in self.hooks]
 
     def match_for_brief(self, brief: ClientBrief, top_k: int = 10) -> List[Dict[str, Any]]:
+        from agency_engine.evolution_engine import load_learned_policy
+
+        cat_weights = load_learned_policy().get("hook_category_weights", {})
         rendered: List[Dict[str, Any]] = []
         for h in self.hooks:
             text = h.template.format(
@@ -256,7 +259,8 @@ class HooksLibrary:
                 bonus += 4
             if "시술" in brief.topic and h.category in ("info_gap", "authority_pro"):
                 bonus += 3
-            final_score = min(100, h.base_score + bonus)
+            weight = float(cat_weights.get(h.category, 1.0))
+            final_score = min(100, int(round((h.base_score + bonus) * weight)))
             rendered.append(
                 {
                     "hook_id": h.hook_id,

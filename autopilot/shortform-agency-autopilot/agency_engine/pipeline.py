@@ -100,11 +100,21 @@ def main(argv: List[str] | None = None) -> int:
     srv_p.add_argument("--host", default="127.0.0.1")
     srv_p.add_argument("--port", type=int, default=8796)
 
+    sub.add_parser("evolve", help="Run periodic 3-Expert Autonomous Self-Learning & Upgrade cycle")
+
     args = parser.parse_args(argv)
     if args.command == "serve":
         from agency_engine.live_server import run_live_server
 
         run_live_server(host=args.host, port=args.port)
+        return 0
+    if args.command == "evolve":
+        from agency_engine.evolution_engine import AutonomousEvolutionEngine
+
+        res = AutonomousEvolutionEngine().run_evolution_cycle()
+        print(f"[Autonomous Evolution] Generation #{res['generation']} (policy v{res['policy_version']})")
+        print(f"  Changes : {json.dumps(res['changes'], ensure_ascii=False)}")
+        print(f"  Report  : {res['report_path']}")
         return 0
 
     result = run_agency_pipeline(run_date=getattr(args, "run_date", None))

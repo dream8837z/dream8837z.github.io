@@ -1,0 +1,24 @@
+{
+  "policy_version": 2,
+  "generation": 1,
+  "updated_at_kst": "2026-11-23T00:48:13+09:00",
+  "tts_rate_pct": 16,
+  "caption_max_words": 4,
+  "hook_category_weights": {
+    "loss_warning": 1.11,
+    "comparison": 1.1,
+    "info_gap": 1.01,
+    "contrarian": 0.99,
+    "authority_pro": 0.99,
+    "listicle_number": 0.97,
+    "story_empathy": 0.95
+  },
+  "active_trend_playbooks": [
+    "초고밀도 1.5초 4단어 카라오케 + 데이터 선제 타격",
+    "한국어 SOV 명사 타겟 카라오케 강조",
+    "0~2.5초 패턴 인터럽트 훅 배너 + 워터마크 지연",
+    "Zero-Gap 무한루프 브릿지 + 1-키워드 DM 콜아웃"
+  ],
+  "dm_trigger_keyword": "체크리스트",
+  "last_expert_summary": "[TR-2026-Q4-01] 2026 하반기 쇼츠/릴스 피드에서 4단어 이하 초단문 카라오케와 1.16x 속도가 3초 잔존율을 +14% 개선함."
+}

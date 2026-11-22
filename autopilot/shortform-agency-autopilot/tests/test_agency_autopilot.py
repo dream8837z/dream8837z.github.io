@@ -158,6 +158,28 @@ class TestEndToEndAgencyPipeline(unittest.TestCase):
             self.assertTrue(Path(res["capcut_draft_path"]).exists())
             self.assertTrue(Path(res["premiere_fcpxml_path"]).exists())
 
+    def test_autonomous_evolution_cycle_stays_within_safe_bounds(self) -> None:
+        from agency_engine.evolution_engine import AutonomousEvolutionEngine, load_learned_policy
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_dir = Path(tmp)
+            cfg = AgencyConfig(output_dir=tmp_dir / "output")
+            pol_p = tmp_dir / "learned_policy.json"
+            hist_p = tmp_dir / "evolution_history.json"
+
+            eng = AutonomousEvolutionEngine(config=cfg, policy_path=pol_p, history_path=hist_p)
+            r1 = eng.run_evolution_cycle(run_date="2026-11-23")
+            r2 = eng.run_evolution_cycle(run_date="2026-11-26")
+
+            self.assertEqual(r1["generation"], 1)
+            self.assertEqual(r2["generation"], 2)
+            pol = load_learned_policy(pol_p)
+            self.assertTrue(8 <= pol["tts_rate_pct"] <= 22)
+            self.assertTrue(3 <= pol["caption_max_words"] <= 6)
+            for w in pol["hook_category_weights"].values():
+                self.assertTrue(0.80 <= w <= 1.35)
+            self.assertTrue(Path(r2["report_path"]).exists())
+
 
 if __name__ == "__main__":
     unittest.main()
