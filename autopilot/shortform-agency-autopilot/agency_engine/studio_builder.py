@@ -157,6 +157,7 @@ class AgencyStudioBuilder:
     <button class="nav-btn" onclick="switchView('sales', this)">04 · 영업 키트 &amp; 계약서</button>
     <button class="nav-btn" onclick="switchView('audit', this)">05 · 단가 시뮬레이터 &amp; 감사</button>
     <button class="nav-btn" onclick="switchView('monetize', this)">06 · 수익화 퍼널 &amp; 리드 CRM</button>
+    <button class="nav-btn" onclick="switchView('evolution', this);refreshEvolution();">07 · 자율학습 &amp; 전문가 진화</button>
     <div class="sidebar-foot">
       <div>Broadcast -14 LUFS · Karaoke</div>
       <div style="margin-top:4px;">Run: {_esc(run_date)}</div>
@@ -333,6 +334,38 @@ class AgencyStudioBuilder:
           <table>
             <thead><tr><th>리드 ID</th><th>브랜드명</th><th>패키지</th><th>예상 MRR</th><th>단계 전환</th><th>3단계 드립 복사</th></tr></thead>
             <tbody id="crmTableBody"><tr><td colspan="6" class="muted">불러오는 중...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 7: AUTONOMOUS SELF-EVOLUTION & EXPERT PANEL -->
+    <section id="view-evolution" class="view">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h2>주기적 외부 전문가 자율학습 &amp; 정책 진화 센터 (v5.0)</h2>
+            <div class="muted">매주 월·목 KST 08:30 클라우드 자동 실행 · YouTube 실시간 성과 + 3인 전문가 감사 → 안전 가드레일 내 정책 자율 업그레이드 &amp; 1클릭 롤백</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn accent-btn" id="btnRunEvo" onclick="runEvolutionNow()">⚡ 외부 전문가 진화 사이클 즉시 실행</button>
+            <button class="btn" onclick="rollbackEvolution(0)">↺ 초기 베이스라인 복원</button>
+          </div>
+        </div>
+        <div class="metrics" style="margin-top:16px;margin-bottom:0;">
+          <div class="metric"><div class="metric-k">현재 진화 세대</div><div class="metric-v accent" id="evoGen">Gen #0</div><div class="metric-s" id="evoVer">Policy v1</div></div>
+          <div class="metric"><div class="metric-k">학습된 TTS 속도</div><div class="metric-v" id="evoTts">+14%</div><div class="metric-s">안전 범위 +8% ~ +22%</div></div>
+          <div class="metric"><div class="metric-k">카라오케 청크 단어수</div><div class="metric-v" id="evoWords">5단어</div><div class="metric-s">안전 범위 3 ~ 6단어</div></div>
+          <div class="metric"><div class="metric-k">활성 댓글 DM 키워드</div><div class="metric-v" id="evoDm">비교표</div><div class="metric-s">자동 로테이션 적용</div></div>
+        </div>
+        <div id="evoWeights" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;"></div>
+      </div>
+      <div class="panel">
+        <h2>자율 진화 이력 (Immutable Evolution Ledger)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>세대</th><th>실행 시각</th><th>적용된 최신 트렌드</th><th>파라미터 변경 Diff</th><th>복원</th></tr></thead>
+            <tbody id="evoTableBody"><tr><td colspan="5" class="muted">불러오는 중...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -598,9 +631,62 @@ class AgencyStudioBuilder:
     toast('클립보드에 복사되었습니다');
   }}
 
+  async function refreshEvolution() {{
+    try {{
+      const r = await fetch('/api/evolution');
+      const d = await r.json();
+      const p = d.current_policy || {{}};
+      document.getElementById('evoGen').textContent = 'Gen #' + (p.generation ?? 0);
+      document.getElementById('evoVer').textContent = 'Policy v' + (p.policy_version ?? 1);
+      document.getElementById('evoTts').textContent = '+' + (p.tts_rate_pct ?? 14) + '%';
+      document.getElementById('evoWords').textContent = (p.caption_max_words ?? 5) + '단어';
+      document.getElementById('evoDm').textContent = p.dm_trigger_keyword || '비교표';
+      const wEl = document.getElementById('evoWeights');
+      const ws = p.hook_category_weights || {{}};
+      wEl.innerHTML = Object.keys(ws).map(k => `<span class="tag gold">${{escHtml(k)}}: ${{escHtml(ws[k])}}x</span>`).join('');
+      const tb = document.getElementById('evoTableBody');
+      const hist = d.history || [];
+      if (!hist.length) {{
+        tb.innerHTML = '<tr><td colspan="5" class="muted">아직 진화 이력이 없습니다. 상단 버튼을 눌러 1세대 진화를 실행하세요.</td></tr>';
+        return;
+      }}
+      tb.innerHTML = hist.map(h => `
+        <tr>
+          <td class="mono accent">Gen #${{escHtml(h.generation)}} (v${{escHtml(h.policy_version)}})</td>
+          <td class="mono muted">${{escHtml(h.evolved_at_kst)}}</td>
+          <td><strong>${{escHtml(h.trend_title)}}</strong><div class="muted" style="font-size:11px;">${{escHtml(h.applied_trend)}}</div></td>
+          <td class="mono">TTS ${{escHtml(h.changes.tts_rate_pct)}} · 단어 ${{escHtml(h.changes.caption_max_words)}} · DM ${{escHtml(h.changes.dm_trigger_keyword)}}</td>
+          <td><button class="btn sm" onclick="rollbackEvolution(${{Number(h.generation)}})">↺ 롤백</button></td>
+        </tr>
+      `).join('');
+    }} catch (e) {{}}
+  }}
+
+  async function runEvolutionNow() {{
+    const btn = document.getElementById('btnRunEvo');
+    btn.disabled = true;
+    try {{
+      const r = await fetch('/api/evolution/run', {{ method: 'POST', headers: {{'Content-Type':'application/json'}}, body: '{{}}' }});
+      const d = await r.json();
+      if (d.ok) {{ toast(`자율 진화 완료: Gen #${{d.generation}} (Policy v${{d.policy_version}})`); refreshEvolution(); }}
+    }} catch (e) {{ toast('진화 실행 오류'); }}
+    finally {{ btn.disabled = false; }}
+  }}
+
+  async function rollbackEvolution(gen) {{
+    try {{
+      const r = await fetch('/api/evolution/rollback', {{
+        method: 'POST', headers: {{'Content-Type':'application/json'}}, body: JSON.stringify({{ generation: gen }})
+      }});
+      const d = await r.json();
+      if (d.ok) {{ toast(`Gen #${{gen}} 정책으로 안전 롤백 완료`); refreshEvolution(); }}
+    }} catch (e) {{ toast('롤백 오류'); }}
+  }}
+
   initProjectTabs();
   renderHooks();
   refreshCrm();
+  refreshEvolution();
 </script>
 </body>
 </html>

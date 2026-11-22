@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 from agency_engine.config import AgencyConfig, ClientBrief
+from agency_engine.evolution_engine import AutonomousEvolutionEngine
 from agency_engine.hooks_library import HooksLibrary
 from agency_engine.monetization_engine import MonetizationEngine
 from agency_engine.pipeline import run_agency_pipeline
@@ -265,6 +266,9 @@ def make_handler(daemon: AgencyAutomationDaemon):
             if parsed.path == "/api/crm":
                 self._send_json(HTTPStatus.OK, MonetizationEngine(daemon.config).crm_summary())
                 return
+            if parsed.path == "/api/evolution":
+                self._send_json(HTTPStatus.OK, AutonomousEvolutionEngine(daemon.config).summary())
+                return
             if parsed.path.startswith("/api/download-bundle/"):
                 client_id = parsed.path.removeprefix("/api/download-bundle/").strip("/")
                 try:
@@ -296,7 +300,7 @@ def make_handler(daemon: AgencyAutomationDaemon):
                 self._send_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "Invalid Content-Length"})
                 return
 
-            if parsed.path in ("/api/lead", "/api/crm/stage", "/api/generate-client"):
+            if parsed.path in ("/api/lead", "/api/crm/stage", "/api/generate-client", "/api/evolution/run", "/api/evolution/rollback"):
                 if length > MAX_JSON_BYTES:
                     self._send_json(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "JSON payload exceeds 64KB limit"})
                     return
@@ -307,6 +311,16 @@ def make_handler(daemon: AgencyAutomationDaemon):
                     return
 
                 try:
+                    if parsed.path == "/api/evolution/run":
+                        evo = AutonomousEvolutionEngine(daemon.config)
+                        res = evo.run_evolution_cycle()
+                        self._send_json(HTTPStatus.OK, {**res, "summary": evo.summary()})
+                        return
+                    if parsed.path == "/api/evolution/rollback":
+                        evo = AutonomousEvolutionEngine(daemon.config)
+                        res = evo.rollback_to_generation(int(req.get("generation", 0)))
+                        self._send_json(HTTPStatus.OK, {**res, "summary": evo.summary()})
+                        return
                     if parsed.path == "/api/lead":
                         mon = MonetizationEngine(daemon.config)
                         lead = mon.capture_lead_and_generate_proposal(req)

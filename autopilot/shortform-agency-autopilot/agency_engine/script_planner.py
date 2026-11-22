@@ -123,11 +123,17 @@ class ScriptPlanner:
         cta_pts = 10
         if any(k in cta_text for k in ("댓글", "DM", "팔로우")):
             cta_pts += 6
-        if "저장" in cta_text:
+        if any(k in cta_text for k in ("비교표", "체크리스트", "가이드", "저장")):
             cta_pts += 4
         cta_pts = min(20, cta_pts)
 
-        total = hook_pts + loop_pts + pacing_pts + proof_pts + cta_pts
+        # v5.0 Discriminative Calibration: Lexical diversity (TTR) + Anti-cliche spam penalty
+        tokens = re.findall(r"[가-힣a-zA-Z0-9]+", full_text)
+        ttr = len(set(tokens)) / max(1, len(tokens))
+        cliche_hits = sum(1 for c in ("무조건 대박", "인생 역전", "100% 보장", "기적의") if c in full_text)
+        calibration = (2 if ttr >= 0.78 else (-3 if ttr < 0.62 else 0)) - (cliche_hits * 6)
+
+        total = max(0, min(100, hook_pts + loop_pts + pacing_pts + proof_pts + cta_pts + calibration))
         grade = "S" if total >= 92 else ("A" if total >= 84 else ("B" if total >= 74 else "C"))
         est_3s_hold = min(89.5, round(52.0 + (hook_pts / 25.0) * 34.0, 1))
         est_completion = min(68.0, round(24.0 + (total / 100.0) * 39.0, 1))
@@ -135,6 +141,8 @@ class ScriptPlanner:
         return {
             "total_score": total,
             "grade": grade,
+            "lexical_diversity_ttr": round(ttr, 2),
+            "cliche_penalty": cliche_hits * 6,
             "predicted_3s_hold_pct": est_3s_hold,
             "predicted_completion_pct": est_completion,
             "axes": {
@@ -147,6 +155,9 @@ class ScriptPlanner:
         }
 
     def _build_4stage_scenes(self, brief: ClientBrief, main_hook: str) -> List[Dict[str, Any]]:
+        from agency_engine.evolution_engine import load_learned_policy
+
+        dm_kw = str(load_learned_policy().get("dm_trigger_keyword", "비교표"))
         return [
             {
                 "stage": "1단계 · 멈추기 (3초 후킹)",
@@ -186,8 +197,8 @@ class ScriptPlanner:
             {
                 "stage": "4단계 · 루프 브릿지 + DM CTA",
                 "duration_sec": 2.4,
-                "subtitle": f"댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,",
-                "highlight_keyword": "댓글 '비교표' → DM",
+                "subtitle": f"댓글에 '{dm_kw}' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,",
+                "highlight_keyword": f"댓글 '{dm_kw}' → DM",
                 "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결",
             },
         ]
