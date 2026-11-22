@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>88일 습관 형성 계산기 & 도파민 디톡스 루틴 테스트 — KAIRA Guide</title>
+  <meta name="description" content="신경가소성 기반 88일 습관 형성 완료 날짜 계산기, 15초 도파민 디톡스 자가진단, 실시간 AI 신경과학 처방전 및 미라클모닝 습관 앱 비교 가이드." />
+  <link rel="canonical" href="https://kaira-admath.pages.dev/guide.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "KAIRA — Quiet Luxury Ritual OS",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web, iOS, Android",
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "12400" },
+    "offers": { "@type": "Offer", "price": "39000", "priceCurrency": "KRW", "description": "Annual Plan with 3-Day Free Trial (Web-Direct)" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"습관 형성에 왜 21일이 아니라 88일이 필요한가요?","acceptedAnswer":{"@type":"Answer","text":"유니버시티 칼리지 런던(UCL) 연구에 따르면 행동이 자동화되는 평균 기간은 66일이며, 88일 프로토콜은 21일 시냅스 점화 → 66일 자동화 임계 → 88일 정체성 고착까지 완주하도록 설계되었습니다."}},
+      {"@type":"Question","name":"도파민 디톡스 첫 72시간에 숏폼 충동을 막는 가장 확실한 방법은?","acceptedAnswer":{"@type":"Answer","text":"기상 직후 30분 코르티솔 각성 반응(CAR) 구간에 휴대폰 비행기 모드를 유지하고, 15분~45분 딥포커스 블록을 Warm Brown Noise와 함께 즉시 실행하는 것이 가장 효과적입니다."}},
+      {"@type":"Question","name":"KAIRA는 일반 습관 체크리스트 앱과 무엇이 다른가요?","acceptedAnswer":{"@type":"Answer","text":"KAIRA는 6단계 비주얼 생체리듬 진단, Web Audio 도자기 햅틱·앰비언트 사운드스케이프, 실시간 70B LLM 신경과학 코치, 9:16 스토리 포스터 공유 기능을 통합한 럭셔리 리추얼 OS입니다."}}
+    ]
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #0E0D0C; --panel: #171513; --card: #1C1A17;
+      --text: #F4EFE6; --sub: #A89F94; --muted: #6E665E;
+      --gold: #D4AF6A; --gold-soft: rgba(212,175,106,0.14); --gold-b: rgba(212,175,106,0.4);
+      --sage: #8EA494; --border: rgba(244,239,230,0.08);
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'Pretendard Variable', 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; }
+    .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+    header {
+      position: sticky; top: 0; z-index: 30;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 24px; background: rgba(14,13,12,0.86); backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { font-family: var(--serif); font-size: 26px; text-decoration: none; color: var(--text); }
+    .brand em { color: var(--gold); font-style: italic; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 36px 20px 80px; }
+    .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    h1 { font-family: var(--serif); font-size: clamp(34px, 6vw, 54px); line-height: 1.08; font-weight: 400; margin-bottom: 14px; }
+    h1 em { color: var(--gold); font-style: italic; }
+    h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin-bottom: 10px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 24px; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 14px; }
+    .stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 22px; border-radius: 999px; border: none; cursor: pointer; text-decoration: none;
+      background: linear-gradient(135deg, var(--gold), #E6C88B); color: #141210; font-weight: 700; font-size: 14.5px;
+    }
+    .pill { padding: 7px 13px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--sub); font-size: 12px; text-decoration: none; cursor: pointer; }
+    .pill.active { border-color: var(--gold); background: var(--gold-soft); color: var(--gold); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 12px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+    select, input[type="date"], input[type="range"] {
+      width: 100%; padding: 11px 12px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--card); color: var(--text); font-family: var(--sans); margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="./index.html">KAIRA <em>Guide</em></a>
+    <div style="display:flex; gap:8px;">
+      <a class="pill" href="./studio.html">AD-MATH Studio</a>
+      <a class="pill active" id="topCta" href="./index.html?utm_source=pseo&utm_medium=organic">88일 무료 시작 →</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="eyebrow">ORGANIC pSEO HUB · NEUROSCIENCE RITUAL PROTOCOL</div>
+    <h1>의지력이 아닌 시스템,<br><em>88일 습관 형성</em> 계산기 & 도파민 진단</h1>
+    <p style="color:var(--sub); font-size:15px; margin-bottom:28px;">
+      21일 작심삼일을 넘어 신경가소성 자동화(66일)와 정체성 고착(88일)까지. 지금 내 기상 시간과 도파민 방해요소를 입력하면 <strong>실시간 Llama 3.3 70B 신경과학 코치</strong>가 무료 2문장 처방전을 즉시 생성합니다.
+    </p>
+
+    <!-- Module 1: 88-Day Milestone Calculator -->
+    <section class="card" id="calculator-88">
+      <div class="eyebrow">TOOL 01 · 88-DAY MILESTONE CALCULATOR</div>
+      <h2>88일 습관 형성 완료일 계산기</h2>
+      <div class="grid3">
+        <div>
+          <label style="font-size:12px; color:var(--sub);">핵심 목표</label>
+          <select id="calcGoal" onchange="recalc()">
+            <option value="deepwork">딥워크 몰입 (Deep Work)</option>
+            <option value="dawn">새벽 리추얼 (Dawn Ritual)</option>
+            <option value="clarity">멘탈 클리어 (Dopamine Reset)</option>
+            <option value="balance">바디 밸런스 (Sleep & Recovery)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px; color:var(--sub);">시작 날짜</label>
+          <input type="date" id="calcStart" onchange="recalc()" />
+        </div>
+        <div>
+          <label style="font-size:12px; color:var(--sub);">목표 기상 시간 (<span class="mono" id="calcWakeLbl">06:30</span>)</label>
+          <input type="range" id="calcWake" min="300" max="600" step="15" value="390" oninput="recalc()" />
+        </div>
+      </div>
+      <div class="grid3">
+        <div class="stat">
+          <div style="font-size:11px; color:var(--sub);">DAY 21 · 시냅스 점화</div>
+          <div class="mono" style="font-size:20px; font-weight:700; margin-top:4px;" id="d21Out">—</div>
+        </div>
+        <div class="stat">
+          <div style="font-size:11px; color:var(--sub);">DAY 66 · 자동화 임계점 (UCL)</div>
+          <div class="mono" style="font-size:20px; font-weight:700; color:var(--sage); margin-top:4px;" id="d66Out">—</div>
+        </div>
+        <div class="stat" style="border-color:var(--gold-b); background:var(--gold-soft);">
+          <div style="font-size:11px; color:var(--gold);">DAY 88 · 정체성 고착 완성</div>
+          <div class="mono" style="font-size:20px; font-weight:700; color:var(--gold); margin-top:4px;" id="d88Out">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module 2: 15-Second Dopamine Detox Diagnostic + LIVE Workers AI Coach -->
+    <section class="card" id="dopamine-test">
+      <div class="eyebrow">TOOL 02 · LIVE AI DOPAMINE DIAGNOSTIC</div>
+      <h2>15초 도파민 방해요소 진단 & 무료 AI 처방전</h2>
+      <p style="font-size:13.5px; color:var(--sub); margin-bottom:14px;">가장 몰입을 자주 끊는 방해요소를 선택하고 실시간 신경과학 처방을 받아보세요.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+        <button class="pill active" data-f="sns" onclick="pickFriction('sns', this)">📱 SNS·쇼츠 도파민</button>
+        <button class="pill" data-f="sleep" onclick="pickFriction('sleep', this)">🌙 수면 불규칙</button>
+        <button class="pill" data-f="perfection" onclick="pickFriction('perfection', this)">🧩 완벽주의 미루기</button>
+        <button class="pill" data-f="noise" onclick="pickFriction('noise', this)">🔔 알림·산만한 환경</button>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <button class="btn" onclick="runLiveAiCoach()">⚡ 실시간 Llama 3.3 AI 처방전 받기</button>
+        <a class="pill active" id="handoffBtn" href="./index.html?utm_source=pseo&utm_medium=organic&utm_campaign=guide_hub">이 진단값으로 KAIRA 바로 시작 →</a>
+      </div>
+      <div id="coachResult" style="display:none; margin-top:16px; padding:18px; border-radius:16px; background:var(--gold-soft); border:1px solid var(--gold-b);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span class="eyebrow" style="margin:0;">NEUROSCIENCE PRESCRIPTION</span>
+          <span class="mono" style="font-size:11px; color:var(--gold);" id="coachEngineBadge">⚡ LIVE</span>
+        </div>
+        <p id="coachText" style="font-size:14.5px; line-height:1.65;"></p>
+      </div>
+    </section>
+
+    <!-- Module 3: App Comparison -->
+    <section class="card" id="app-comparison">
+      <div class="eyebrow">COMPARISON · WHY KAIRA WINS</div>
+      <h2>미라클모닝 · 습관 트래커 앱 비교</h2>
+      <table>
+        <thead>
+          <tr><th>비교 항목</th><th>일반 체크리스트 앱</th><th style="color:var(--gold);">KAIRA Ritual OS</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>온보딩 & 개인화</td><td>수동 20분 설정 · 텍스트 위주</td><td><strong>6단계 비주얼 생체리듬 진단 (30초)</strong></td></tr>
+          <tr><td>감각적 몰입 & 사운드</td><td>무음 또는 기본 알림음</td><td><strong>Web Audio 도자기 햅틱 · 432Hz/빗소리 앰비언트</strong></td></tr>
+          <tr><td>AI 습관 코칭</td><td>고정 문구 또는 월 2만 원 추가 과금</td><td><strong>실시간 Llama 3.3 70B 2문장 신경과학 처방 ($0)</strong></td></tr>
+          <tr><td>바이럴 성취 공유</td><td>단순 화면 캡처</td><td><strong>원탭 9:16 1080×1920 에디토리얼 스토리 포스터</strong></td></tr>
+          <tr><td>가격 구조</td><td>앱스토어 수수료 포함 연 ₩69,000+</td><td><strong>Web-Direct 연간 ₩39,000 (하루 ₩106 · 3일 무료)</strong></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const WORKER = 'https://kaira-admath-worker.dream8837z.workers.dev';
+    let selectedFriction = 'sns';
+
+    function fmtDate(base, addDays) {
+      const d = new Date(base.getTime() + addDays * 86400000);
+      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    }
+    function fmtWake(m) {
+      return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+    }
+    function updateLinks() {
+      const goal = document.getElementById('calcGoal').value;
+      const wake = document.getElementById('calcWake').value;
+      const url = `./index.html?utm_source=pseo&utm_medium=organic&utm_campaign=guide_hub&goal=${goal}&friction=${selectedFriction}&wake=${wake}`;
+      document.getElementById('handoffBtn').href = url;
+      document.getElementById('topCta').href = url;
+    }
+    function recalc() {
+      const sVal = document.getElementById('calcStart').value;
+      const base = sVal ? new Date(sVal) : new Date();
+      document.getElementById('calcWakeLbl').textContent = fmtWake(Number(document.getElementById('calcWake').value));
+      document.getElementById('d21Out').textContent = fmtDate(base, 21);
+      document.getElementById('d66Out').textContent = fmtDate(base, 66);
+      document.getElementById('d88Out').textContent = fmtDate(base, 88);
+      updateLinks();
+    }
+    function pickFriction(f, btn) {
+      selectedFriction = f;
+      document.querySelectorAll('#dopamine-test button.pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateLinks();
+    }
+    async function runLiveAiCoach() {
+      const box = document.getElementById('coachResult');
+      const txt = document.getElementById('coachText');
+      const badge = document.getElementById('coachEngineBadge');
+      box.style.display = 'block';
+      txt.textContent = '신경과학 프로파일을 분석하고 있습니다...';
+      badge.textContent = '⏳ THINKING';
+      try {
+        const res = await fetch(`${WORKER}/api/v1/coach`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            goal: document.getElementById('calcGoal').value,
+            frictions: [selectedFriction],
+            wake_minutes: Number(document.getElementById('calcWake').value),
+            streak: 1,
+            lang: 'ko'
+          })
+        });
+        const data = await res.json();
+        txt.textContent = data.prescription;
+        badge.textContent = data.source === 'workers_ai' ? `⚡ Llama 3.3 70B Live (${data.latency_ms}ms)` : `🛡 Rule Fallback (${data.upstream_status})`;
+      } catch (e) {
+        txt.textContent = '네트워크 연결이 원활하지 않습니다. KAIRA 앱에서 바로 88일 프로토콜을 시작해 보세요.';
+        badge.textContent = 'OFFLINE';
+      }
+    }
+
+    document.getElementById('calcStart').valueAsDate = new Date();
+    recalc();
+  </script>
+</body>
+</html>

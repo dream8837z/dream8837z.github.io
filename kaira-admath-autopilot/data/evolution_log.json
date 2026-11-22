@@ -1,0 +1,15 @@
+{
+  "cycle_days": 3,
+  "cycles": [
+    {
+      "evaluated_at": "2026-11-23 00:44:32 KST",
+      "patch_version": "v2.0.1-auto",
+      "d1_entries_3d": 1,
+      "d1_cvr_pct": 100,
+      "d1_downsell_lift_pp": 100,
+      "content_needed": true,
+      "ui_needed": false,
+      "summary_note": "Content: UPDATE | UI/CRO: OPTIMAL | Usability: maintain_quiet_luxury_flow"
+    }
+  ]
+}

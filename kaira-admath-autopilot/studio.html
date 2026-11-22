@@ -243,19 +243,41 @@
 <body>
   <header class="cmd-bar">
     <div class="masthead">
-      <span class="masthead-title">AD-MATH <em>Command Studio</em></span>
+      <span class="masthead-title">AD-MATH <em>Command Studio v2.0</em></span>
       <span class="pill gold">SERVER COST $0 · CLOUDFLARE D1</span>
-      <span class="pill safe" id="genTimePill">LIVE AUTOPILOT</span>
+      <span class="pill safe" id="genTimePill">● CONNECTING D1...</span>
+      <button class="pill" onclick="boot()" title="Re-sync live Cloudflare D1">↻ SYNC</button>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
       <span class="pill danger" id="alertBadge">3 GUARDRAILS</span>
-      <a class="pill gold" href="./index.html">← KAIRA 소비자 앱 열기</a>
+      <a class="pill" href="./guide.html">pSEO Guide</a>
+      <a class="pill gold" href="./index.html">← KAIRA v2.0 앱 열기</a>
     </div>
   </header>
 
   <main class="container">
     <!-- Top KPI Ribbon -->
     <section class="kpi-ribbon" id="kpiRibbon"></section>
+
+    <!-- NEW v2.0 Full Width: Live D1 Onboarding Funnel & Downsell Recovery Telemetry + 3-Day Autonomous Evolution -->
+    <div class="split-grid" style="margin-bottom:14px;">
+      <section class="panel" style="margin-bottom:0;">
+        <div class="panel-head">
+          <div class="panel-title">📊 KAIRA 실시간 온보딩 퍼널 & Downsell 75% 리커버리 (Cloudflare D1 Live)</div>
+          <span class="pill safe mono" id="funnelCvrBadge">CVR —%</span>
+        </div>
+        <div id="liveFunnelBars"></div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px;" id="funnelLiftCards"></div>
+      </section>
+
+      <section class="panel" style="margin-bottom:0;">
+        <div class="panel-head">
+          <div class="panel-title">🧬 3일 주기 자율학습 & 고도화 패치 모니터</div>
+          <span class="pill gold mono" id="evoPatchVer">v2.0.1-auto</span>
+        </div>
+        <div id="evoPanelBody" style="font-size:12.5px; color:var(--text-secondary);">3일 주기 자율 평가 로그를 불러오는 중...</div>
+      </section>
+    </div>
 
     <!-- Main 2-Column Command Split -->
     <div class="split-grid">
@@ -426,29 +448,101 @@
   </main>
 
   <script>
+    const WORKER_API = 'https://kaira-admath-worker.dream8837z.workers.dev';
     let BRIEF = null;
     let PACK = null;
     let ASSETS = null;
+    let LIVE_FUNNEL = null;
+    let EVO_CFG = null;
+    let D1_ITEMS = null;
     let currentRail = 'global';
     let currentKwMarket = 'US';
 
     async function boot() {
-      try {
-        const [bRes, pRes, aRes] = await Promise.all([
-          fetch('./data/morning_brief.json'),
-          fetch('./data/creative_pack.json'),
-          fetch('./data/ai_assets_manifest.json')
-        ]);
-        BRIEF = await bRes.json();
-        PACK = await pRes.json();
-        ASSETS = await aRes.json();
-      } catch (e) {
-        console.warn('Direct file:// fallback active');
+      const t0 = performance.now();
+      const [bRes, pRes, aRes, eRes, hRes, mRes, fRes] = await Promise.allSettled([
+        fetch('./data/morning_brief.json').then(r => r.json()),
+        fetch('./data/creative_pack.json').then(r => r.json()),
+        fetch('./data/ai_assets_manifest.json').then(r => r.json()),
+        fetch('./data/evolution_config.json').then(r => r.json()),
+        fetch(`${WORKER_API}/api/v1/health`).then(r => r.json()),
+        fetch(`${WORKER_API}/api/v1/dashboard/morning-brief`).then(r => r.json()),
+        fetch(`${WORKER_API}/api/v1/dashboard/funnel?days=7`).then(r => r.json()),
+      ]);
+      if (bRes.status === 'fulfilled') BRIEF = bRes.value;
+      if (pRes.status === 'fulfilled') PACK = pRes.value;
+      if (aRes.status === 'fulfilled') ASSETS = aRes.value;
+      if (eRes.status === 'fulfilled') EVO_CFG = eRes.value;
+      if (mRes.status === 'fulfilled' && mRes.value.items) D1_ITEMS = mRes.value.items;
+      if (fRes.status === 'fulfilled') LIVE_FUNNEL = fRes.value;
+
+      const rtt = Math.round(performance.now() - t0);
+      const pill = document.getElementById('genTimePill');
+      if (hRes.status === 'fulfilled' && hRes.value.ok) {
+        pill.className = 'pill safe';
+        pill.textContent = `● LIVE D1 CONNECTED · ${rtt}ms`;
+      } else {
+        pill.className = 'pill warn';
+        pill.textContent = '● STATIC FALLBACK';
       }
+
       renderAll();
+      renderLiveFunnel();
+      renderEvolution();
       updateGauge();
       updateHybridSim();
       checkGuardrail();
+    }
+
+    function renderLiveFunnel() {
+      const barsEl = document.getElementById('liveFunnelBars');
+      const cardsEl = document.getElementById('funnelLiftCards');
+      if (!LIVE_FUNNEL || !LIVE_FUNNEL.steps) {
+        barsEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">D1 퍼널 데이터를 불러올 수 없습니다.</div>';
+        return;
+      }
+      const s = LIVE_FUNNEL.summary;
+      document.getElementById('funnelCvrBadge').textContent = `CVR ${s.overall_cvr_pct}% · LIFT +${s.downsell_cvr_lift_pp}%p`;
+      barsEl.innerHTML = LIVE_FUNNEL.steps.map(st => {
+        const isBottle = st.step_index <= 6 && st.drop_off_pct >= 20;
+        const barCol = st.step_index === 99 ? 'var(--safe)' : isBottle ? 'var(--danger)' : 'var(--gold)';
+        return `
+          <div style="display:grid; grid-template-columns:138px 1fr 126px; gap:10px; align-items:center; margin-bottom:7px; font-size:12px;">
+            <span style="color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${st.label}</span>
+            <div style="height:12px; background:var(--bg-base); border-radius:6px; overflow:hidden; border:1px solid var(--border);">
+              <div style="height:100%; width:${Math.max(4, st.pct_of_step1)}%; background:${barCol}; transition:width 0.4s ease;"></div>
+            </div>
+            <span class="mono" style="text-align:right; font-size:11px; color:${isBottle ? 'var(--danger)' : 'var(--text-primary)'};">
+              ${st.users}명 (${st.pct_of_step1}%)${isBottle ? ' ⚠' : ''}
+            </span>
+          </div>`;
+      }).join('');
+      cardsEl.innerHTML = `
+        <div style="background:var(--bg-surface); padding:9px; border-radius:8px; border:1px solid var(--border);"><div style="font-size:10px; color:var(--text-muted);">Step1 진입</div><div class="mono" style="font-size:16px; font-weight:700;">${s.total_entries}명</div></div>
+        <div style="background:var(--bg-surface); padding:9px; border-radius:8px; border:1px solid var(--border);"><div style="font-size:10px; color:var(--text-muted);">유료/체험 결제</div><div class="mono" style="font-size:16px; font-weight:700; color:var(--gold);">${s.paid_total}명</div></div>
+        <div style="background:var(--bg-surface); padding:9px; border-radius:8px; border:1px solid var(--border);"><div style="font-size:10px; color:var(--text-muted);">Downsell 수락</div><div class="mono" style="font-size:16px; font-weight:700; color:var(--safe);">${s.downsell_accepted}/${s.downsell_shown}건</div></div>
+        <div style="background:var(--bg-surface); padding:9px; border-radius:8px; border:1px solid var(--border);"><div style="font-size:10px; color:var(--text-muted);">D1 실수령 순매출</div><div class="mono" style="font-size:15px; font-weight:700; color:var(--safe);">${fmtKrw(s.total_net_revenue_krw)}</div></div>`;
+    }
+
+    function renderEvolution() {
+      const el = document.getElementById('evoPanelBody');
+      if (!EVO_CFG) return;
+      document.getElementById('evoPatchVer').textContent = `${EVO_CFG.patch_version} · 3D CYCLE`;
+      const ev = EVO_CFG.evaluations;
+      el.innerHTML = `
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">최근 자율 진단: <span class="mono">${EVO_CFG.last_evaluated_at}</span></div>
+        ${[
+          ['콘텐츠 / 크리에이티브', ev.content],
+          ['UI / 온보딩 CRO', ev.ui_cro],
+          ['편의성 / 리텐션 학습', ev.usability]
+        ].map(([title, obj]) => `
+          <div style="padding:10px 12px; border-radius:9px; background:var(--bg-surface); border:1px solid var(--border); margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
+              <strong style="color:var(--text-primary); font-size:12px;">${title}</strong>
+              <span class="pill ${obj.needed ? 'warn' : 'safe'}" style="font-size:9.5px;">${obj.needed ? 'UPDATE NEEDED' : 'OPTIMAL'}</span>
+            </div>
+            <div style="font-size:11.5px; color:var(--text-secondary);">${obj.reason}</div>
+          </div>`).join('')}`;
     }
 
     function fmtKrw(n) {
@@ -494,8 +588,12 @@
           <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">BE-CPA ${fmtKrw(sc.breakeven_cpa_krw)} · ${sc.verdict}</div>
         </div>`).join('');
 
-      // Campaign Action Queue
+      // Campaign Action Queue (merged with LIVE D1 persistent status!)
+      const d1Map = {};
+      if (D1_ITEMS) D1_ITEMS.forEach(x => { d1Map[x.campaign_pk] = x; });
       document.getElementById('campaignTbody').innerHTML = BRIEF.campaigns.map((c, idx) => {
+        const d1 = d1Map[c.campaign_pk] || {};
+        const isExecuted = String(d1.last_action_note || '').startsWith('FOUNDER_EXECUTED:');
         const badgeCls = c.recommended_action === 'FIX_GUARDRAIL' || c.recommended_action === 'KILL' ? 'danger'
           : (c.recommended_action === 'SCALE_20' || c.recommended_action === 'SWITCH_COST_CAP') ? 'safe' : 'warn';
         return `
@@ -506,7 +604,7 @@
             </td>
             <td>
               <span class="pill" style="font-size:10px;">${c.market} · ${c.match_or_bid}</span>
-              ${c.search_match_on ? '<div class="mono" style="color:var(--danger); font-size:10.5px; margin-top:3px;">⚠ SEARCH MATCH ON</div>' : ''}
+              ${(d1.search_match_on ?? c.search_match_on) ? '<div class="mono" style="color:var(--danger); font-size:10.5px; margin-top:3px;">⚠ SEARCH MATCH ON</div>' : ''}
             </td>
             <td class="mono">${fmtKrw(c.spend_krw)}</td>
             <td class="mono">${c.paid_conversions}건 / ${fmtKrw(c.actual_cpa_krw)}</td>
@@ -516,7 +614,11 @@
               <span class="pill ${badgeCls}" style="margin-bottom:4px;">${c.recommended_action}</span>
               <div style="font-size:11.5px; color:var(--text-secondary);">${c.action_note}</div>
             </td>
-            <td><button class="act-btn" id="actBtn_${idx}" onclick="approveAction(${idx}, '${c.recommended_action}')">실행</button></td>
+            <td>
+              <button class="act-btn ${isExecuted ? 'done' : ''}" id="actBtn_${idx}" ${isExecuted ? 'disabled' : ''} onclick="approveAction(${idx}, '${c.campaign_pk}', '${c.recommended_action}')">
+                ${isExecuted ? `✓ D1 (${d1.status || 'DONE'})` : '실행'}
+              </button>
+            </td>
           </tr>`;
       }).join('');
 
@@ -556,10 +658,28 @@
       }
     }
 
-    function approveAction(idx, action) {
+    async function approveAction(idx, campaignPk, action) {
       const btn = document.getElementById(`actBtn_${idx}`);
-      btn.classList.add('done');
-      btn.textContent = '✓ 적용됨';
+      btn.disabled = true;
+      btn.textContent = '⏳ D1 반영...';
+      try {
+        const res = await fetch(`${WORKER_API}/api/v1/adops/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ campaign_pk: campaignPk, action })
+        });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          btn.classList.add('done');
+          btn.textContent = `✓ D1 (${data.campaign.status})`;
+        } else {
+          btn.disabled = false;
+          btn.textContent = data.error === 'COOLDOWN_72H_LOCKED' ? `⛔ 72h 락 (${data.remaining_hours}h)` : '재시도';
+        }
+      } catch {
+        btn.classList.add('done');
+        btn.textContent = '✓ 로컬 적용';
+      }
     }
 
     function renderKeywords(market) {

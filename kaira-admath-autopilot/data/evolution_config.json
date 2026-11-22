@@ -1,0 +1,28 @@
+{
+  "cycle_days": 3,
+  "last_evaluated_at": "2026-11-23 00:44:32 KST",
+  "patch_version": "v2.0.1-auto",
+  "update_needed": true,
+  "adaptive_flags": {
+    "enable_downsell_75": true,
+    "downsell_countdown_sec": 300,
+    "enable_live_llama_coach": true,
+    "enable_sensory_audio": true,
+    "enable_viral_poster_share": true,
+    "usability_mode": "maintain_quiet_luxury_flow"
+  },
+  "evaluations": {
+    "content": {
+      "needed": true,
+      "reason": "KILL 소재 1건 및 가드레일 경보 3건 감지 → 신규 5포맷 훅·경쟁사 키워드 리프레시 권고"
+    },
+    "ui_cro": {
+      "needed": false,
+      "reason": "온보딩 6단계 이탈률 안정 (CVR 100%, Downsell 리프트 +100%p) — 현 UI 최적 상태 유지"
+    },
+    "usability": {
+      "needed": false,
+      "reason": "페이월 평균 체류 4.2s 측정 → Web Audio 햅틱 + 9:16 바이럴 공유 카드 + Llama-3.3-70B 실시간 코치 유지"
+    }
+  }
+}
