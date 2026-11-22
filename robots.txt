@@ -3,3 +3,4 @@ Allow: /
 Sitemap: https://dream8837z.github.io/sitemap.xml
 Sitemap: https://dream8837z.github.io/pseo-revenue-autopilot/sitemap.xml
 Sitemap: https://dream8837z.github.io/passive-income-microsaas-autopilot/sitemap.xml
+Sitemap: https://dream8837z.github.io/devtool-ai-utility-autopilot/sitemap.xml
