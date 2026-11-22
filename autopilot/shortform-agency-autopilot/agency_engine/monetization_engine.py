@@ -181,23 +181,40 @@ class MonetizationEngine:
         for p in projects:
             sc = p["script"]
             dl = p["deliverable"]
+            ind = sc.get("industry", "")
+            # Fix #3: Dynamic industry seed tags + YouTube categoryId (never send clinic videos to AI/marketing seed pool!)
+            if any(k in ind for k in ("피부", "뷰티", "미용")):
+                cat_id = "26"  # Howto & Style
+            elif any(k in ind for k in ("의료", "치과", "클리닉", "병원", "건강")):
+                cat_id = "27"  # Education
+            else:
+                cat_id = "22"  # People & Blogs
+
+            kw_parts = [s.get("highlight_keyword", "") for s in sc.get("active_scenes", [])[:3]]
+            dyn_tags = [t.strip() for t in [sc["client_name"], ind.replace("·", " "), *kw_parts, "Shorts"] if t and t.strip()]
             utm_url = f"{PUBLIC_SITE_URL}?utm_source=youtube_shorts&utm_medium=organic&utm_campaign={run_date}_{sc['client_id']}"
             title = f"{sc['topic']} ({sc['client_name']}) #Shorts"[:95]
             description = (
                 f"{sc['selected_hook']}\n\n"
-                f"▶ 우리 브랜드도 이런 방송급 AI 시네마틱 숏폼 월 10+2편 무인 제작 맡기기:\n"
-                f"{utm_url}\n\n"
-                f"#쇼츠 #릴스 #숏폼제작 #{sc['industry'].replace('·', ' #')} #AI자동화"
+                f"▶ 무료 비교 기준표 & 맞춤 상담 확인하기:\n{utm_url}\n\n"
+                + " ".join(f"#{t.replace(' ', '')}" for t in dyn_tags[:6])
+            )
+            pinned = (
+                f"① 댓글에 [비교표] 딱 세 글자만 남기시면 핵심 기준표 바로 보내드려요 👇\n"
+                f"② 솔직히 여러분은 어떤 기준이 제일 중요하셨나요? ({utm_url})"
             )
             queue_items.append(
                 {
                     "client_id": sc["client_id"],
                     "client_name": sc["client_name"],
+                    "industry": ind,
+                    "category_id": cat_id,
+                    "tags": dyn_tags[:10],
                     "mp4_path": dl["mp4_path"],
                     "srt_path": dl["srt_path"],
                     "youtube_title": title,
                     "youtube_description": description,
-                    "pinned_comment": f"🔥 3초 후킹 140개 무료 진단 & 숏폼 10+2편 제작 문의 👉 {utm_url}",
+                    "pinned_comment": pinned,
                     "funnel_utm_url": utm_url,
                     "privacy_status": "public",
                     "upload_status": "QUEUED_READY",

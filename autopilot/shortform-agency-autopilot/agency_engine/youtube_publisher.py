@@ -73,8 +73,8 @@ def _upload_single_video(token: str, item: Dict[str, Any]) -> Dict[str, Any]:
             "snippet": {
                 "title": item["youtube_title"][:100],
                 "description": item["youtube_description"][:5000],
-                "tags": ["쇼츠", "릴스", "숏폼제작", "AI자동화", "B2B마케팅"],
-                "categoryId": "27",
+                "tags": item.get("tags") or [item.get("client_name", "Shorts"), item.get("industry", "리뷰"), "Shorts"],
+                "categoryId": str(item.get("category_id") or "22"),
                 "defaultLanguage": "ko",
                 "defaultAudioLanguage": "ko",
             },

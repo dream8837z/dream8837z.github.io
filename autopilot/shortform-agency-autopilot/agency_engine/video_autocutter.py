@@ -65,13 +65,42 @@ async def _synthesize_edge_tts_with_boundaries(
     return boundaries
 
 
+_WEAK_VERB_SUFFIXES = ("습니다", "하세요", "다릅니다", "줄어듭니다", "있어요", "해요", "보이소", "됩니더", "있심더", "입니다", "됩니다")
+
+
+def _pick_korean_focus_word_idx(words: List[str], highlight_kw: str = "") -> int:
+    """Fix #1: Korean SOV Noun-Target Karaoke — prioritizes numbers/symbols -> highlight_kw -> longest non-verb noun."""
+    if not words:
+        return 0
+    # 1. Numbers / comparison tokens (90%, 3가지, vs)
+    for i, w in enumerate(words):
+        if re.search(r"\d+|%|vs|VS", w):
+            return i
+    # 2. Scene highlight keyword overlap
+    kw_tokens = [k.strip() for k in re.split(r"[\s·/]+", highlight_kw) if len(k.strip()) >= 2]
+    for i, w in enumerate(words):
+        if any(k in w for k in kw_tokens):
+            return i
+    # 3. Longest substantive noun (avoiding Korean trailing verb endings)
+    candidates = [
+        (len(re.sub(r"[^가-힣a-zA-Z0-9]", "", w)), i)
+        for i, w in enumerate(words)
+        if not any(w.rstrip(".!?,") .endswith(suf) for suf in _WEAK_VERB_SUFFIXES)
+    ]
+    if candidates:
+        candidates.sort(key=lambda x: (-x[0], x[1]))
+        return candidates[0][1]
+    return 0
+
+
 def _build_karaoke_chunks(
     text: str,
     boundaries: List[Dict[str, Any]],
     total_dur: float,
+    highlight_kw: str = "",
     max_words_per_chunk: int = 5,
 ) -> List[Dict[str, Any]]:
-    """Groups WordBoundary tokens into crisp 1.5~2.2s chunks with exact active-word focus."""
+    """Groups WordBoundary tokens into crisp 1.5~2.2s chunks with Korean SOV noun-target focus."""
     if boundaries and len(boundaries) >= 2:
         groups: List[List[Dict[str, Any]]] = []
         buf: List[Dict[str, Any]] = []
@@ -90,31 +119,30 @@ def _build_karaoke_chunks(
         if buf:
             groups.append(buf)
 
-        # Create timed overlay steps highlighting the peak keyword / active word per group
         steps: List[Dict[str, Any]] = []
         for g_idx, g in enumerate(groups):
             g_start = g[0]["start"]
             g_end = groups[g_idx + 1][0]["start"] if g_idx + 1 < len(groups) else total_dur
             g_dur = max(0.45, round(g_end - g_start, 3))
             words = [x["text"] for x in g]
-            # Split each group into 2 rhythmic karaoke beats (first half word -> climax word)
+            focus_idx = _pick_korean_focus_word_idx(words, highlight_kw)
             if len(words) >= 3 and g_dur >= 1.1:
-                mid_dur = round(g_dur * 0.48, 3)
+                mid_dur = round(g_dur * 0.45, 3)
                 rem_dur = round(max(0.35, g_dur - mid_dur), 3)
-                steps.append({"words": words, "active_idx": 0, "duration_sec": mid_dur, "text": " ".join(words)})
-                steps.append({"words": words, "active_idx": len(words) - 1, "duration_sec": rem_dur, "text": " ".join(words)})
+                first_idx = 0 if focus_idx != 0 else min(1, len(words) - 1)
+                steps.append({"words": words, "active_idx": first_idx, "duration_sec": mid_dur, "text": " ".join(words)})
+                steps.append({"words": words, "active_idx": focus_idx, "duration_sec": rem_dur, "text": " ".join(words)})
             else:
-                steps.append({"words": words, "active_idx": len(words) - 1, "duration_sec": g_dur, "text": " ".join(words)})
+                steps.append({"words": words, "active_idx": focus_idx, "duration_sec": g_dur, "text": " ".join(words)})
         return steps
 
-    # Fallback proportional splitting if offline
     raw_clauses = [c.strip() for c in re.split(r"(?<=[.!?])\s+|,\s*", text) if c.strip()] or [text]
     total_chars = max(1, sum(len(c) for c in raw_clauses))
     steps = []
     for c in raw_clauses:
         words = c.split()
         c_dur = round(max(0.6, total_dur * (len(c) / total_chars)), 3)
-        steps.append({"words": words, "active_idx": max(0, len(words) - 1), "duration_sec": c_dur, "text": c})
+        steps.append({"words": words, "active_idx": _pick_korean_focus_word_idx(words, highlight_kw), "duration_sec": c_dur, "text": c})
     return steps
 
 
@@ -313,20 +341,23 @@ class VideoAutoCutter:
         active_idx: int,
         highlight_kw: str,
         progress_ratio: float,
+        scene_idx: int = 0,
+        is_last_scene: bool = False,
+        hook_banner_title: str = "",
     ) -> None:
-        """Band-free 1px gradient scrim + Rock-Steady Karaoke Active-Word Pop Captions."""
+        """Band-free 1px gradient scrim + Anti-Ad-Delay Watermark + Scene-0 Hook Banner + Korean SOV Karaoke Pop."""
         overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
 
         # Band-free 1px smooth top & lower-third gradient scrims
-        top_grad = Image.linear_gradient("L").resize((W, 260))
-        top_alpha = top_grad.point(lambda p: int(145 * (1.0 - p / 255.0)))
-        top_layer = Image.new("RGBA", (W, 260), (0, 0, 0, 255))
+        top_grad = Image.linear_gradient("L").resize((W, 280))
+        top_alpha = top_grad.point(lambda p: int(155 * (1.0 - p / 255.0)))
+        top_layer = Image.new("RGBA", (W, 280), (0, 0, 0, 255))
         top_layer.putalpha(top_alpha)
         overlay.alpha_composite(top_layer, (0, 0))
 
         bot_h = H - 1080
         bot_grad = Image.linear_gradient("L").resize((W, bot_h))
-        bot_alpha = bot_grad.point(lambda p: int(222 * ((p / 255.0) ** 1.15)))
+        bot_alpha = bot_grad.point(lambda p: int(224 * ((p / 255.0) ** 1.15)))
         bot_layer = Image.new("RGBA", (W, bot_h), (6, 6, 8, 255))
         bot_layer.putalpha(bot_alpha)
         overlay.alpha_composite(bot_layer, (0, 1080))
@@ -339,11 +370,23 @@ class VideoAutoCutter:
         draw.rectangle([80, 156, 80 + bar_w, 162], fill=(255, 77, 46, 248))
 
         f_brand = ImageFont.truetype(str(self.config.resolve_font("bold")), 28)
+        f_banner = ImageFont.truetype(str(self.config.resolve_font("black")), 48)
         f_kw = ImageFont.truetype(str(self.config.resolve_font("black")), 32)
         f_sub = ImageFont.truetype(str(self.config.resolve_font("black")), 58)
         f_sub_active = ImageFont.truetype(str(self.config.resolve_font("black")), 64)
+        f_dm = ImageFont.truetype(str(self.config.resolve_font("bold")), 30)
 
-        draw.text((82, 184), client_name, fill=(255, 255, 255, 225), font=f_brand)
+        # Fix #1: Hide brand watermark on Scene 0 (prevents 0.3s "AD" swipe-away); show from Scene 1+
+        if scene_idx > 0:
+            draw.text((82, 184), client_name, fill=(255, 255, 255, 220), font=f_brand)
+        elif hook_banner_title:
+            # High-contrast 0~2.5s Pattern-Interrupt Hook Headline Banner (Safe Zone y=230..310)
+            bt = hook_banner_title[:20]
+            bb = draw.textbbox((0, 0), bt, font=f_banner)
+            bw = bb[2] - bb[0]
+            bx = (W - bw) // 2
+            draw.rounded_rectangle([bx - 30, 226, bx + bw + 30, 306], radius=16, fill=(10, 10, 14, 215), outline=(245, 196, 81, 240), width=3)
+            draw.text((bx, 240), bt, fill=(245, 196, 81, 255), font=f_banner)
 
         # Persistent scene keyword anchor pill (Safe Zone y=1195)
         if highlight_kw:
@@ -354,7 +397,7 @@ class VideoAutoCutter:
             draw.rounded_rectangle([px - 24, 1192, px + tw + 24, 1246], radius=27, fill=(245, 196, 81, 245))
             draw.text((px, 1200), kw, fill=(10, 10, 12, 255), font=f_kw)
 
-        # Layout words across 1~2 centered lines with active word karaoke pop
+        # Layout words across 1~2 centered lines with Korean SOV active word karaoke pop
         lines: List[List[Tuple[int, str]]] = [[]]
         line_chars = 0
         for idx, w in enumerate(words):
@@ -367,7 +410,6 @@ class VideoAutoCutter:
 
         y = 1288
         for line_items in lines:
-            # Measure total line width
             widths = []
             for idx, w in line_items:
                 font = f_sub_active if idx == active_idx else f_sub
@@ -384,13 +426,22 @@ class VideoAutoCutter:
                     draw.rounded_rectangle(
                         [lx - 14, wy - 6, lx + w_px + 14, wy + h_px + 16],
                         radius=14,
-                        fill=(255, 77, 46, 220),
+                        fill=(255, 77, 46, 228),
                     )
                 for dx, dy in ((-3, 3), (3, 3), (0, 4)):
                     draw.text((lx + dx, wy + dy), word_txt, fill=(0, 0, 0, 210), font=font)
                 draw.text((lx, wy), word_txt, fill=(255, 255, 255, 255), font=font)
                 lx += w_px + space_w
             y += 88
+
+        # Fix #2: Visual DM Callout Pill on final scene (keeps voice fast & loopable while driving comments)
+        if is_last_scene:
+            dm_txt = "댓글에 [비교표] 남기면 무료 기준표 즉시 DM 발송"
+            db = draw.textbbox((0, 0), dm_txt, font=f_dm)
+            dw = db[2] - db[0]
+            dx = (W - dw) // 2
+            draw.rounded_rectangle([dx - 24, 1492, dx + dw + 24, 1546], radius=27, fill=(255, 255, 255, 240))
+            draw.text((dx, 1502), dm_txt, fill=(10, 10, 12, 255), font=f_dm)
 
         overlay.save(out_png, format="PNG")
 
@@ -432,11 +483,13 @@ class VideoAutoCutter:
                     scene_audio = tmp_dir / f"voice_{idx:02d}.wav"
                     self._make_silence_wav(dur, scene_audio)
 
-                seg_dur = round(dur + 0.20, 2)
+                # Fix #2: Zero-Gap loop cut on final scene (eliminates ending silence)
+                is_last = idx == total_scenes - 1
+                seg_dur = round(max(0.6, dur - 0.05), 2) if is_last else round(dur + 0.16, 2)
                 bg_jpg = tmp_dir / f"bg_{idx:02d}.jpg"
                 self._prepare_cover_bg(photos[idx % len(photos)] if photos else None, bg_jpg)
 
-                karaoke_steps = _build_karaoke_chunks(scene["subtitle"], boundaries, seg_dur)
+                karaoke_steps = _build_karaoke_chunks(scene["subtitle"], boundaries, seg_dur, highlight_kw=scene["highlight_keyword"])
                 ov_concat_lines: List[str] = []
                 step_cursor = cursor
 
@@ -451,6 +504,9 @@ class VideoAutoCutter:
                         active_idx=step["active_idx"],
                         highlight_kw=scene["highlight_keyword"],
                         progress_ratio=prog,
+                        scene_idx=idx,
+                        is_last_scene=is_last,
+                        hook_banner_title=script_plan.get("topic", ""),
                     )
                     ov_concat_lines.append(f"file '{ov_png.as_posix()}'")
                     ov_concat_lines.append(f"duration {s_dur:.3f}")
@@ -610,11 +666,11 @@ class VideoAutoCutter:
             "[vox_raw]highpass=f=85,acompressor=threshold=-18dB:ratio=3:attack=5:release=60,alimiter=limit=0.95,asplit=2[vox_mix][vox_sc]"
         )
 
-        # 3. Procedural warm Cmaj7 ambient BGM bed sidechain-ducked under voice ($0 royalty-free)
+        # Fix #2: Seamless infinite-loop BGM (remove 0.8s ending fade-out so loop never drops energy)
         filter_parts.append(
             f"aevalsrc='0.18*sin(2*PI*130.81*t)+0.12*sin(2*PI*164.81*t)+0.10*sin(2*PI*196.00*t)+0.08*sin(2*PI*246.94*t)':"
             f"s=44100:c=stereo:d={total_out_dur:.2f},"
-            f"lowpass=f=420,afade=t=in:st=0:d=0.6,afade=t=out:st={max(0.2, total_out_dur - 0.8):.2f}:d=0.8,volume=0.14[bgm_raw]"
+            f"lowpass=f=420,afade=t=in:st=0:d=0.15,afade=t=out:st={max(0.1, total_out_dur - 0.06):.2f}:d=0.06,volume=0.14[bgm_raw]"
         )
         filter_parts.append(
             "[bgm_raw][vox_sc]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=250[bgm_ducked]"

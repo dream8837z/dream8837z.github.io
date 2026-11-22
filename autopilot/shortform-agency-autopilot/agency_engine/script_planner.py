@@ -184,11 +184,11 @@ class ScriptPlanner:
                 "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음",
             },
             {
-                "stage": "4단계 · 부탁하기 (CTA 전환)",
-                "duration_sec": 3.5,
-                "subtitle": f"{brief.cta_action}. 지금 저장해 두시면 필요할 때 바로 꺼내 보실 수 있습니다.",
-                "highlight_keyword": "저장 · 댓글 DM",
-                "camera_direction": "하단 화살표 모션 + 댓글/팔로우 유도 자막 고정",
+                "stage": "4단계 · 루프 브릿지 + DM CTA",
+                "duration_sec": 2.4,
+                "subtitle": f"댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,",
+                "highlight_keyword": "댓글 '비교표' → DM",
+                "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결",
             },
         ]
 
