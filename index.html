@@ -43,11 +43,34 @@
         <a class="btn en" href="/devtool-ai-utility-autopilot/index.html">ToolForge Pro (95 DevTools &amp; AI Hub)</a>
         <a class="btn en" href="/devtool-ai-utility-autopilot/tools/json-formatter-validator.html">JSON Formatter &amp; Validator</a>
         <a class="btn en" href="/devtool-ai-utility-autopilot/tools/ai-prompt-optimizer.html">AI Prompt Optimizer &amp; Tokens</a>
+        <a class="btn pub" href="/boring-marketing-studio/dashboard/index.html">3단계 무소음 복리 스튜디오 (Boring Autopilot)</a>
       </div>
     </section>
     <footer>
-      <p>공식 출처: 금융감독원·행정안전부·국토교통부·한국부동산원·창업진흥원·건강보험심사평가원 | <a href="/pseo-revenue-autopilot/privacy.html">개인정보처리방침</a> · <a href="/pseo-revenue-autopilot/disclaimer.html">면책고지</a></p>
+      <p>공식 출처: 금융감독원·행정안전부·국토교통부·한국부동산원·창업진흥원·건강보험심사평가원 | <a href="/pseo-revenue-autopilot/privacy.html">개인정보처리방침</a> · <a href="/pseo-revenue-autopilot/disclaimer.html">면책고지</a> · <a href="/llms.txt">AI Citation Index (llms.txt)</a></p>
     </footer>
   </main>
+  <script>
+  (function(){
+    try {
+      var ref = (document.referrer || '').toLowerCase();
+      var params = new URLSearchParams(window.location.search);
+      var ch = params.get('utm_source') || 'direct_or_organic';
+      if (ref.indexOf('chatgpt.com') >= 0 || ref.indexOf('openai.com') >= 0) ch = 'ai_chatgpt_search';
+      else if (ref.indexOf('perplexity.ai') >= 0) ch = 'ai_perplexity';
+      else if (ref.indexOf('claude.ai') >= 0) ch = 'ai_claude';
+      else if (ref.indexOf('gemini.google.com') >= 0) ch = 'ai_gemini';
+      else if (ref.indexOf('search.naver.com') >= 0) ch = 'seo_naver';
+      else if (ref.indexOf('google.') >= 0) ch = 'seo_google';
+      if (!localStorage.getItem('bm_first_channel')) localStorage.setItem('bm_first_channel', ch);
+      localStorage.setItem('bm_last_channel', ch);
+      window.__BORING_ATTRIBUTION__ = {
+        first_touch: localStorage.getItem('bm_first_channel'),
+        last_touch: ch,
+        hook_id: params.get('utm_content') || 'organic_aio'
+      };
+    } catch (e) {}
+  })();
+  </script>
 </body>
 </html>
