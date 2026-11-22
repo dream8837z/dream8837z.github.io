@@ -1,0 +1,11 @@
+# KAIRA — Quiet Luxury 88-Day Ritual & Deep Focus OS
+
+> KAIRA is a minimalist, neuroscience-backed 88-day habit & deep focus Web-to-App OS designed to replace cluttered checklist trackers with calm execution, tactile Web Audio soundscapes, and real-time Llama 3.3 70B neuroscience coaching.
+
+## Core Tools & Pages
+- [KAIRA Ritual OS (Web-to-App)](https://kaira-admath.pages.dev/): 6-step visual chronotype onboarding, 88-day neuroplasticity curve, tactile ceramic audio & 432Hz/Brown Noise deep focus timer, 9:16 editorial story poster export.
+- [88-Day Habit Formation Calculator & Dopamine Reset Diagnostic (English Tier-1)](https://kaira-admath.pages.dev/guide-en.html): Interactive Day-21 / Day-66 / Day-88 milestone calculator + free live Llama 3.3 70B neuroscience micro-prescription.
+- [88일 습관 형성 계산기 & 도파민 디톡스 루틴 테스트 (Korean)](https://kaira-admath.pages.dev/guide.html): 한국어 88일 습관 형성 계산기, 15초 도파민 방해요소 진단 및 무료 실시간 AI 코치 처방전.
+
+## Pricing
+- Web-Direct Annual Privilege: $44.99/year (KR: ₩39,000/year) with 3-day free trial.

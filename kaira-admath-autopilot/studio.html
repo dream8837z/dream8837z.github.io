@@ -279,6 +279,44 @@
       </section>
     </div>
 
+    <!-- NEW v3.0: Real Monetization Rail & Email Lead Vault Control Center -->
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">💳 실결제 레일(Stripe · Polar · Lemon Squeezy · Toss) & 이메일 리드 수익화 관제 센터</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <span class="pill gold" id="monetizationModeBadge">SANDBOX DEMO</span>
+          <a class="pill safe" href="./ads.txt" target="_blank">ads.txt (AdSense OK)</a>
+          <a class="pill" href="./sitemap.xml" target="_blank">sitemap.xml</a>
+          <a class="pill" href="./llms.txt" target="_blank">llms.txt (GEO)</a>
+          <a class="pill" href="./guide-en.html" target="_blank">🇺🇸 EN pSEO Hub</a>
+        </div>
+      </div>
+      <div class="split-grid" style="margin-bottom:0;">
+        <div>
+          <div style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">
+            실결제 링크(Polar / Lemon Squeezy / Stripe Payment Link / Toss / Gumroad)를 입력 후 저장하면, <strong>코드 배포 없이 즉시 `KAIRA` 결제창이 실결제로 전환</strong>됩니다.
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+            <input id="cfgAnnualKrw" placeholder="연간 ₩39,000 실결제 URL (Toss/Polar/Stripe)" style="padding:9px 11px; border-radius:8px; border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-size:12px;" />
+            <input id="cfgAnnualUsd" placeholder="Annual $44.99 Checkout URL (Polar/Lemon/Stripe)" style="padding:9px 11px; border-radius:8px; border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-size:12px;" />
+            <input id="cfgDsKrw" placeholder="Downsell 75% ₩29,000 실결제 URL" style="padding:9px 11px; border-radius:8px; border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-size:12px;" />
+            <input id="cfgDsUsd" placeholder="Downsell 75% $29.99 Checkout URL" style="padding:9px 11px; border-radius:8px; border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-size:12px;" />
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button class="act-btn" style="border-color:var(--gold); color:var(--gold); padding:8px 16px;" onclick="saveMonetizationConfig()" id="saveMonBtn">💾 D1에 실결제 레일 즉시 저장</button>
+            <span style="font-size:11.5px; color:var(--text-muted);" id="saveMonStatus">결제 완료 복귀 URL 권장: https://kaira-admath.pages.dev/?paid=1</span>
+          </div>
+        </div>
+        <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong style="font-size:12.5px;">📥 D1 이메일 리드 볼트 (<span class="mono" id="leadCountTxt">0</span>건)</strong>
+            <button class="act-btn" onclick="exportLeadsCsv()">⬇ CSV 추출</button>
+          </div>
+          <div id="leadsListBox" style="font-size:11.5px; color:var(--text-secondary); max-height:110px; overflow-y:auto;">수집된 이메일 리드가 없습니다. KAIRA 결제창에서 이메일을 입력하면 실시간 적재됩니다.</div>
+        </div>
+      </div>
+    </section>
+
     <!-- Main 2-Column Command Split -->
     <div class="split-grid">
       <!-- LEFT COLUMN (62%): Break-Even CPA Gauge + 30%->60% Hybrid Margin Simulator -->
@@ -455,12 +493,14 @@
     let LIVE_FUNNEL = null;
     let EVO_CFG = null;
     let D1_ITEMS = null;
+    let MON_CFG = null;
+    let LEADS_DATA = [];
     let currentRail = 'global';
     let currentKwMarket = 'US';
 
     async function boot() {
       const t0 = performance.now();
-      const [bRes, pRes, aRes, eRes, hRes, mRes, fRes] = await Promise.allSettled([
+      const [bRes, pRes, aRes, eRes, hRes, mRes, fRes, monRes, lRes] = await Promise.allSettled([
         fetch('./data/morning_brief.json').then(r => r.json()),
         fetch('./data/creative_pack.json').then(r => r.json()),
         fetch('./data/ai_assets_manifest.json').then(r => r.json()),
@@ -468,6 +508,8 @@
         fetch(`${WORKER_API}/api/v1/health`).then(r => r.json()),
         fetch(`${WORKER_API}/api/v1/dashboard/morning-brief`).then(r => r.json()),
         fetch(`${WORKER_API}/api/v1/dashboard/funnel?days=7`).then(r => r.json()),
+        fetch(`${WORKER_API}/api/v1/monetization/config`).then(r => r.json()),
+        fetch(`${WORKER_API}/api/v1/dashboard/leads`).then(r => r.json()),
       ]);
       if (bRes.status === 'fulfilled') BRIEF = bRes.value;
       if (pRes.status === 'fulfilled') PACK = pRes.value;
@@ -475,8 +517,11 @@
       if (eRes.status === 'fulfilled') EVO_CFG = eRes.value;
       if (mRes.status === 'fulfilled' && mRes.value.items) D1_ITEMS = mRes.value.items;
       if (fRes.status === 'fulfilled') LIVE_FUNNEL = fRes.value;
+      if (monRes.status === 'fulfilled' && monRes.value.config) MON_CFG = monRes.value.config;
+      if (lRes.status === 'fulfilled' && lRes.value.leads) LEADS_DATA = lRes.value.leads;
 
       const rtt = Math.round(performance.now() - t0);
+      renderAll();
       const pill = document.getElementById('genTimePill');
       if (hRes.status === 'fulfilled' && hRes.value.ok) {
         pill.className = 'pill safe';
@@ -486,12 +531,61 @@
         pill.textContent = '● STATIC FALLBACK';
       }
 
-      renderAll();
       renderLiveFunnel();
       renderEvolution();
+      renderMonetization();
       updateGauge();
       updateHybridSim();
       checkGuardrail();
+    }
+
+    function renderMonetization() {
+      if (MON_CFG) {
+        document.getElementById('cfgAnnualKrw').value = MON_CFG.checkout_annual_krw || '';
+        document.getElementById('cfgAnnualUsd').value = MON_CFG.checkout_annual_usd || '';
+        document.getElementById('cfgDsKrw').value = MON_CFG.checkout_downsell_krw || '';
+        document.getElementById('cfgDsUsd').value = MON_CFG.checkout_downsell_usd || '';
+        const b = document.getElementById('monetizationModeBadge');
+        b.textContent = MON_CFG.mode === 'live_checkout' ? '● LIVE REAL CHECKOUT' : 'SANDBOX DEMO (URL 입력 시 즉시 실결제)';
+        b.className = MON_CFG.mode === 'live_checkout' ? 'pill safe' : 'pill gold';
+      }
+      document.getElementById('leadCountTxt').textContent = LEADS_DATA.length;
+      if (LEADS_DATA.length > 0) {
+        document.getElementById('leadsListBox').innerHTML = LEADS_DATA.map(l =>
+          `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border);"><span class="mono" style="color:var(--text-primary);">${l.email}</span><span class="mono" style="color:var(--text-muted);">${l.market} · ${l.acquisition_channel}</span></div>`
+        ).join('');
+      }
+    }
+
+    async function saveMonetizationConfig() {
+      const btn = document.getElementById('saveMonBtn');
+      btn.textContent = '⏳ 저장 중...';
+      try {
+        const payload = {
+          checkout_annual_krw: document.getElementById('cfgAnnualKrw').value.trim(),
+          checkout_annual_usd: document.getElementById('cfgAnnualUsd').value.trim(),
+          checkout_downsell_krw: document.getElementById('cfgDsKrw').value.trim(),
+          checkout_downsell_usd: document.getElementById('cfgDsUsd').value.trim(),
+        };
+        const res = await fetch(`${WORKER_API}/api/v1/monetization/config`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          btn.textContent = '✓ D1 저장 완료';
+          setTimeout(() => { btn.textContent = '💾 D1에 실결제 레일 즉시 저장'; boot(); }, 1000);
+        }
+      } catch {
+        btn.textContent = '저장 실패';
+      }
+    }
+
+    function exportLeadsCsv() {
+      const rows = [['user_id', 'email', 'market', 'channel', 'created_at'], ...LEADS_DATA.map(l => [l.user_id, l.email, l.market, l.acquisition_channel, l.created_at])];
+      const csv = rows.map(r => r.join(',')).join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+      a.download = 'kaira_leads.csv';
+      a.click();
     }
 
     function renderLiveFunnel() {

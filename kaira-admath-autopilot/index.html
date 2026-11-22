@@ -388,10 +388,11 @@
       <div class="eyebrow" id="chkEyebrow">WEB-TO-APP DIRECT CHECKOUT · 3.5% FEE</div>
       <h3 style="font-family: var(--font-serif); font-size: 28px; font-weight: 400; margin-bottom: 6px;" id="chkTitle">KAIRA Annual Privilege</h3>
       <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;" id="chkDesc">App Store 15% 수수료 없이 웹에서 즉시 활성화 · Cloudflare D1 실시간 기록</p>
-      <div style="display:flex; justify-content:space-between; padding:12px 14px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border); margin-bottom:14px; font-family:var(--font-mono); font-size:13px;">
+      <div style="display:flex; justify-content:space-between; padding:12px 14px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border); margin-bottom:12px; font-family:var(--font-mono); font-size:13px;">
         <span id="chkTodayLabel">결제 금액</span>
         <strong style="color:var(--gold);" id="chkTodayAmt">₩0 (3일 무료)</strong>
       </div>
+      <input id="chkEmailInput" type="email" placeholder="이메일 입력 (88일 프로토콜 백업 & 영수증 수신 · 선택)" style="width:100%; padding:12px 14px; border-radius:14px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-primary); font-family:var(--font-sans); font-size:13px; margin-bottom:12px;" />
       <button class="primary-btn" onclick="completeCheckout()" id="chkConfirmBtn">원탭으로 88일 리추얼 시작하기</button>
       <button class="pill-btn" style="width:100%; justify-content:center; margin-top:10px; padding:11px;" onclick="closeCheckout()">돌아가기</button>
     </div>
@@ -706,13 +707,18 @@
       coachText: '', coachEngine: '', attribution: { channel: 'organic', campaign_id: null }
     };
 
-    // Parse pSEO / Paid UTM Deep-Link Parameters
+    // Parse pSEO / Paid UTM Deep-Link Parameters & Live Checkout Return
+    let MONETIZATION_CFG = {};
+    fetch(`${WORKER_API}/api/v1/monetization/config`).then(r => r.json()).then(d => { if (d && d.config) MONETIZATION_CFG = d.config; }).catch(() => {});
+
     (() => {
       const sp = new URLSearchParams(location.search);
       if (sp.get('goal')) state.goal = sp.get('goal');
       if (sp.get('friction')) state.frictions = [sp.get('friction')];
       if (sp.get('wake')) state.wakeMinutes = Number(sp.get('wake'));
+      if (sp.get('lang') === 'en' || sp.get('lang') === 'ko') state.lang = sp.get('lang');
       if (sp.get('utm_source')) state.attribution = { channel: sp.get('utm_source'), campaign_id: sp.get('utm_campaign') || sp.get('campaign_id') };
+      if (sp.get('paid') === '1') { state.subscribed = true; state.step = 7; save(); }
     })();
 
     let stepEnteredAt = Date.now(), stepDir = 1, activeOfferType = 'standard', dsInterval = null;
@@ -1120,6 +1126,25 @@
     function completeCheckout() {
       const isKr = state.lang === 'ko';
       const isDs = activeOfferType === 'downsell_75';
+      const emailVal = (document.getElementById('chkEmailInput')?.value || '').trim();
+      if (emailVal && emailVal.includes('@')) {
+        fetch(`${WORKER_API}/api/v1/leads`, {
+          method: 'POST', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: uid, email: emailVal, market: isKr ? 'KR' : 'US', acquisition_channel: state.attribution?.channel || 'organic' })
+        }).catch(() => {});
+      }
+
+      // Route to REAL live checkout URL if configured in AD-MATH Studio (Stripe / Polar / Lemon Squeezy / Toss / Gumroad)
+      const liveUrl = isDs
+        ? (isKr ? MONETIZATION_CFG.checkout_downsell_krw : MONETIZATION_CFG.checkout_downsell_usd)
+        : (state.plan === 'annual' ? (isKr ? MONETIZATION_CFG.checkout_annual_krw : MONETIZATION_CFG.checkout_annual_usd) : MONETIZATION_CFG.checkout_monthly_krw);
+      if (liveUrl && liveUrl.startsWith('http')) {
+        const sep = liveUrl.includes('?') ? '&' : '?';
+        window.location.href = `${liveUrl}${sep}client_reference_id=${encodeURIComponent(uid)}${emailVal ? `&prefilled_email=${encodeURIComponent(emailVal)}` : ''}`;
+        return;
+      }
+
       const price = isDs ? (isKr ? 29000 : 29.99) : (state.plan === 'annual' ? (isKr ? 39000 : 44.99) : (isKr ? 9900 : 11.99));
       const productId = isDs ? (isKr ? 'kaira_annual_downsell_krw_29000' : 'kaira_annual_downsell_usd_2999') : `kaira_${state.plan}_${isKr ? 'krw' : 'usd'}`;
       fetch(`${WORKER_API}/api/v1/webhooks/billing`, {
