@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>KAIRA — Quiet Luxury Ritual & Deep Focus OS</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    :root {
+      --bg-canvas: #0E0D0C;
+      --bg-elevated: #171513;
+      --bg-card: #1C1A17;
+      --bg-glass: rgba(23, 21, 19, 0.78);
+      --text-primary: #F4EFE6;
+      --text-secondary: #A89F94;
+      --text-muted: #6E665E;
+      --gold: #D4AF6A;
+      --gold-soft: rgba(212, 175, 106, 0.14);
+      --gold-border: rgba(212, 175, 106, 0.42);
+      --sage: #8EA494;
+      --sage-soft: rgba(142, 164, 148, 0.15);
+      --border: rgba(244, 239, 230, 0.08);
+      --shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+      --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --font-serif: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Pretendard Variable', 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-canvas: #F6F2EB;
+      --bg-elevated: #FFFFFF;
+      --bg-card: #FBF9F5;
+      --bg-glass: rgba(255, 255, 255, 0.84);
+      --text-primary: #1A1816;
+      --text-secondary: #635B53;
+      --text-muted: #968D84;
+      --gold: #B58E47;
+      --gold-soft: rgba(181, 142, 71, 0.12);
+      --gold-border: rgba(181, 142, 71, 0.45);
+      --sage: #5F7A67;
+      --sage-soft: rgba(95, 122, 103, 0.13);
+      --border: rgba(26, 24, 22, 0.09);
+      --shadow: 0 24px 64px rgba(26, 24, 22, 0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      transition: background 0.45s var(--ease-editorial), color 0.35s ease;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Subtle Editorial Film Grain Overlay (0.035 opacity) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Ambient Luxury Glow */
+    .ambient-orb {
+      position: fixed;
+      top: -180px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 640px;
+      height: 420px;
+      background: radial-gradient(ellipse at center, rgba(212, 175, 106, 0.14), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.6s ease;
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 460px;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-canvas);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    /* Top Minimal Bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px) saturate(140%);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .brand-mark {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .brand-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .topbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pill-btn {
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-editorial);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .pill-btn:hover {
+      border-color: var(--gold-border);
+      color: var(--text-primary);
+    }
+    .pill-btn.gold {
+      background: var(--gold-soft);
+      border-color: var(--gold-border);
+      color: var(--gold);
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      height: 2px;
+      background: var(--border);
+      width: 100%;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), #F0D59C);
+      width: 16.6%;
+      transition: width 0.55s var(--ease-editorial);
+    }
+
+    .stage {
+      flex: 1;
+      padding: 28px 24px 110px;
+      display: flex;
+      flex-direction: column;
+      animation: fadeSlide 0.5s var(--ease-editorial);
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: 14px;
+      line-height: 1.58;
+      color: var(--text-secondary);
+      margin-bottom: 26px;
+    }
+
+    /* 2x2 Visual Cards */
+    .visual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .v-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px 16px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.3s var(--ease-spring), border-color 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .v-card:hover { transform: translateY(-2px); border-color: var(--gold-border); }
+    .v-card:active { transform: scale(0.97); }
+    .v-card.selected {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      box-shadow: 0 0 0 1px var(--gold), 0 12px 28px rgba(212, 175, 106, 0.12);
+    }
+    .v-art {
+      height: 112px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, rgba(212, 175, 106, 0.12), rgba(255,255,255,0.02));
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .v-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s var(--ease-editorial);
+    }
+    .v-card:hover .v-art img {
+      transform: scale(1.06);
+    }
+    .v-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+    .v-card-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: -8px;
+    }
+
+    /* Chronotype Sky Card */
+    .sky-card {
+      border-radius: 24px;
+      padding: 28px 22px;
+      border: 1px solid var(--border);
+      text-align: center;
+      transition: background 0.6s ease;
+      margin-bottom: 22px;
+    }
+    .sky-time {
+      font-family: var(--font-mono);
+      font-size: 52px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    }
+    .sky-label {
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.88);
+    }
+    input[type="range"].luxury-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--border);
+      outline: none;
+      margin: 18px 0 8px;
+    }
+    input[type="range"].luxury-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid var(--bg-canvas);
+      box-shadow: 0 4px 16px rgba(212,175,106,0.45);
+      cursor: pointer;
+    }
+
+    /* Intensity Stack */
+    .stack-list { display: flex; flex-direction: column; gap: 12px; }
+    .stack-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.28s var(--ease-spring);
+    }
+    .stack-card.selected {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      box-shadow: 0 0 0 1px var(--gold);
+    }
+    .badge-rec {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--gold);
+      color: #141210;
+    }
+
+    /* Synthesis Chart & Loading */
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      font-size: 14px;
+      transition: all 0.35s ease;
+    }
+    .check-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: transparent;
+      transition: all 0.35s var(--ease-spring);
+    }
+    .check-row.done { border-color: var(--gold-border); }
+    .check-row.done .check-dot {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #141210;
+    }
+    .curve-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      margin-top: 14px;
+    }
+    .curve-path {
+      stroke-dasharray: 420;
+      stroke-dashoffset: 420;
+      animation: drawLine 1.4s var(--ease-editorial) forwards;
+    }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+    /* Paywall */
+    .trial-toggle-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .switch {
+      width: 46px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--border);
+      position: relative;
+      cursor: pointer;
+      transition: background 0.25s ease;
+    }
+    .switch.on { background: var(--gold); }
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      transition: transform 0.28s var(--ease-spring);
+    }
+    .switch.on::after { transform: translateX(20px); }
+
+    .timeline-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+    .tl-item { display: flex; align-items: center; gap: 10px; }
+    .tl-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    .plan-card {
+      border: 1.5px solid var(--border);
+      background: var(--bg-elevated);
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .plan-card.selected {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      box-shadow: 0 10px 28px rgba(212, 175, 106, 0.14);
+    }
+    .plan-badge {
+      position: absolute;
+      top: -10px;
+      right: 14px;
+      background: var(--gold);
+      color: #141210;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    /* Sticky Bottom CTA */
+    .bottom-cta-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 460px;
+      padding: 14px 22px calc(16px + env(safe-area-inset-bottom));
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      z-index: 40;
+    }
+    .primary-btn {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, var(--gold), #E6C88B);
+      color: #141210;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s var(--ease-spring), box-shadow 0.25s ease;
+      box-shadow: 0 10px 30px rgba(212, 175, 106, 0.28);
+    }
+    .primary-btn:active { transform: scale(0.98); }
+    .primary-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+    /* Main Ritual OS App Views */
+    .os-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    .os-tab {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 9px 10px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .os-tab.active {
+      background: var(--gold);
+      color: #141210;
+    }
+
+    .ritual-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.28s var(--ease-spring);
+    }
+    .ritual-item.done {
+      border-color: rgba(142, 164, 148, 0.45);
+      background: var(--sage-soft);
+    }
+    .ritual-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.28s var(--ease-spring);
+      flex-shrink: 0;
+    }
+    .ritual-item.done .ritual-check {
+      background: var(--sage);
+      border-color: var(--sage);
+      color: #0E0D0C;
+    }
+
+    /* 88-Day Heatmap */
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(11, 1fr);
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .hm-dot {
+      aspect-ratio: 1;
+      border-radius: 5px;
+      background: var(--border);
+      transition: transform 0.2s ease;
+    }
+    .hm-dot.l1 { background: rgba(212, 175, 106, 0.28); }
+    .hm-dot.l2 { background: rgba(212, 175, 106, 0.58); }
+    .hm-dot.l3 { background: var(--gold); box-shadow: 0 0 8px rgba(212, 175, 106, 0.35); }
+
+    /* Deep Focus Timer */
+    .timer-ring-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+    .breathing-aura {
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .breathing-aura.running::before {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-border);
+      animation: breathe 8s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(0.95); opacity: 0.25; }
+      50% { transform: scale(1.07); opacity: 0.8; }
+    }
+    .timer-digits {
+      font-family: var(--font-mono);
+      font-size: 46px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+    }
+
+    .coach-card {
+      background: linear-gradient(145deg, var(--gold-soft), var(--bg-elevated));
+      border: 1px solid var(--gold-border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    /* Checkout Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-sheet {
+      width: 100%;
+      max-width: 460px;
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--gold-border);
+      border-radius: 26px 26px 0 0;
+      padding: 24px 22px 32px;
+      animation: fadeSlide 0.35s var(--ease-editorial);
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="ambient-orb" id="ambientOrb"></div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">KAIRA</span>
+        <span class="brand-tag">RITUAL OS</span>
+      </div>
+      <div class="topbar-controls">
+        <button class="pill-btn" id="langBtn" onclick="toggleLang()">EN</button>
+        <button class="pill-btn" id="themeBtn" onclick="toggleTheme()">☀</button>
+        <a class="pill-btn gold" href="./studio.html" title="Open Founder Ad-Math Command Studio">AD-MATH ↗</a>
+      </div>
+    </header>
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <main class="stage" id="stage"></main>
+
+    <div class="bottom-cta-bar" id="ctaBar">
+      <button class="primary-btn" id="mainCta" onclick="handleNext()">계속하기</button>
+    </div>
+  </div>
+
+  <!-- Web-to-App 3.5% Fee Instant Checkout Simulation Sheet -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-sheet">
+      <div class="eyebrow" id="chkEyebrow">WEB-TO-APP DIRECT CHECKOUT · 3.5% FEE</div>
+      <h3 style="font-family: var(--font-serif); font-size: 28px; font-weight: 400; margin-bottom: 6px;" id="chkTitle">KAIRA Annual Privilege</h3>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;" id="chkDesc">App Store 15% 수수료 없이 웹에서 즉시 활성화 · 3일 무료 후 자동 전환</p>
+      <div style="display:flex; justify-content:space-between; padding:12px 14px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border); margin-bottom:14px; font-family:var(--font-mono); font-size:13px;">
+        <span id="chkTodayLabel">오늘 결제 금액</span>
+        <strong style="color:var(--gold);" id="chkTodayAmt">₩0 (3일 무료)</strong>
+      </div>
+      <button class="primary-btn" onclick="completeCheckout()" id="chkConfirmBtn">원탭으로 88일 리추얼 시작하기</button>
+      <button class="pill-btn" style="width:100%; justify-content:center; margin-top:10px; padding:11px;" onclick="closeCheckout()" id="chkCancelBtn">돌아가기</button>
+    </div>
+  </div>
+
+  <script>
+    const I18N = {
+      ko: {
+        step1_eye: 'STEP 01 · CORE IDENTITY',
+        step1_h: '어떤 하루를 <em>설계</em>할까요?',
+        step1_s: '복잡한 체크리스트 대신, 당신의 정체성을 바꿀 단 하나의 방향을 고르세요.',
+        goals: [
+          { id: 'deepwork', t: '딥워크 몰입', s: '방해 없는 초집중' },
+          { id: 'dawn', t: '새벽 리추얼', s: '고요한 아침 시작' },
+          { id: 'clarity', t: '멘탈 클리어', s: '도파민 디톡스' },
+          { id: 'balance', t: '바디 밸런스', s: '수면 · 회복 리듬' },
+        ],
+        step2_eye: 'STEP 02 · HIDDEN FRICTION',
+        step2_h: '무엇이 몰입을 <em>방해</em>하나요?',
+        step2_s: '최대 2가지를 선택하면 AI 코치가 맞춤형 차단 루틴을 처방합니다.',
+        frictions: [
+          { id: 'sns', t: 'SNS 도파민', s: '무의식적 쇼츠·릴스' },
+          { id: 'sleep', t: '수면 불규칙', s: '늦은 취침과 피로' },
+          { id: 'perfection', t: '완벽주의 미루기', s: '시작 전 과부하' },
+          { id: 'noise', t: '산만한 환경', s: '알림과 잦은 끊김' },
+        ],
+        step3_eye: 'STEP 03 · CHRONOTYPE DIAL',
+        step3_h: '하루가 시작되는 <em>시간</em>',
+        step3_s: '슬라이더를 움직여 당신의 생체 시계에 맞는 첫 리추얼 시점을 맞추세요.',
+        step4_eye: 'STEP 04 · RITUAL INTENSITY',
+        step4_h: '지속 가능한 <em>리듬</em>을 고르세요',
+        step4_s: '의지력이 아닌 시스템이 88일을 완성합니다.',
+        intensities: [
+          { id: 'gentle', min: 15, t: 'Gentle · 15분/일', s: '부담 없이 매일 100% 성공하는 입문 리듬', badge: '' },
+          { id: 'focused', min: 45, t: 'Focused · 45분/일', s: '상위 7% 사용자가 선택한 가장 높은 정착률', badge: 'BEST' },
+          { id: 'monk', min: 90, t: 'Monk Mode · 90분/일', s: '88일 만에 압도적 성과를 만드는 초집중 모드', badge: '' },
+        ],
+        step5_eye: 'STEP 05 · 88-DAY SYNTHESIS',
+        step5_h: '당신의 <em>88일 변화</em> 곡선',
+        step5_s: '의지력은 7일 만에 꺾이지만, 설계된 리추얼은 66일 이후 자동화됩니다.',
+        step5_cta: '나의 88일 리추얼 열기',
+        pw_eye: 'KAIRA ANNUAL PRIVILEGE',
+        pw_h: '하루 <em>106원</em>으로<br>가장 고요한 몰입을',
+        pw_s: '에스프레소 한 모금보다 적은 투자로 88일 정체성을 완성하세요.',
+        trial_label: '3일 무료 체험 활성화 (오늘 ₩0)',
+        tl1: '오늘 (Day 0): ₩0 결제 · 전체 리추얼 OS 즉시 잠금 해제',
+        tl2: '2일차 (Day 2): 갱신 24시간 전 알림 발송 · 원탭 해지 가능',
+        tl3: '3일차 (Day 3): 연간 ₩39,000 자동 전환 (하루 ₩106)',
+        annual_t: '연간 플랜 (Annual)',
+        annual_p: '₩39,000 / 년',
+        annual_sub: '월 ₩3,250 · 하루 ₩106',
+        annual_badge: '67% OFF · MOST POPULAR',
+        monthly_t: '월간 플랜 (Monthly)',
+        monthly_p: '₩9,900 / 월',
+        monthly_sub: '매월 자동 갱신',
+        pw_cta_trial: '3일 무료로 시작하기 (오늘 ₩0)',
+        pw_cta_now: '연간 ₩39,000으로 시작하기',
+        skip_txt: '무료 체험 모드로 먼저 둘러보기',
+        next: '계속하기',
+        tabs: ['오늘의 리추얼', '딥포커스', '88일 히트맵'],
+      },
+      en: {
+        step1_eye: 'STEP 01 · CORE IDENTITY',
+        step1_h: 'What kind of day are you <em>designing</em>?',
+        step1_s: 'Leave bloated checklists behind. Choose one quiet direction to master.',
+        goals: [
+          { id: 'deepwork', t: 'Deep Work', s: 'Zero-distraction flow' },
+          { id: 'dawn', t: 'Dawn Ritual', s: 'Unhurried mornings' },
+          { id: 'clarity', t: 'Mental Clarity', s: 'Dopamine reset' },
+          { id: 'balance', t: 'Body Balance', s: 'Sleep & recovery' },
+        ],
+        step2_eye: 'STEP 02 · HIDDEN FRICTION',
+        step2_h: 'What breaks your <em>flow</em>?',
+        step2_s: 'Select up to 2 friction points for your personalized AI coach prescription.',
+        frictions: [
+          { id: 'sns', t: 'Doomscrolling', s: 'Short-form loops' },
+          { id: 'sleep', t: 'Irregular Sleep', s: 'Late-night fatigue' },
+          { id: 'perfection', t: 'Perfectionism', s: 'Overthinking start' },
+          { id: 'noise', t: 'Digital Noise', s: 'Constant pings' },
+        ],
+        step3_eye: 'STEP 03 · CHRONOTYPE DIAL',
+        step3_h: 'When does your day <em>begin</em>?',
+        step3_s: 'Drag the dial to align your first ritual with your natural wake window.',
+        step4_eye: 'STEP 04 · RITUAL INTENSITY',
+        step4_h: 'Choose a <em>rhythm</em> you can keep',
+        step4_s: 'Built by system, not willpower.',
+        intensities: [
+          { id: 'gentle', min: 15, t: 'Gentle · 15m/day', s: 'Zero-friction consistency for busy schedules', badge: '' },
+          { id: 'focused', min: 45, t: 'Focused · 45m/day', s: 'Chosen by top 7% converters for highest retention', badge: 'BEST' },
+          { id: 'monk', min: 90, t: 'Monk Mode · 90m/day', s: 'High-output 88-day identity transformation', badge: '' },
+        ],
+        step5_eye: 'STEP 05 · 88-DAY SYNTHESIS',
+        step5_h: 'Your <em>88-Day</em> Transformation',
+        step5_s: 'Willpower fades by Day 7. A designed ritual becomes automatic by Day 66.',
+        step5_cta: 'Unlock My 88-Day Ritual',
+        pw_eye: 'KAIRA ANNUAL PRIVILEGE',
+        pw_h: 'Quiet mastery,<br>for <em>$0.12</em> a day.',
+        pw_s: 'Less than a sip of espresso for a full year of calm execution.',
+        trial_label: 'Enable 3-day free trial ($0 today)',
+        tl1: 'Today (Day 0): $0 charged · Instant full OS unlock',
+        tl2: 'Day 2: Friendly reminder 24h before renewal · 1-tap cancel',
+        tl3: 'Day 3: $44.99/year Web-Direct (Stripe 3.5% rail)',
+        annual_t: 'Annual Privilege',
+        annual_p: '$44.99 / yr',
+        annual_sub: '$3.75/mo · $0.12/day',
+        annual_badge: 'SAVE 67% · BEST VALUE',
+        monthly_t: 'Monthly Access',
+        monthly_p: '$11.99 / mo',
+        monthly_sub: 'Billed monthly',
+        pw_cta_trial: 'Start 3-Day Free Trial ($0 Today)',
+        pw_cta_now: 'Continue for $44.99 / year',
+        skip_txt: 'Explore Free Mode first',
+        next: 'Continue',
+        tabs: ['Today', 'Deep Focus', '88-Day Map'],
+      }
+    };
+
+    const STORE_KEY = 'kaira_ritual_state_v1';
+    let state = JSON.parse(localStorage.getItem(STORE_KEY) || 'null') || {
+      lang: 'ko',
+      theme: 'dark',
+      step: 1, // 1..6 onboarding/paywall, 7 = active OS
+      goal: 'deepwork',
+      frictions: ['sns'],
+      wakeMinutes: 390, // 06:30
+      intensity: 'focused',
+      trialOn: true,
+      plan: 'annual',
+      subscribed: false,
+      activeTab: 0,
+      rituals: [],
+      heatmap: Array.from({ length: 88 }, (_, i) => (i < 14 ? (i % 3 === 0 ? 2 : 3) : 0)),
+      streak: 14,
+      focusMinutesTotal: 420
+    };
+
+    let timerSec = 45 * 60;
+    let timerRunning = false;
+    let timerInterval = null;
+
+    function save() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    function t() { return I18N[state.lang]; }
+
+    function toggleLang() {
+      state.lang = state.lang === 'ko' ? 'en' : 'ko';
+      document.getElementById('langBtn').textContent = state.lang === 'ko' ? 'EN' : 'KO';
+      save(); render();
+    }
+    function toggleTheme() {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', state.theme);
+      document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '☀' : '☾';
+      save();
+    }
+
+    function formatWake(mins) {
+      const h = String(Math.floor(mins / 60)).padStart(2, '0');
+      const m = String(mins % 60).padStart(2, '0');
+      return `${h}:${m}`;
+    }
+    function skyStyle(mins) {
+      if (mins < 390) return { bg: 'linear-gradient(145deg, #161B2E, #3B2F4A, #B97A56)', lbl: state.lang === 'ko' ? '새벽 여명 · Dawn Architect' : 'Pre-Dawn · Quiet Architect' };
+      if (mins < 480) return { bg: 'linear-gradient(145deg, #2D3548, #8E6A4E, #D4AF6A)', lbl: state.lang === 'ko' ? '황금 아침 · Golden Hour' : 'Golden Morning · Peak Cortisol' };
+      return { bg: 'linear-gradient(145deg, #2C4A5E, #5B8699, #C7B299)', lbl: state.lang === 'ko' ? '오전 몰입 · Late Starter' : 'Mid-Morning · Steady Flow' };
+    }
+
+    function svgIcon(type) {
+      const s = 'stroke="var(--gold)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+      const map = {
+        deepwork: `<svg width="32" height="32" viewBox="0 0 24 24" ${s}><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>`,
+        dawn: `<svg width="32" height="32" viewBox="0 0 24 24" ${s}><path d="M12 4v3M4.93 7.93l2.12 2.12M19.07 7.93l-2.12 2.12M3 16h18M7 16a5 5 0 0 1 10 0"/></svg>`,
+        clarity: `<svg width="32" height="32" viewBox="0 0 24 24" ${s}><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>`,
+        balance: `<svg width="32" height="32" viewBox="0 0 24 24" ${s}><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16 4 4 0 0 1 0-8 4 4 0 0 0 0-8z"/></svg>`,
+        sns: `<svg width="28" height="28" viewBox="0 0 24 24" ${s}><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg>`,
+        sleep: `<svg width="28" height="28" viewBox="0 0 24 24" ${s}><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`,
+        perfection: `<svg width="28" height="28" viewBox="0 0 24 24" ${s}><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>`,
+        noise: `<svg width="28" height="28" viewBox="0 0 24 24" ${s}><path d="M3 12h3l3-7 4 14 3-7h5"/></svg>`,
+      };
+      return map[type] || map.clarity;
+    }
+
+    function buildPersonalizedRituals() {
+      const wake = formatWake(state.wakeMinutes);
+      const mins = state.intensity === 'gentle' ? 15 : state.intensity === 'monk' ? 90 : 45;
+      timerSec = mins * 60;
+      if (state.lang === 'ko') {
+        state.rituals = [
+          { id: 1, title: `${wake} 기상 직후 휴대폰 없이 물 한 잔`, tag: 'MORNING', done: true },
+          { id: 2, title: `KAIRA ${mins}분 딥포커스 1세션 완주`, tag: `${mins}M FOCUS`, done: false },
+          { id: 3, title: state.frictions.includes('sns') ? '오전 11시까지 쇼츠·SNS 앱 차단' : '핵심 1순위 작업 15분 선행 착수', tag: 'ANTI-FRICTION', done: false },
+          { id: 4, title: '취침 30분 전 오늘의 1줄 회고', tag: 'NIGHT', done: false },
+        ];
+      } else {
+        state.rituals = [
+          { id: 1, title: `${wake} Wake · Hydrate before touching phone`, tag: 'MORNING', done: true },
+          { id: 2, title: `Complete ${mins}m Deep Focus Session`, tag: `${mins}M FOCUS`, done: false },
+          { id: 3, title: state.frictions.includes('sns') ? 'Zero short-form feeds before 11:00 AM' : 'Start #1 priority task for 15m', tag: 'ANTI-FRICTION', done: false },
+          { id: 4, title: '1-line evening reflection before sleep', tag: 'NIGHT', done: false },
+        ];
+      }
+      save();
+    }
+
+    function render() {
+      document.documentElement.setAttribute('data-theme', state.theme);
+      document.getElementById('langBtn').textContent = state.lang === 'ko' ? 'EN' : 'KO';
+      document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '☀' : '☾';
+
+      const stage = document.getElementById('stage');
+      const ctaBar = document.getElementById('ctaBar');
+      const ctaBtn = document.getElementById('mainCta');
+      const pTrack = document.getElementById('progressTrack');
+      const pFill = document.getElementById('progressFill');
+      const L = t();
+
+      if (state.step <= 6) {
+        pTrack.classList.remove('hidden');
+        ctaBar.classList.remove('hidden');
+        pFill.style.width = `${(state.step / 6) * 100}%`;
+      } else {
+        pTrack.classList.add('hidden');
+        ctaBar.classList.add('hidden');
+      }
+
+      if (state.step === 1) {
+        stage.innerHTML = `
+          <div class="eyebrow">${L.step1_eye}</div>
+          <h1 class="hero-title">${L.step1_h}</h1>
+          <p class="hero-sub">${L.step1_s}</p>
+          <div class="visual-grid">
+            ${L.goals.map(g => `
+              <div class="v-card ${state.goal === g.id ? 'selected' : ''}" onclick="selectGoal('${g.id}')">
+                <div class="v-art">
+                  <img src="./assets/onboarding/${g.id}.jpg" alt="${g.t}" onerror="this.style.display='none'; this.parentElement.innerHTML=svgIcon('${g.id}')" />
+                </div>
+                <div class="v-card-title">${g.t}</div>
+                <div class="v-card-sub">${g.s}</div>
+              </div>
+            `).join('')}
+          </div>`;
+        ctaBtn.textContent = L.next;
+      } else if (state.step === 2) {
+        stage.innerHTML = `
+          <div class="eyebrow">${L.step2_eye}</div>
+          <h1 class="hero-title">${L.step2_h}</h1>
+          <p class="hero-sub">${L.step2_s}</p>
+          <div class="visual-grid">
+            ${L.frictions.map(f => `
+              <div class="v-card ${state.frictions.includes(f.id) ? 'selected' : ''}" onclick="toggleFriction('${f.id}')">
+                <div class="v-art">${svgIcon(f.id)}</div>
+                <div class="v-card-title">${f.t}</div>
+                <div class="v-card-sub">${f.s}</div>
+              </div>
+            `).join('')}
+          </div>`;
+        ctaBtn.textContent = L.next;
+      } else if (state.step === 3) {
+        const sky = skyStyle(state.wakeMinutes);
+        stage.innerHTML = `
+          <div class="eyebrow">${L.step3_eye}</div>
+          <h1 class="hero-title">${L.step3_h}</h1>
+          <p class="hero-sub">${L.step3_s}</p>
+          <div class="sky-card" id="skyCard" style="background:${sky.bg};">
+            <div class="sky-time" id="skyTime">${formatWake(state.wakeMinutes)}</div>
+            <div class="sky-label" id="skyLabel">${sky.lbl}</div>
+          </div>
+          <input type="range" class="luxury-slider" min="300" max="600" step="15" value="${state.wakeMinutes}" oninput="updateWake(this.value)" />
+          <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--text-muted);">
+            <span>05:00</span><span>07:30</span><span>10:00</span>
+          </div>`;
+        ctaBtn.textContent = L.next;
+      } else if (state.step === 4) {
+        stage.innerHTML = `
+          <div class="eyebrow">${L.step4_eye}</div>
+          <h1 class="hero-title">${L.step4_h}</h1>
+          <p class="hero-sub">${L.step4_s}</p>
+          <div class="stack-list">
+            ${L.intensities.map(x => `
+              <div class="stack-card ${state.intensity === x.id ? 'selected' : ''}" onclick="selectIntensity('${x.id}')">
+                <div>
+                  <div style="font-size:16px; font-weight:600; margin-bottom:4px;">${x.t}</div>
+                  <div style="font-size:12.5px; color:var(--text-secondary);">${x.s}</div>
+                </div>
+                ${x.badge ? `<span class="badge-rec">${x.badge}</span>` : ''}
+              </div>
+            `).join('')}
+          </div>`;
+        ctaBtn.textContent = L.next;
+      } else if (state.step === 5) {
+        const wake = formatWake(state.wakeMinutes);
+        const mins = state.intensity === 'gentle' ? 15 : state.intensity === 'monk' ? 90 : 45;
+        stage.innerHTML = `
+          <div class="eyebrow">${L.step5_eye}</div>
+          <h1 class="hero-title">${L.step5_h}</h1>
+          <p class="hero-sub">${L.step5_s}</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+            <span class="pill-btn gold">⏰ ${wake}</span>
+            <span class="pill-btn gold">⚡ ${mins}m / day</span>
+            <span class="pill-btn gold">🎯 88-Day Protocol</span>
+          </div>
+          <div class="check-row done"><span class="check-dot">✓</span><span>${state.lang === 'ko' ? '생체 시계 & 기상 리듬 매핑 완료' : 'Chronotype & wake window mapped'}</span></div>
+          <div class="check-row done"><span class="check-dot">✓</span><span>${state.lang === 'ko' ? '방해요소 차단 트리거 설계 완료' : 'Friction blocker triggers calibrated'}</span></div>
+          <div class="check-row done"><span class="check-dot">✓</span><span>${state.lang === 'ko' ? '88일 신경가소성 정착 커브 생성 완료' : '88-day neuroplasticity curve generated'}</span></div>
+          <div class="curve-card">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:10px;">
+              <span>● <strong style="color:var(--gold);">KAIRA System</strong></span>
+              <span>--- ${state.lang === 'ko' ? '기존 의지력' : 'Willpower only'}</span>
+            </div>
+            <svg viewBox="0 0 360 150" style="width:100%; height:auto; overflow:visible;">
+              <line x1="10" y1="130" x2="350" y2="130" stroke="var(--border)" />
+              <path d="M 15 110 Q 90 120, 170 125 T 345 128" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4 4" />
+              <path class="curve-path" d="M 15 115 C 80 105, 130 68, 210 42 S 300 22, 345 16" fill="none" stroke="var(--gold)" stroke-width="3" stroke-linecap="round" />
+              <circle cx="95" cy="92" r="4" fill="var(--gold)" />
+              <circle cx="235" cy="36" r="4" fill="var(--gold)" />
+              <circle cx="345" cy="16" r="5.5" fill="var(--gold)" />
+              <text x="82" y="145" fill="var(--text-muted)" font-size="10" font-family="JetBrains Mono">Day 21</text>
+              <text x="218" y="145" fill="var(--text-muted)" font-size="10" font-family="JetBrains Mono">Day 66</text>
+              <text x="315" y="145" fill="var(--gold)" font-size="10" font-family="JetBrains Mono">Day 88</text>
+            </svg>
+          </div>`;
+        ctaBtn.textContent = L.step5_cta;
+      } else if (state.step === 6) {
+        stage.innerHTML = `
+          <div class="eyebrow">${L.pw_eye}</div>
+          <h1 class="hero-title">${L.pw_h}</h1>
+          <p class="hero-sub">${L.pw_s}</p>
+          <div class="trial-toggle-box">
+            <span style="font-size:13.5px; font-weight:600;">${L.trial_label}</span>
+            <div class="switch ${state.trialOn ? 'on' : ''}" onclick="toggleTrial()"></div>
+          </div>
+          ${state.trialOn ? `
+            <div class="timeline-box">
+              <div class="tl-item"><span class="tl-dot"></span><span>${L.tl1}</span></div>
+              <div class="tl-item"><span class="tl-dot" style="opacity:0.65;"></span><span>${L.tl2}</span></div>
+              <div class="tl-item"><span class="tl-dot" style="opacity:0.35;"></span><span>${L.tl3}</span></div>
+            </div>` : ''}
+          <div class="plan-card ${state.plan === 'annual' ? 'selected' : ''}" onclick="selectPlan('annual')">
+            <span class="plan-badge">${L.annual_badge}</span>
+            <div>
+              <div style="font-size:15px; font-weight:700;">${L.annual_t}</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">${L.annual_sub}</div>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--gold);">${L.annual_p}</div>
+          </div>
+          <div class="plan-card ${state.plan === 'monthly' ? 'selected' : ''}" onclick="selectPlan('monthly')">
+            <div>
+              <div style="font-size:15px; font-weight:600;">${L.monthly_t}</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">${L.monthly_sub}</div>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:14px; color:var(--text-secondary);">${L.monthly_p}</div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; font-size:12px; color:var(--text-secondary);">
+            <span>★ 4.9 (12,400+ Reviews)</span>
+            <span style="color:var(--sage);">Web-Direct · 3.5% Rail</span>
+          </div>
+          <button class="pill-btn" style="margin:18px auto 0; border:none; background:transparent; color:var(--text-muted);" onclick="enterOS(false)">${L.skip_txt}</button>`;
+        ctaBtn.textContent = state.trialOn ? L.pw_cta_trial : L.pw_cta_now;
+      } else {
+        renderOS(stage, L);
+      }
+    }
+
+    function renderOS(stage, L) {
+      if (!state.rituals || state.rituals.length === 0) buildPersonalizedRituals();
+      const doneCount = state.rituals.filter(r => r.done).length;
+      const pct = Math.round((doneCount / state.rituals.length) * 100);
+
+      let bodyHtml = '';
+      if (state.activeTab === 0) {
+        bodyHtml = `
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-radius:22px; background:var(--bg-elevated); border:1px solid var(--border); margin-bottom:16px;">
+            <div>
+              <div class="eyebrow" style="margin-bottom:4px;">DAY ${state.streak} / 88 · ${state.subscribed ? 'ANNUAL PRO' : 'FREE MODE'}</div>
+              <div style="font-family:var(--font-serif); font-size:26px;">${state.lang === 'ko' ? '오늘의 고요한 리추얼' : "Today's Quiet Rituals"}</div>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:24px; font-weight:700; color:var(--gold);">${pct}%</div>
+          </div>
+          ${state.rituals.map(r => `
+            <div class="ritual-item ${r.done ? 'done' : ''}" onclick="toggleRitual(${r.id})">
+              <div>
+                <div style="font-size:10px; font-weight:700; letter-spacing:0.12em; color:var(--gold); margin-bottom:3px;">${r.tag}</div>
+                <div style="font-size:14.5px; font-weight:500; ${r.done ? 'text-decoration:line-through; opacity:0.75;' : ''}">${r.title}</div>
+              </div>
+              <div class="ritual-check">${r.done ? '✓' : ''}</div>
+            </div>
+          `).join('')}
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <input id="newRitualInput" placeholder="${state.lang === 'ko' ? '새 리추얼 추가...' : 'Add new ritual...'}" style="flex:1; padding:12px 14px; border-radius:14px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-primary); font-family:var(--font-sans); font-size:13.5px;" />
+            <button class="pill-btn gold" style="padding:0 16px; border-radius:14px;" onclick="addRitual()">+</button>
+          </div>
+          <div class="coach-card">
+            <div class="eyebrow" style="margin-bottom:6px;">AI RITUAL COACH INSIGHT</div>
+            <p style="font-size:13px; line-height:1.58; color:var(--text-primary);">
+              ${state.lang === 'ko'
+                ? `현재 ${state.streak}일 연속 스트릭 유지 중입니다. ${formatWake(state.wakeMinutes)} 기상 직후 첫 15분간 휴대폰을 비행기 모드로 유지하면 오늘 완료율이 94%까지 올라갑니다.`
+                : `You are on a ${state.streak}-day streak. Keeping airplane mode on for 15 minutes after ${formatWake(state.wakeMinutes)} boosts your daily completion odds to 94%.`}
+            </p>
+          </div>`;
+      } else if (state.activeTab === 1) {
+        const mm = String(Math.floor(timerSec / 60)).padStart(2, '0');
+        const ss = String(timerSec % 60).padStart(2, '0');
+        bodyHtml = `
+          <div class="timer-ring-wrap">
+            <div class="eyebrow">DEEP FOCUS · 4s BREATHING SYNC</div>
+            <div class="breathing-aura ${timerRunning ? 'running' : ''}" style="border:2px solid var(--gold-border); background:var(--bg-elevated); margin:16px 0 22px;">
+              <div style="text-align:center;">
+                <div class="timer-digits" id="timerDigits">${mm}:${ss}</div>
+                <div style="font-size:11px; letter-spacing:0.14em; color:var(--text-secondary); margin-top:4px;">${timerRunning ? 'INHALE · EXHALE' : 'READY FOR FLOW'}</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; width:100%;">
+              <button class="primary-btn" onclick="toggleTimer()">${timerRunning ? (state.lang === 'ko' ? '일시정지' : 'Pause') : (state.lang === 'ko' ? '몰입 시작 · 방해 금지' : 'Enter Deep Focus')}</button>
+              <button class="pill-btn" style="padding:0 18px;" onclick="resetTimer()">↺</button>
+            </div>
+          </div>`;
+      } else {
+        bodyHtml = `
+          <div style="padding:18px 20px; border-radius:22px; background:var(--bg-elevated); border:1px solid var(--border);">
+            <div class="eyebrow">88-DAY IDENTITY HEATMAP</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:12px 0 6px;">
+              <div style="padding:12px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border);">
+                <div style="font-size:10px; color:var(--text-muted);">STREAK</div>
+                <div style="font-family:var(--font-mono); font-size:22px; color:var(--gold); font-weight:700;">${state.streak}d</div>
+              </div>
+              <div style="padding:12px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border);">
+                <div style="font-size:10px; color:var(--text-muted);">FOCUS</div>
+                <div style="font-family:var(--font-mono); font-size:22px; font-weight:700;">${state.focusMinutesTotal}m</div>
+              </div>
+              <div style="padding:12px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border);">
+                <div style="font-size:10px; color:var(--text-muted);">TARGET</div>
+                <div style="font-family:var(--font-mono); font-size:22px; color:var(--sage); font-weight:700;">88d</div>
+              </div>
+            </div>
+            <div class="heatmap-grid">
+              ${state.heatmap.map((v, i) => `<div class="hm-dot ${v === 1 ? 'l1' : v === 2 ? 'l2' : v === 3 ? 'l3' : ''}" title="Day ${i+1}"></div>`).join('')}
+            </div>
+            <button class="pill-btn" style="margin-top:16px;" onclick="restartOnboarding()">↺ ${state.lang === 'ko' ? '온보딩 & 페이월 다시 체험하기' : 'Replay Onboarding & Paywall'}</button>
+          </div>`;
+      }
+
+      stage.innerHTML = `
+        <div class="os-tabs">
+          ${L.tabs.map((lbl, idx) => `<button class="os-tab ${state.activeTab === idx ? 'active' : ''}" onclick="setTab(${idx})">${lbl}</button>`).join('')}
+        </div>
+        ${bodyHtml}`;
+    }
+
+    function selectGoal(id) { state.goal = id; save(); render(); }
+    function toggleFriction(id) {
+      if (state.frictions.includes(id)) state.frictions = state.frictions.filter(x => x !== id);
+      else if (state.frictions.length < 2) state.frictions.push(id);
+      else { state.frictions.shift(); state.frictions.push(id); }
+      save(); render();
+    }
+    function updateWake(val) {
+      state.wakeMinutes = Number(val);
+      const sky = skyStyle(state.wakeMinutes);
+      document.getElementById('skyTime').textContent = formatWake(state.wakeMinutes);
+      document.getElementById('skyLabel').textContent = sky.lbl;
+      document.getElementById('skyCard').style.background = sky.bg;
+      save();
+    }
+    function selectIntensity(id) { state.intensity = id; save(); render(); }
+    function toggleTrial() { state.trialOn = !state.trialOn; save(); render(); }
+    function selectPlan(p) { state.plan = p; save(); render(); }
+
+    function handleNext() {
+      if (state.step < 6) {
+        state.step += 1;
+        save(); render();
+      } else {
+        document.getElementById('chkTodayAmt').textContent = state.trialOn
+          ? (state.lang === 'ko' ? '₩0 (3일 무료)' : '$0.00 (3-day trial)')
+          : (state.plan === 'annual' ? (state.lang === 'ko' ? '₩39,000 / 년' : '$44.99 / yr') : (state.lang === 'ko' ? '₩9,900 / 월' : '$11.99 / mo'));
+        document.getElementById('checkoutModal').classList.add('open');
+      }
+    }
+    function closeCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
+    function completeCheckout() { closeCheckout(); enterOS(true); }
+    function enterOS(isPro) {
+      state.subscribed = isPro;
+      state.step = 7;
+      buildPersonalizedRituals();
+      render();
+    }
+    function setTab(i) { state.activeTab = i; save(); render(); }
+    function toggleRitual(id) {
+      const r = state.rituals.find(x => x.id === id);
+      if (r) {
+        r.done = !r.done;
+        const doneRatio = state.rituals.filter(x => x.done).length / state.rituals.length;
+        state.heatmap[state.streak] = doneRatio >= 0.75 ? 3 : doneRatio > 0 ? 2 : 0;
+        save(); render();
+      }
+    }
+    function addRitual() {
+      const inp = document.getElementById('newRitualInput');
+      if (inp && inp.value.trim()) {
+        state.rituals.push({ id: Date.now(), title: inp.value.trim(), tag: 'CUSTOM', done: false });
+        save(); render();
+      }
+    }
+    function toggleTimer() {
+      if (timerRunning) {
+        clearInterval(timerInterval); timerRunning = false; render();
+      } else {
+        timerRunning = true; render();
+        timerInterval = setInterval(() => {
+          if (timerSec > 0) {
+            timerSec -= 1;
+            const el = document.getElementById('timerDigits');
+            if (el) el.textContent = `${String(Math.floor(timerSec/60)).padStart(2,'0')}:${String(timerSec%60).padStart(2,'0')}`;
+          } else {
+            clearInterval(timerInterval); timerRunning = false;
+            state.focusMinutesTotal += 45;
+            if (state.rituals[1]) state.rituals[1].done = true;
+            save(); render();
+          }
+        }, 1000);
+      }
+    }
+    function resetTimer() {
+      clearInterval(timerInterval); timerRunning = false;
+      timerSec = (state.intensity === 'gentle' ? 15 : state.intensity === 'monk' ? 90 : 45) * 60;
+      render();
+    }
+    function restartOnboarding() { state.step = 1; save(); render(); }
+
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+    render();
+  </script>
+</body>
+</html>

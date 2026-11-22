@@ -1,0 +1,9 @@
+{
+  "name": "KAIRA — Quiet Luxury Ritual OS",
+  "short_name": "KAIRA",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0E0D0C",
+  "theme_color": "#0E0D0C",
+  "description": "88-Day Quiet Luxury Habit & Deep Focus Web-to-App OS"
+}

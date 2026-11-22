@@ -1,0 +1,91 @@
+{
+  "onboarding_artworks": {
+    "deepwork": {
+      "ok": true,
+      "path": "./assets/onboarding/deepwork.jpg",
+      "status": "CACHED (445,886 bytes)"
+    },
+    "dawn": {
+      "ok": true,
+      "path": "./assets/onboarding/dawn.jpg",
+      "status": "CACHED (520,382 bytes)"
+    },
+    "clarity": {
+      "ok": true,
+      "path": "./assets/onboarding/clarity.jpg",
+      "status": "CACHED (617,554 bytes)"
+    },
+    "balance": {
+      "ok": true,
+      "path": "./assets/onboarding/balance.jpg",
+      "status": "CACHED (618,297 bytes)"
+    }
+  },
+  "ad_creatives": [
+    {
+      "id": "F1",
+      "title": "POV Hook (1인칭 몰입)",
+      "voice_text": "작심삼일만 십 년째던 내가, 팔십팔 일째 새벽 여섯 시에 눈 뜨게 된 단 하나의 화면. 복잡한 습관 앱 대신, 단 삼 초면 끝나는 카이라 리추얼.",
+      "image": "./assets/ads/ad_F1.jpg",
+      "audio": "./assets/ads/ad_F1.mp3",
+      "video": "./assets/ads/ad_F1.mp4",
+      "statuses": {
+        "image": "CACHED (460,956 bytes)",
+        "audio": "CACHED (172,660 bytes)",
+        "video": "RENDERED (335,610 bytes)"
+      }
+    },
+    {
+      "id": "F2",
+      "title": "Before / After 88-Day Curve",
+      "voice_text": "데이 원과 데이 팔십팔. 습관 트래커 화면 딱 하나 바꿨을 뿐인데, 의지력이 아니라 시스템이 하루를 바꿉니다. 오늘이 당신의 데이 원입니다.",
+      "image": "./assets/ads/ad_F2.jpg",
+      "audio": "./assets/ads/ad_F2.mp3",
+      "video": "./assets/ads/ad_F2.mp4",
+      "statuses": {
+        "image": "CACHED (541,060 bytes)",
+        "audio": "CACHED (172,660 bytes)",
+        "video": "RENDERED (347,955 bytes)"
+      }
+    },
+    {
+      "id": "F3",
+      "title": "Competitor Painpoint",
+      "voice_text": "유명한 습관 앱 다섯 개 다 지웠습니다. 설정만 이십 분 걸리거든요. 하루 백육 원으로 가장 고요하고 단순한 몰입을 시작하세요.",
+      "image": "./assets/ads/ad_F3.jpg",
+      "audio": "./assets/ads/ad_F3.mp3",
+      "video": "./assets/ads/ad_F3.mp4",
+      "statuses": {
+        "image": "CACHED (397,761 bytes)",
+        "audio": "CACHED (142,985 bytes)",
+        "video": "RENDERED (241,073 bytes)"
+      }
+    },
+    {
+      "id": "F4",
+      "title": "ASMR Quiet Luxury UI",
+      "voice_text": "하루를 끝내는 가장 고요하고 중독적인 삼 초 체크인. 카이라 딥포커스 리추얼, 지금 삼 일 무료로 경험해 보세요.",
+      "image": "./assets/ads/ad_F4.jpg",
+      "audio": "./assets/ads/ad_F4.mp3",
+      "video": "./assets/ads/ad_F4.mp4",
+      "statuses": {
+        "image": "CACHED (428,900 bytes)",
+        "audio": "CACHED (123,758 bytes)",
+        "video": "RENDERED (203,079 bytes)"
+      }
+    },
+    {
+      "id": "F5",
+      "title": "Psychology Checklist Hook",
+      "voice_text": "다섯 개 중 세 개 해당되면 의지력이 아니라 환경 도파민 문제입니다. 삼십 초 무료 진단으로 나만의 팔십팔 일 실행 곡선을 확인하세요.",
+      "image": "./assets/ads/ad_F5.jpg",
+      "audio": "./assets/ads/ad_F5.mp3",
+      "video": "./assets/ads/ad_F5.mp4",
+      "statuses": {
+        "image": "CACHED (448,350 bytes)",
+        "audio": "CACHED (163,883 bytes)",
+        "video": "RENDERED (297,164 bytes)"
+      }
+    }
+  ]
+}

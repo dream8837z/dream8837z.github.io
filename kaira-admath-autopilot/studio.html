@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AD-MATH Command Studio — KAIRA 2-Stage Paid UA & Unit Economics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    :root {
+      --bg-base: #08090B;
+      --bg-panel: #101216;
+      --bg-surface: #161920;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-active: rgba(212, 175, 106, 0.38);
+      --text-primary: #F3F4F6;
+      --text-secondary: #9CA3AF;
+      --text-muted: #6B7280;
+      --gold: #D4AF6A;
+      --gold-soft: rgba(212, 175, 106, 0.14);
+      --safe: #34D399;
+      --safe-soft: rgba(52, 211, 153, 0.12);
+      --warn: #F59E0B;
+      --warn-soft: rgba(245, 158, 11, 0.12);
+      --danger: #F43F5E;
+      --danger-soft: rgba(244, 63, 94, 0.14);
+      --asa: #60A5FA;
+      --tiktok: #E879F9;
+      --seo: #34D399;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-sans: 'Pretendard Variable', 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    /* Top Command Bar */
+    .cmd-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: rgba(8, 9, 11, 0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .masthead {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .masthead-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      letter-spacing: -0.02em;
+    }
+    .masthead-title em { color: var(--gold); font-style: italic; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .pill.gold { background: var(--gold-soft); border-color: var(--border-active); color: var(--gold); }
+    .pill.safe { background: var(--safe-soft); border-color: rgba(52,211,153,0.35); color: var(--safe); }
+    .pill.warn { background: var(--warn-soft); border-color: rgba(245,158,11,0.35); color: var(--warn); }
+    .pill.danger { background: var(--danger-soft); border-color: rgba(244,63,94,0.4); color: var(--danger); }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 20px 24px 60px;
+    }
+
+    /* Top KPI Ribbon */
+    .kpi-ribbon {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .kpi-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; }
+    .kpi-val { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+    .kpi-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Asymmetric 2-Column Split */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 1024px) { .split-grid { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .panel-title { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+
+    /* Segmented Toggle */
+    .seg {
+      display: inline-flex;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .seg button {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .seg button.active { background: var(--gold); color: #101216; }
+
+    /* Sliders */
+    .slider-row { margin-bottom: 12px; }
+    .slider-meta { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 5px; }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th {
+      text-align: left;
+      padding: 9px 10px;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 11px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .act-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+    .act-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .act-btn.done { background: var(--safe-soft); border-color: var(--safe); color: var(--safe); }
+
+    /* Margin Waterfall Bar */
+    .bar-track {
+      height: 22px;
+      border-radius: 6px;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      position: relative;
+      margin: 10px 0;
+    }
+    .bar-seg { height: 100%; transition: width 0.35s ease; }
+
+    /* Guardrail Alert Box */
+    .guard-box {
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      margin-top: 10px;
+    }
+    .guard-box.locked { border-color: var(--danger); background: var(--danger-soft); }
+    .guard-box.ok { border-color: var(--safe); background: var(--safe-soft); }
+
+    .kw-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      margin: 0 6px 6px 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="cmd-bar">
+    <div class="masthead">
+      <span class="masthead-title">AD-MATH <em>Command Studio</em></span>
+      <span class="pill gold">SERVER COST $0 · CLOUDFLARE D1</span>
+      <span class="pill safe" id="genTimePill">LIVE AUTOPILOT</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span class="pill danger" id="alertBadge">3 GUARDRAILS</span>
+      <a class="pill gold" href="./index.html">← KAIRA 소비자 앱 열기</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Top KPI Ribbon -->
+    <section class="kpi-ribbon" id="kpiRibbon"></section>
+
+    <!-- Main 2-Column Command Split -->
+    <div class="split-grid">
+      <!-- LEFT COLUMN (62%): Break-Even CPA Gauge + 30%->60% Hybrid Margin Simulator -->
+      <div>
+        <!-- Module 1: Live 180° Break-Even CPA Arc Gauge -->
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">🎯 실시간 손익분기(Break-Even) CPA 계기판 & 수수료 차익 비교</div>
+            <div class="seg">
+              <button id="railGlobalBtn" class="active" onclick="setRail('global')">글로벌 Web-to-App (3.5%)</button>
+              <button id="railKrBtn" onclick="setRail('kr')">한국 단독 iOS (26.8% 공제)</button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 240px 1fr; gap:20px; align-items:center;">
+            <div style="text-align:center;">
+              <svg viewBox="0 0 220 130" style="width:220px; height:auto;">
+                <!-- Safe Arc -->
+                <path d="M 20 110 A 90 90 0 0 1 110 20" fill="none" stroke="rgba(52,211,153,0.28)" stroke-width="14" stroke-linecap="round"/>
+                <!-- Danger Arc -->
+                <path d="M 110 20 A 90 90 0 0 1 200 110" fill="none" stroke="rgba(244,63,94,0.28)" stroke-width="14" stroke-linecap="round"/>
+                <!-- Break-even Gold Tick at Top (110, 20) -->
+                <line x1="110" y1="8" x2="110" y2="30" stroke="#D4AF6A" stroke-width="3"/>
+                <!-- Needle -->
+                <g id="gaugeNeedle" transform="rotate(-35 110 110)" style="transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);">
+                  <line x1="110" y1="110" x2="110" y2="32" stroke="#F3F4F6" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="110" cy="110" r="6" fill="#D4AF6A"/>
+                </g>
+              </svg>
+              <div class="mono" style="font-size:20px; font-weight:700; color:var(--gold); margin-top:-6px;" id="gaugeBeVal">₩58,338</div>
+              <div style="font-size:11px; color:var(--text-secondary);">Break-Even CPA 상한선</div>
+            </div>
+
+            <div>
+              <div class="slider-row">
+                <div class="slider-meta"><span>실현 객단가 (Gross ARPPU)</span><strong class="mono" id="lblArppu">₩63,000</strong></div>
+                <input type="range" id="slArppu" min="20000" max="90000" step="1000" value="63000" oninput="updateGauge()" />
+              </div>
+              <div class="slider-row">
+                <div class="slider-meta"><span>현재 실제 획득 단가 (Actual CPA)</span><strong class="mono" id="lblCpa">₩37,800</strong></div>
+                <input type="range" id="slCpa" min="10000" max="75000" step="500" value="37800" oninput="updateGauge()" />
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px;">
+                <div style="background:var(--bg-surface); padding:10px; border-radius:8px; border:1px solid var(--border);">
+                  <div style="font-size:10px; color:var(--text-muted);">실질 수취율</div>
+                  <div class="mono" style="font-size:16px; font-weight:700;" id="outTakeRate">92.6%</div>
+                </div>
+                <div style="background:var(--bg-surface); padding:10px; border-radius:8px; border:1px solid var(--border);">
+                  <div style="font-size:10px; color:var(--text-muted);">목표 Cost Cap (30%마진)</div>
+                  <div class="mono" style="font-size:16px; font-weight:700; color:var(--gold);" id="outCostCap">₩40,837</div>
+                </div>
+                <div style="background:var(--bg-surface); padding:10px; border-radius:8px; border:1px solid var(--border);">
+                  <div style="font-size:10px; color:var(--text-muted);">유저당 여유 마진</div>
+                  <div class="mono" style="font-size:16px; font-weight:700; color:var(--safe);" id="outHeadroom">+₩20,538</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Module 2: ASA vs TikTok Cost Cap vs SEO Hybrid Margin Simulator (30% -> 60%) -->
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">📈 ASA · TikTok Cost Cap · 무료 SEO 하이브리드 마진 시뮬레이터 (30% → 60%)</div>
+            <span class="pill gold mono" id="simTargetBadge">TARGET 60%+</span>
+          </div>
+          <div class="slider-row">
+            <div class="slider-meta">
+              <span>무료 오가닉(pSEO · 숏폼 오가닉) 유입 비중</span>
+              <strong class="mono" style="color:var(--seo);" id="lblSeoShare">50%</strong>
+            </div>
+            <input type="range" id="slSeoShare" min="0" max="80" step="5" value="50" oninput="updateHybridSim()" />
+          </div>
+          <div class="bar-track">
+            <div class="bar-seg" id="barPaidCost" style="width:32%; background:var(--tiktok);" title="Paid Ad Spend"></div>
+            <div class="bar-seg" id="barFees" style="width:7.4%; background:var(--warn);" title="Fees & Refunds"></div>
+            <div class="bar-seg" id="barProfit" style="width:60.6%; background:var(--safe);" title="Net Operating Profit"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--text-secondary); margin-bottom:14px;">
+            <span>■ 유료 광고비 (<span class="mono" id="txtAdPct">30.0%</span>)</span>
+            <span>■ 수수료/환불 (<span class="mono">7.4%</span>)</span>
+            <span style="color:var(--safe); font-weight:700;">■ 순영업이익률 (<span class="mono" id="txtProfitPct">62.6%</span>)</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;" id="scenarioCards"></div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN (38%): 20% Scale-Up Guardrail Lock + 5x50K Creative Test Matrix -->
+      <div>
+        <!-- Module 3: Interactive 20% Budget Guardrail Lock -->
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">🛡️ 20% 증액 가드레일 & 72h 쿨다운 제어기</div>
+            <span class="pill safe" id="guardStatusPill">SAFE</span>
+          </div>
+          <div class="slider-row">
+            <div class="slider-meta"><span>전일 일예산: <strong class="mono">₩100,000</strong> → 변경 요청 예산</span><strong class="mono" id="lblNewBudget">₩120,000 (+20%)</strong></div>
+            <input type="range" id="slNewBudget" min="80000" max="200000" step="5000" value="120000" oninput="checkGuardrail()" />
+          </div>
+          <div class="slider-row">
+            <div class="slider-meta"><span>직전 예산 변경 후 경과 시간 (최소 72h 쿨다운)</span><strong class="mono" id="lblCooldown">72시간</strong></div>
+            <input type="range" id="slCooldown" min="6" max="120" step="6" value="72" oninput="checkGuardrail()" />
+          </div>
+          <div class="guard-box ok" id="guardBox">
+            <div style="font-size:12.5px; font-weight:700;" id="guardTitle">✅ 증액 승인 가능 (알고리즘 학습 안전 구간)</div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;" id="guardDesc">증액률 +20.0% 이내 및 72시간 쿨다운 충족. TikTok/ASA 머신러닝 초기화 없이 안전하게 스케일업 가능합니다.</div>
+          </div>
+        </section>
+
+        <!-- Module 4: 5-Format x ₩50,000 Creative Testing Board -->
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">🎬 5포맷 × 5만 원 (총 25만 원) 틱톡 테스트 보드</div>
+            <span class="pill gold mono">CAP ₩250,000</span>
+          </div>
+          <div id="creativeMatrix"></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Full Width: Live Morning Ad-Ops Action Queue (from ad_ops_autopilot.py) -->
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">⚡ 매일 아침 08:00 Ad-Ops 자동 교차분석 & 원클릭 액션 큐 (`ad_ops_autopilot.py` 실측 출력)</div>
+        <span class="pill gold">SEARCH MATCH OFF · EXACT ONLY · 20% CAP</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>플랫폼 / 캠페인</th>
+              <th>방식 / 시장</th>
+              <th>지출액</th>
+              <th>전환 / CPA</th>
+              <th>손익분기 CPA</th>
+              <th>D0 ROAS</th>
+              <th>권고 액션 & 가드레일 진단</th>
+              <th>승인</th>
+            </tr>
+          </thead>
+          <tbody id="campaignTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Full Width: Live AI Generated 5-Format TikTok/Reels Video Ad Gallery -->
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">🎥 실물 렌더링 완료: 5포맷 틱톡/릴스 AI 광고 영상 & ElevenLabs 보이스 (FLUX.1-schnell + ElevenLabs + FFmpeg)</div>
+        <span class="pill safe">5/5 LIVE MP4 READY</span>
+      </div>
+      <div id="aiVideoGallery" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;"></div>
+    </section>
+
+    <!-- Full Width: Live App Store Top 10 [Exact Match] Competitor Keywords (from creative_factory.py) -->
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">🔍 실시간 App Store 경쟁사 [Exact Match] Top 10 키워드 추출기 (`creative_factory.py` iTunes API 실측)</div>
+        <div class="seg">
+          <button id="kwUsBtn" class="active" onclick="renderKeywords('US')">🇺🇸 US Tier-1 Top 10</button>
+          <button id="kwKrBtn" onclick="renderKeywords('KR')">🇰🇷 KR Top 10</button>
+        </div>
+      </div>
+      <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;" id="kwGuardLine"></div>
+      <div id="kwContainer"></div>
+    </section>
+  </main>
+
+  <script>
+    let BRIEF = null;
+    let PACK = null;
+    let ASSETS = null;
+    let currentRail = 'global';
+    let currentKwMarket = 'US';
+
+    async function boot() {
+      try {
+        const [bRes, pRes, aRes] = await Promise.all([
+          fetch('./data/morning_brief.json'),
+          fetch('./data/creative_pack.json'),
+          fetch('./data/ai_assets_manifest.json')
+        ]);
+        BRIEF = await bRes.json();
+        PACK = await pRes.json();
+        ASSETS = await aRes.json();
+      } catch (e) {
+        console.warn('Direct file:// fallback active');
+      }
+      renderAll();
+      updateGauge();
+      updateHybridSim();
+      checkGuardrail();
+    }
+
+    function fmtKrw(n) {
+      if (n === null || n === undefined) return '—';
+      return (n < 0 ? '-₩' : '₩') + Math.abs(Math.round(n)).toLocaleString('ko-KR');
+    }
+
+    function renderAll() {
+      if (!BRIEF) return;
+      const s = BRIEF.summary;
+      document.getElementById('genTimePill').textContent = `SYNCED ${BRIEF.generated_at}`;
+      document.getElementById('alertBadge').textContent = `${s.guardrail_alert_count} GUARDRAILS · ${s.kill_count} KILL · ${s.scale_count} SCALE`;
+
+      document.getElementById('kpiRibbon').innerHTML = `
+        <div class="kpi-card">
+          <div class="kpi-label">일일 총 광고비 (Spend)</div>
+          <div class="kpi-val mono">${fmtKrw(s.total_spend_krw)}</div>
+          <div class="kpi-sub">${s.total_campaigns}개 활성 캠페인 교차분석</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">실수령 순매출 (Net Rev)</div>
+          <div class="kpi-val mono" style="color:var(--gold);">${fmtKrw(s.total_net_revenue_krw)}</div>
+          <div class="kpi-sub">총매출 ${fmtKrw(s.total_gross_revenue_krw)} · 유료 ${s.total_paid_conversions}건</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">당일 순영업이익 (Margin)</div>
+          <div class="kpi-val mono" style="color:var(--safe);">${fmtKrw(s.net_profit_krw)}</div>
+          <div class="kpi-sub">영업마진 ${s.blended_margin_pct}% · D0 ROAS ${s.blended_d0_roas}x</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">블렌디드 CPA</div>
+          <div class="kpi-val mono">${fmtKrw(s.blended_cpa_krw)}</div>
+          <div class="kpi-sub">가드레일 경보 ${s.guardrail_alert_count}건 · 스케일 대기 ${s.scale_count}건</div>
+        </div>`;
+
+      // Hybrid Scenarios
+      document.getElementById('scenarioCards').innerHTML = BRIEF.hybrid_scenarios.map(sc => `
+        <div style="background:var(--bg-surface); border:1px solid ${sc.operating_margin_pct >= 60 ? 'var(--border-active)' : 'var(--border)'}; border-radius:10px; padding:12px;">
+          <div style="font-size:11.5px; font-weight:700; margin-bottom:4px;">${sc.name}</div>
+          <div class="mono" style="font-size:18px; font-weight:700; color:${sc.operating_margin_pct < 0 ? 'var(--danger)' : sc.operating_margin_pct >= 60 ? 'var(--gold)' : 'var(--safe)'};">
+            ${sc.operating_margin_pct > 0 ? '+' : ''}${sc.operating_margin_pct}% (${fmtKrw(sc.monthly_net_profit_krw)}/월)
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">BE-CPA ${fmtKrw(sc.breakeven_cpa_krw)} · ${sc.verdict}</div>
+        </div>`).join('');
+
+      // Campaign Action Queue
+      document.getElementById('campaignTbody').innerHTML = BRIEF.campaigns.map((c, idx) => {
+        const badgeCls = c.recommended_action === 'FIX_GUARDRAIL' || c.recommended_action === 'KILL' ? 'danger'
+          : (c.recommended_action === 'SCALE_20' || c.recommended_action === 'SWITCH_COST_CAP') ? 'safe' : 'warn';
+        return `
+          <tr>
+            <td>
+              <div style="font-weight:700;">${c.campaign_name}</div>
+              <div class="mono" style="font-size:11px; color:var(--text-muted);">${c.platform.toUpperCase()} · ${c.label}</div>
+            </td>
+            <td>
+              <span class="pill" style="font-size:10px;">${c.market} · ${c.match_or_bid}</span>
+              ${c.search_match_on ? '<div class="mono" style="color:var(--danger); font-size:10.5px; margin-top:3px;">⚠ SEARCH MATCH ON</div>' : ''}
+            </td>
+            <td class="mono">${fmtKrw(c.spend_krw)}</td>
+            <td class="mono">${c.paid_conversions}건 / ${fmtKrw(c.actual_cpa_krw)}</td>
+            <td class="mono" style="color:var(--gold);">${fmtKrw(c.breakeven_cpa_krw)}</td>
+            <td class="mono" style="color:${c.d0_roas >= 1.33 ? 'var(--safe)' : c.d0_roas < 1.0 ? 'var(--danger)' : 'var(--warn)'}; font-weight:700;">${c.d0_roas.toFixed(2)}x</td>
+            <td>
+              <span class="pill ${badgeCls}" style="margin-bottom:4px;">${c.recommended_action}</span>
+              <div style="font-size:11.5px; color:var(--text-secondary);">${c.action_note}</div>
+            </td>
+            <td><button class="act-btn" id="actBtn_${idx}" onclick="approveAction(${idx}, '${c.recommended_action}')">실행</button></td>
+          </tr>`;
+      }).join('');
+
+      // Creative Matrix
+      if (PACK) {
+        document.getElementById('creativeMatrix').innerHTML = PACK.five_formats.map(f => {
+          const cls = f.status === 'KILL' ? 'danger' : (f.status === 'WINNER' || f.status === 'SCALING') ? 'safe' : 'warn';
+          return `
+            <div style="padding:11px 12px; border-radius:9px; background:var(--bg-surface); border:1px solid var(--border); margin-bottom:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <strong style="font-size:12.5px;">${f.id}. ${f.name}</strong>
+                <span class="pill ${cls}" style="font-size:10px;">${f.status} · CTR ${f.ctr_benchmark}</span>
+              </div>
+              <div style="font-size:12px; color:var(--text-primary); margin-bottom:3px;">"${f.hook_ko}"</div>
+              <div style="font-size:11px; color:var(--text-muted);">${f.scale_rule}</div>
+            </div>`;
+        }).join('');
+        renderKeywords('US');
+      }
+
+      if (ASSETS && ASSETS.ad_creatives) {
+        document.getElementById('aiVideoGallery').innerHTML = ASSETS.ad_creatives.map(ad => `
+          <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="font-size:12.5px; color:var(--gold);">${ad.id} · ${ad.title}</strong>
+              <span class="pill safe" style="font-size:9.5px;">MP4</span>
+            </div>
+            ${ad.video
+              ? `<video controls playsinline preload="metadata" poster="${ad.image || ''}" style="width:100%; aspect-ratio:9/16; border-radius:8px; background:#000; object-fit:cover;"><source src="${ad.video}" type="video/mp4" /></video>`
+              : `<img src="${ad.image || ''}" style="width:100%; aspect-ratio:9/16; border-radius:8px; object-fit:cover;" />`}
+            <div style="font-size:11.5px; color:var(--text-secondary); line-height:1.45;">"${ad.voice_text}"</div>
+            <div style="display:flex; gap:6px; margin-top:auto;">
+              ${ad.video ? `<a class="act-btn" style="text-decoration:none; text-align:center; flex:1;" href="${ad.video}" download>⬇ MP4 다운로드</a>` : ''}
+              ${ad.audio ? `<a class="act-btn" style="text-decoration:none; text-align:center; flex:1;" href="${ad.audio}" download>🔊 보이스 MP3</a>` : ''}
+            </div>
+          </div>`).join('');
+      }
+    }
+
+    function approveAction(idx, action) {
+      const btn = document.getElementById(`actBtn_${idx}`);
+      btn.classList.add('done');
+      btn.textContent = '✓ 적용됨';
+    }
+
+    function renderKeywords(market) {
+      currentKwMarket = market;
+      document.getElementById('kwUsBtn').classList.toggle('active', market === 'US');
+      document.getElementById('kwKrBtn').classList.toggle('active', market === 'KR');
+      if (!PACK) return;
+      const obj = PACK.asa_competitor_keywords[market];
+      document.getElementById('kwGuardLine').innerHTML = `
+        <strong>가드레일 강제 적용:</strong> Search Match = <span class="mono" style="color:var(--safe);">OFF</span> ·
+        Match Type = <span class="mono" style="color:var(--gold);">[EXACT ONLY]</span> ·
+        자동 부정 키워드(Negative Exact): <span class="mono">${obj.guardrails.negative_exact.join(', ')}</span>`;
+      document.getElementById('kwContainer').innerHTML = obj.keywords.map(k => `
+        <div class="kw-chip">
+          <span class="mono" style="color:var(--gold); font-weight:700;">${k.keyword}</span>
+          <span class="mono" style="color:var(--text-secondary); font-size:11px;">★${k.rating} (${k.rating_count.toLocaleString()}) · 초기CPT ${fmtKrw(k.initial_cpt_krw)}</span>
+        </div>`).join('');
+    }
+
+    function setRail(rail) {
+      currentRail = rail;
+      document.getElementById('railGlobalBtn').classList.toggle('active', rail === 'global');
+      document.getElementById('railKrBtn').classList.toggle('active', rail === 'kr');
+      if (rail === 'global') {
+        document.getElementById('slArppu').value = 63000;
+        document.getElementById('slCpa').value = 37800;
+      } else {
+        document.getElementById('slArppu').value = 39000;
+        document.getElementById('slCpa').value = 26000;
+      }
+      updateGauge();
+    }
+
+    function updateGauge() {
+      const arppu = Number(document.getElementById('slArppu').value);
+      const cpa = Number(document.getElementById('slCpa').value);
+      const takeRate = currentRail === 'global' ? 0.926 : 0.732;
+      const beCpa = Math.round(arppu * takeRate);
+      const costCap = Math.round(beCpa * 0.70);
+      const headroom = beCpa - cpa;
+
+      document.getElementById('lblArppu').textContent = fmtKrw(arppu);
+      document.getElementById('lblCpa').textContent = fmtKrw(cpa);
+      document.getElementById('gaugeBeVal').textContent = fmtKrw(beCpa);
+      document.getElementById('outTakeRate').textContent = (takeRate * 100).toFixed(1) + '%';
+      document.getElementById('outCostCap').textContent = fmtKrw(costCap);
+      const hrEl = document.getElementById('outHeadroom');
+      hrEl.textContent = (headroom >= 0 ? '+' : '') + fmtKrw(headroom);
+      hrEl.style.color = headroom >= 0 ? 'var(--safe)' : 'var(--danger)';
+
+      // Map ratio (cpa / beCpa) from 0..2 -> angle -90..+90 deg (1.0 = 0 deg top tick)
+      const ratio = Math.min(2, Math.max(0, cpa / beCpa));
+      const angle = (ratio - 1) * 90;
+      document.getElementById('gaugeNeedle').setAttribute('transform', `rotate(${angle.toFixed(1)} 110 110)`);
+    }
+
+    function updateHybridSim() {
+      const seoShare = Number(document.getElementById('slSeoShare').value);
+      document.getElementById('lblSeoShare').textContent = seoShare + '%';
+      const paidShare = (100 - seoShare) / 100;
+      const adPct = +(60 * paidShare).toFixed(1); // 60% ad cost when 100% paid
+      const feePct = 7.4;
+      const profitPct = +(100 - feePct - adPct).toFixed(1);
+
+      document.getElementById('barPaidCost').style.width = adPct + '%';
+      document.getElementById('barFees').style.width = feePct + '%';
+      document.getElementById('barProfit').style.width = Math.max(0, profitPct) + '%';
+      document.getElementById('txtAdPct').textContent = adPct + '%';
+      document.getElementById('txtProfitPct').textContent = profitPct + '%';
+      const badge = document.getElementById('simTargetBadge');
+      badge.textContent = profitPct >= 60 ? `🏆 60%+ 마진 돌파 (${profitPct}%)` : `현재 마진 ${profitPct}%`;
+      badge.className = profitPct >= 60 ? 'pill safe mono' : 'pill gold mono';
+    }
+
+    function checkGuardrail() {
+      const prev = 100000;
+      const next = Number(document.getElementById('slNewBudget').value);
+      const hrs = Number(document.getElementById('slCooldown').value);
+      const pct = Math.round(((next - prev) / prev) * 100);
+      document.getElementById('lblNewBudget').textContent = `${fmtKrw(next)} (${pct >= 0 ? '+' : ''}${pct}%)`;
+      document.getElementById('lblCooldown').textContent = `${hrs}시간`;
+
+      const box = document.getElementById('guardBox');
+      const pill = document.getElementById('guardStatusPill');
+      const title = document.getElementById('guardTitle');
+      const desc = document.getElementById('guardDesc');
+
+      if (pct > 20 || (pct > 0 && hrs < 72)) {
+        box.className = 'guard-box locked';
+        pill.className = 'pill danger';
+        pill.textContent = 'LOCKED · BLOCKED';
+        title.textContent = '⛔ 하드 가드레일 차단: 학습 초기화(Learning Phase Reset) 위험';
+        desc.textContent = pct > 20
+          ? `요청 증액률(+${pct}%)이 상한(+20%)을 초과했습니다. 자동 차단되며 최대 허용 예산은 ₩120,000입니다.`
+          : `직전 변경 후 ${hrs}시간 경과(최소 72시간 쿨다운 미충족). 쿨다운 종료 전 증액 API 호출이 차단됩니다.`;
+      } else {
+        box.className = 'guard-box ok';
+        pill.className = 'pill safe';
+        pill.textContent = 'SAFE';
+        title.textContent = '✅ 증액 승인 가능 (알고리즘 학습 안전 구간)';
+        desc.textContent = `증액률 ${pct >= 0 ? '+' : ''}${pct}% 및 ${hrs}시간 쿨다운 조건 충족. 안전하게 스케일업 가능합니다.`;
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>

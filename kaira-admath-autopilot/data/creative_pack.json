@@ -1,0 +1,318 @@
+{
+  "generated_at": "2026-11-22 20:06:11 KST",
+  "batch_date": "20261122",
+  "total_test_budget_krw": 250000,
+  "five_formats": [
+    {
+      "id": "F1",
+      "name": "POV Hook (1인칭 몰입)",
+      "budget_krw": 50000,
+      "status": "TESTING",
+      "ctr_benchmark": "1.8%",
+      "hook_ko": "POV: 작심삼일만 10년째던 내가 88일째 새벽 6시에 눈 뜨는 단 하나의 화면",
+      "hook_en": "POV: You finally deleted 5 bloated habit apps and switched to one quiet ritual OS",
+      "visual_direction": "새벽 조명 아래 침대 옆 아이폰, 3초 만에 원탭 체크인 -> 샴페인 골드 링 점등 클로즈업",
+      "cta_ko": "프로필 링크에서 30초 만에 내 88일 리추얼 설계하기",
+      "cta_en": "Design your 88-day ritual in 30 seconds (link in bio)",
+      "kill_rule": "₩25,000 지출 시 CTR < 0.8% 또는 ₩50,000 소진 시 전환 0건 -> 즉시 KILL",
+      "scale_rule": "CPA ≤ 손익분기 75% & 전환 ≥ 3건 -> Cost Cap 복제 (+20% 룰)",
+      "creative_code": "TT_20261122_F1_H01_50K"
+    },
+    {
+      "id": "F2",
+      "name": "Before / After 88-Day Curve",
+      "budget_krw": 50000,
+      "status": "WINNER",
+      "ctr_benchmark": "2.4%",
+      "hook_ko": "Day 1 vs Day 88 — 습관 기록 화면 딱 하나 바꿨을 때 벌어지는 일",
+      "hook_en": "Day 1 vs Day 88: What happens when your habit tracker feels like a luxury journal",
+      "visual_direction": "텅 빈 도트 매트릭스 -> 21일·66일·88일 샴페인 골드 스트릭이 채워지는 타임랩스",
+      "cta_ko": "오늘이 당신의 Day 1입니다. 3일 무료 체험 시작",
+      "cta_en": "Make today your Day 1. Start your 3-day free trial",
+      "kill_rule": "₩25,000 지출 시 CTR < 0.8% -> 즉시 KILL",
+      "scale_rule": "현재 WINNER 후보 -> TikTok Cost Cap 자동입찰 전환 권장",
+      "creative_code": "TT_20261122_F2_H01_50K"
+    },
+    {
+      "id": "F3",
+      "name": "Competitor Painpoint (경쟁사 비교)",
+      "budget_krw": 50000,
+      "status": "KILL",
+      "ctr_benchmark": "0.7%",
+      "hook_ko": "유명한 습관 앱 5개 다 지웠습니다. 설정만 20분 걸리거든요.",
+      "hook_en": "Why I deleted every mainstream habit app (too many buttons, zero calm)",
+      "visual_direction": "좌측: 복잡한 알람/광고 폭탄 화면 vs 우측: KAIRA 원탭 3초 완료 화면 분할 비교",
+      "cta_ko": "가장 고요하고 단순한 습관 OS 무료로 시작하기",
+      "cta_en": "Try the quietest habit OS ever built",
+      "kill_rule": "실제 CTR 0.69% / 전환 0건 -> 자동 KILL 판정 완료",
+      "scale_rule": "훅 문구 교체 후 Batch 2 재테스트",
+      "creative_code": "TT_20261122_F3_H01_50K"
+    },
+    {
+      "id": "F4",
+      "name": "ASMR Quiet Luxury UI Showcase",
+      "budget_krw": 50000,
+      "status": "SCALING",
+      "ctr_benchmark": "2.1%",
+      "hook_ko": "(볼륨 UP) 하루를 끝내는 가장 중독적인 체크인 사운드",
+      "hook_en": "(Sound ON) The most satisfying 3-second night ritual on iOS & Web",
+      "visual_direction": "무자막 다크 옵시디언 UI + 딥포커스 브리딩 링 + 햅틱 클릭 ASMR",
+      "cta_ko": "직접 눌러보고 싶다면 프로필 링크 클릭",
+      "cta_en": "Tap the link to feel it yourself",
+      "kill_rule": "평균 시청시간 < 5초 시 교체",
+      "scale_rule": "Cost Cap 가동 중 (D0 ROAS 2.42x) -> 72h 쿨다운 후 +20% 증액",
+      "creative_code": "TT_20261122_F4_H01_50K"
+    },
+    {
+      "id": "F5",
+      "name": "Psychology Checklist Hook (심리 테스트)",
+      "budget_krw": 50000,
+      "status": "TESTING",
+      "ctr_benchmark": "1.9%",
+      "hook_ko": "5개 중 3개 해당되면 의지력이 아니라 '환경 도파민' 문제입니다",
+      "hook_en": "If 3 of these 5 apply to you, it's not willpower—it's your morning friction",
+      "visual_direction": "5개 증상 체크박스 순차 체크 -> KAIRA 88일 신경가소성 커브 처방전 화면 전환",
+      "cta_ko": "30초 무료 진단으로 내 실행력 곡선 확인하기",
+      "cta_en": "Take the 30-second chronotype & focus diagnostic",
+      "kill_rule": "저장/공유율 < 1.0% 시 훅 교체",
+      "scale_rule": "KR 시장 전환 3건 돌파 -> 웹 결제(Toss 3.5%) 퍼널 유지하며 +20% 테스트",
+      "creative_code": "TT_20261122_F5_H01_50K"
+    }
+  ],
+  "asa_competitor_keywords": {
+    "US": {
+      "country": "US",
+      "guardrails": {
+        "search_match_on": false,
+        "match_type": "EXACT_ONLY",
+        "negative_exact": [
+          "free",
+          "crack",
+          "cancel",
+          "refund",
+          "mod"
+        ]
+      },
+      "keywords": [
+        {
+          "keyword": "[Finch]",
+          "raw_brand": "Finch",
+          "full_app_name": "Finch: Self-Care Pet",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.95,
+          "rating_count": 778114,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Me+ Lifestyle Routine]",
+          "raw_brand": "Me+ Lifestyle Routine",
+          "full_app_name": "Me+ Lifestyle Routine",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.8,
+          "rating_count": 249016,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Structured]",
+          "raw_brand": "Structured",
+          "full_app_name": "Structured: Daily Planner Todo",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.79,
+          "rating_count": 169243,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Habit Tracker]",
+          "raw_brand": "Habit Tracker",
+          "full_app_name": "Habit Tracker",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.79,
+          "rating_count": 149087,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Productive]",
+          "raw_brand": "Productive",
+          "full_app_name": "Productive - Habit Tracker",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.6,
+          "rating_count": 91061,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Forest]",
+          "raw_brand": "Forest",
+          "full_app_name": "Forest: Focus for Productivity",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.79,
+          "rating_count": 49616,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[FocusFlight]",
+          "raw_brand": "FocusFlight",
+          "full_app_name": "FocusFlight - Deepfocus Timer",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.85,
+          "rating_count": 9992,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Daily Routine]",
+          "raw_brand": "Daily Routine",
+          "full_app_name": "Daily Routine - Planner & Mood",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.76,
+          "rating_count": 9320,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Focus Tree]",
+          "raw_brand": "Focus Tree",
+          "full_app_name": "Focus Tree: Timer & Flashcards",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.68,
+          "rating_count": 5752,
+          "initial_cpt_krw": 2858
+        },
+        {
+          "keyword": "[Dear Me]",
+          "raw_brand": "Dear Me",
+          "full_app_name": "Dear Me: Daily Routine Tracker",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.87,
+          "rating_count": 4997,
+          "initial_cpt_krw": 2858
+        }
+      ]
+    },
+    "KR": {
+      "country": "KR",
+      "guardrails": {
+        "search_match_on": false,
+        "match_type": "EXACT_ONLY",
+        "negative_exact": [
+          "무료",
+          "해지",
+          "환불",
+          "크랙",
+          "free",
+          "crack",
+          "cancel"
+        ]
+      },
+      "keywords": [
+        {
+          "keyword": "[투두메이트]",
+          "raw_brand": "투두메이트",
+          "full_app_name": "투두메이트: 할 일 목록, 루틴 플래너",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.78,
+          "rating_count": 108599,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[플래닛]",
+          "raw_brand": "플래닛",
+          "full_app_name": "플래닛 - 할 일, 일정, 캘린더",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.81,
+          "rating_count": 39793,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[Do!]",
+          "raw_brand": "Do!",
+          "full_app_name": "Do! – 간편한 할 일 관리",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.74,
+          "rating_count": 27903,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[마이루틴]",
+          "raw_brand": "마이루틴",
+          "full_app_name": "마이루틴: 루틴 습관 투두 플래너・ADHD 하루 계획표",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.77,
+          "rating_count": 25151,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[갓생 루틴 루티너리]",
+          "raw_brand": "갓생 루틴 루티너리",
+          "full_app_name": "갓생 루틴 루티너리 - 하루 습관 계획표, 투두리스트",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.74,
+          "rating_count": 6767,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[데이스탬프]",
+          "raw_brand": "데이스탬프",
+          "full_app_name": "데이스탬프 - 좋은 습관, 루틴 쉽게 만들기",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.72,
+          "rating_count": 5227,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[오늘의목표]",
+          "raw_brand": "오늘의목표",
+          "full_app_name": "오늘의목표 - 목표 습관 루틴 챌린지 관리",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.79,
+          "rating_count": 5152,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[아이젠하워 매트릭스]",
+          "raw_brand": "아이젠하워 매트릭스",
+          "full_app_name": "아이젠하워 매트릭스: 투두, 메모 우선순위 관리",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.53,
+          "rating_count": 2698,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[두잉두잉]",
+          "raw_brand": "두잉두잉",
+          "full_app_name": "두잉두잉",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.46,
+          "rating_count": 2406,
+          "initial_cpt_krw": 997
+        },
+        {
+          "keyword": "[꾸주니]",
+          "raw_brand": "꾸주니",
+          "full_app_name": "꾸주니 - 30일 챌린지",
+          "match_type": "EXACT",
+          "search_match_on": false,
+          "rating": 4.63,
+          "rating_count": 1603,
+          "initial_cpt_krw": 997
+        }
+      ]
+    }
+  }
+}
