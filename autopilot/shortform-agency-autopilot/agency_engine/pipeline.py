@@ -54,13 +54,16 @@ def run_agency_pipeline(
     # 4. Compute Realistic Unit Economics & Hourly Rate Matrix
     economics = AgencyEconomicsAuditor().evaluate()
 
-    # 5. End-to-End Monetization Funnel + Client Handoff ZIPs + YouTube Shorts Publish Queue + CRM Summary
+    # 5. End-to-End Monetization Funnel + Client Handoff ZIPs + YouTube Shorts Publish Queue + 7-Day Promo Pack
+    from agency_engine.promo_autopilot import OmnichannelPromoAutopilot
+
     monetization = MonetizationEngine(cfg)
     for proj in projects:
         hz = monetization.build_client_handoff_bundle(proj, date_str)
         proj["deliverable"]["handoff_zip_path"] = str(hz)
     public_funnel = monetization.build_public_b2b_funnel(projects, date_str, sync_gh_pages=(config is None))
     youtube_queue = monetization.build_youtube_publish_queue(projects, date_str)
+    promo_pack = OmnichannelPromoAutopilot(cfg).generate_7day_pack(date_str)
     crm = monetization.crm_summary()
 
     payload: Dict[str, Any] = {
