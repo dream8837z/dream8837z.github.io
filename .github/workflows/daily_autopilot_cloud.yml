@@ -1,0 +1,60 @@
+name: Daily Autonomous Cloud Autopilot (KST 09:00 — 24/365 PC-OFF Execution)
+
+on:
+  schedule:
+    # 매일 KST 09:00 (UTC 00:00) PC 전원과 무관하게 클라우드 무인 실행
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: daily-autopilot-cloud
+  cancel-in-progress: false
+
+jobs:
+  ai-company-autopilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - run: pip install pillow
+      - name: Run 5 AI Departments + Master SHA-256 Verification Gate
+        working-directory: autopilot/ai-company-autopilot
+        env:
+          TARGET_SITE_DIRS: "${{ github.workspace }}"
+        run: |
+          python -m company_engine run
+          python -m unittest discover -s tests -t . -v
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai-company-daily-output
+          path: autopilot/ai-company-autopilot/output/
+          retention-days: 14
+
+  shortform-agency-autopilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - run: pip install pillow imageio-ffmpeg edge-tts
+      - name: Run v4.0 Broadcast Shortform Agency Pipeline & Publish Queue
+        working-directory: autopilot/shortform-agency-autopilot
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: |
+          python -m agency_engine run
+          python -m agency_engine.youtube_publisher --max 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shortform-agency-v4-deliverables
+          path: autopilot/shortform-agency-autopilot/output/
+          retention-days: 14

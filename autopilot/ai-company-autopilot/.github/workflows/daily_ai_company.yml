@@ -1,0 +1,34 @@
+name: Daily AI Company Autopilot (KST 09:00)
+
+on:
+  schedule:
+    # 매일 KST 09:00 (UTC 00:00) 무인 실행
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-ai-employees:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pillow
+
+      - name: Run 5 AI Departments + Master Evidence Verification Gate
+        run: python -m company_engine run
+
+      - name: Run Automated Test Suite
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: Upload Daily HQ Report & SNS Card News Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-company-daily-output
+          path: output/

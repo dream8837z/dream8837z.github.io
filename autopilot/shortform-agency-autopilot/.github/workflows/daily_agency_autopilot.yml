@@ -1,0 +1,41 @@
+name: Daily Shortform Agency Autopilot (KST 09:00)
+
+on:
+  schedule:
+    # 매일 KST 09:00 (UTC 00:00) 클라우드 무인 실행 (PC 전원 OFF 무관)
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  build-and-publish-shortform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pillow imageio-ffmpeg edge-tts
+
+      - name: Run v3.0 Cinematic Shortform Agency Autopilot
+        run: python -m agency_engine run
+
+      - name: Run Automated Test Suite
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: Publish Queued Reel to YouTube Shorts (when OAuth Secrets configured)
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: python -m agency_engine.youtube_publisher --max 1
+
+      - name: Upload Rendered Reels, CapCut/Premiere Exports & Studio Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shortform-agency-daily-output
+          path: output/

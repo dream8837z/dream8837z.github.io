@@ -1,0 +1,11 @@
+[project]
+name = "ai-company-autopilot"
+version = "1.0.0"
+description = "AI 직원 5명 + 총괄 마스터 무인 사이트 운영·증거 검증·수익화 완전 자동화 시스템"
+requires-python = ">=3.11"
+dependencies = [
+    "pillow>=10.0.0",
+]
+
+[project.scripts]
+ai-company = "company_engine.pipeline:main"

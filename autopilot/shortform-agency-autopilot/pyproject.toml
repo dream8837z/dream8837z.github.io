@@ -1,0 +1,12 @@
+[project]
+name = "shortform-agency-autopilot"
+version = "1.0.0"
+description = "B2B 쇼폼(릴스·쇼츠) 외주 대행 완전 자동화 팩토리 — 140+ 훅 사전, 4단계 대본, AI 무음·NG 자동 컷편집, CapCut/Premiere Export & 영업·계약 자동화"
+requires-python = ">=3.11"
+dependencies = [
+    "pillow>=10.0.0",
+    "imageio-ffmpeg>=0.6.0",
+]
+
+[project.scripts]
+agency-autopilot = "agency_engine.pipeline:main"
