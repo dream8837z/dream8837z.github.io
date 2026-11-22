@@ -248,10 +248,12 @@
       <span class="pill safe" id="genTimePill">● CONNECTING D1...</span>
       <button class="pill" onclick="boot()" title="Re-sync live Cloudflare D1">↻ SYNC</button>
     </div>
-    <div style="display:flex; align-items:center; gap:8px;">
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+      <input id="adminKeyInput" type="password" placeholder="🔐 Admin Key" style="width:130px; padding:5px 9px; border-radius:999px; border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-size:11px;" onchange="setAdminKey(this.value)" />
       <span class="pill danger" id="alertBadge">3 GUARDRAILS</span>
+      <a class="pill safe" href="./promo.html">📣 5대 채널 홍보 킷</a>
       <a class="pill" href="./guide.html">pSEO Guide</a>
-      <a class="pill gold" href="./index.html">← KAIRA v2.0 앱 열기</a>
+      <a class="pill gold" href="./index.html">← KAIRA 앱</a>
     </div>
   </header>
 
@@ -487,6 +489,10 @@
 
   <script>
     const WORKER_API = 'https://kaira-admath-worker.dream8837z.workers.dev';
+    let ADMIN_KEY = sessionStorage.getItem('kaira_admin_key') || '';
+    function setAdminKey(v) { ADMIN_KEY = v.trim(); sessionStorage.setItem('kaira_admin_key', ADMIN_KEY); boot(); }
+    function authHeaders(extra = {}) { return ADMIN_KEY ? { ...extra, Authorization: `Bearer ${ADMIN_KEY}` } : extra; }
+    function esc(s) { return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
     let BRIEF = null;
     let PACK = null;
     let ASSETS = null;
@@ -509,7 +515,7 @@
         fetch(`${WORKER_API}/api/v1/dashboard/morning-brief`).then(r => r.json()),
         fetch(`${WORKER_API}/api/v1/dashboard/funnel?days=7`).then(r => r.json()),
         fetch(`${WORKER_API}/api/v1/monetization/config`).then(r => r.json()),
-        fetch(`${WORKER_API}/api/v1/dashboard/leads`).then(r => r.json()),
+        fetch(`${WORKER_API}/api/v1/dashboard/leads`, { headers: authHeaders() }).then(r => r.json()),
       ]);
       if (bRes.status === 'fulfilled') BRIEF = bRes.value;
       if (pRes.status === 'fulfilled') PACK = pRes.value;
@@ -552,8 +558,10 @@
       document.getElementById('leadCountTxt').textContent = LEADS_DATA.length;
       if (LEADS_DATA.length > 0) {
         document.getElementById('leadsListBox').innerHTML = LEADS_DATA.map(l =>
-          `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border);"><span class="mono" style="color:var(--text-primary);">${l.email}</span><span class="mono" style="color:var(--text-muted);">${l.market} · ${l.acquisition_channel}</span></div>`
+          `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border);"><span class="mono" style="color:var(--text-primary);">${esc(l.email)}</span><span class="mono" style="color:var(--text-muted);">${esc(l.market)} · ${esc(l.acquisition_channel)}</span></div>`
         ).join('');
+      } else if (!ADMIN_KEY) {
+        document.getElementById('leadsListBox').textContent = '🔒 보안 보호 활성화됨 — 상단 🔐 Admin Key를 입력하면 D1 리드 볼트가 잠금 해제됩니다.';
       }
     }
 
@@ -568,8 +576,9 @@
           checkout_downsell_usd: document.getElementById('cfgDsUsd').value.trim(),
         };
         const res = await fetch(`${WORKER_API}/api/v1/monetization/config`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+          method: 'POST', headers: authHeaders({ 'Content-Type': 'application/json' }), body: JSON.stringify(payload)
         });
+        if (res.status === 401) { btn.textContent = '🔐 상단 Admin Key 입력 필요'; return; }
         if (res.ok) {
           btn.textContent = '✓ D1 저장 완료';
           setTimeout(() => { btn.textContent = '💾 D1에 실결제 레일 즉시 저장'; boot(); }, 1000);
@@ -759,9 +768,10 @@
       try {
         const res = await fetch(`${WORKER_API}/api/v1/adops/action`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders({ 'Content-Type': 'application/json' }),
           body: JSON.stringify({ campaign_pk: campaignPk, action })
         });
+        if (res.status === 401) { btn.disabled = false; btn.textContent = '🔐 Admin Key 필요'; return; }
         const data = await res.json();
         if (res.ok && data.ok) {
           btn.classList.add('done');

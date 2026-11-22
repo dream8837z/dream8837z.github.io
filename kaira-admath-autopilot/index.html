@@ -3,7 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>KAIRA v2.0 — Quiet Luxury Ritual & Deep Focus OS</title>
+  <title>KAIRA — Quiet Luxury 88-Day Ritual & Deep Focus OS</title>
+  <meta name="description" content="Forget 21 days. Design your 88-day habit & deep focus ritual in 30 seconds with Web Audio ceramic haptics, Brown Noise, and a live 70B AI neuroscience coach." />
+  <link rel="canonical" href="https://kaira-admath.pages.dev/" />
+  <link rel="alternate" hreflang="ko" href="https://kaira-admath.pages.dev/?lang=ko" />
+  <link rel="alternate" hreflang="en" href="https://kaira-admath.pages.dev/?lang=en" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230E0D0C'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' fill='%23D4AF6A' font-family='Georgia,serif' font-size='38'%3EK%3C/text%3E%3C/svg%3E" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kaira-admath.pages.dev/" />
+  <meta property="og:title" content="KAIRA — 하루 3초, 88일 Quiet Luxury 습관 & 딥포커스 OS" />
+  <meta property="og:description" content="21일은 짧습니다. 설치 없이 30초 생체리듬 진단 + 도자기 햅틱 사운드 + 실시간 70B AI 신경과학 코치." />
+  <meta property="og:image" content="https://kaira-admath.pages.dev/assets/og-kaira.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="KAIRA — Quiet Luxury 88-Day Ritual & Deep Focus OS" />
+  <meta name="twitter:description" content="Zero-signup 88-day habit OS with synthesized Web Audio soundscapes & live Llama 3.3 70B neuroscience coach." />
+  <meta name="twitter:image" content="https://kaira-admath.pages.dev/assets/og-kaira.jpg" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -369,8 +383,7 @@
         <button class="pill-btn" id="soundBtn" onclick="toggleSound()" title="Luxury Audio On/Off">♪</button>
         <button class="pill-btn" id="langBtn" onclick="toggleLang()">EN</button>
         <button class="pill-btn" id="themeBtn" onclick="toggleTheme()">☀</button>
-        <a class="pill-btn" href="./guide.html" title="88-Day pSEO Guide">Guide</a>
-        <a class="pill-btn gold" href="./studio.html" title="Founder Ad-Math Studio">AD-MATH ↗</a>
+        <a class="pill-btn gold" href="./guide.html" title="88-Day Habit Calculator & Guide">Guide</a>
       </div>
     </header>
     <div class="progress-track" id="progressTrack"><div class="progress-fill" id="progressFill"></div></div>
@@ -690,26 +703,30 @@
       }
     };
 
-    const STORE_KEY = 'kaira_ritual_state_v2';
+    const STORE_KEY = 'kaira_ritual_state_v4';
     const uid = localStorage.getItem('kaira_uid') || (() => {
       const id = 'usr_' + Math.random().toString(36).slice(2, 12);
       localStorage.setItem('kaira_uid', id);
       return id;
     })();
+    const autoLang = (navigator.language || 'en').toLowerCase().startsWith('ko') ? 'ko' : 'en';
 
     let state = JSON.parse(localStorage.getItem(STORE_KEY) || 'null') || {
-      lang: 'ko', theme: 'dark', soundOn: true, ambientMode: 'brown',
+      lang: autoLang, theme: 'dark', soundOn: true, ambientMode: 'brown',
       step: 1, goal: 'deepwork', frictions: ['sns'], wakeMinutes: 390, intensity: 'focused',
-      trialOn: true, plan: 'annual', subscribed: false, activeTab: 0, inspectedDay: 13,
-      downsellShown: false, downsellExpiresAt: 0,
-      rituals: [], heatmap: Array.from({ length: 88 }, (_, i) => (i < 14 ? (i % 3 === 0 ? 2 : 3) : 0)),
-      streak: 14, focusMinutesTotal: 420,
+      trialOn: true, plan: 'annual', subscribed: false, activeTab: 0, inspectedDay: 0,
+      downsellShown: false, downsellExpiresAt: 0, coachCallsUsed: 0, lastCheckinDate: '',
+      rituals: [], heatmap: Array.from({ length: 88 }, () => 0),
+      streak: 0, focusMinutesTotal: 0,
       coachText: '', coachEngine: '', attribution: { channel: 'organic', campaign_id: null }
     };
 
-    // Parse pSEO / Paid UTM Deep-Link Parameters & Live Checkout Return
+    // Parse pSEO / Paid UTM Deep-Link Parameters & Server-Side Pro Entitlement Verification
     let MONETIZATION_CFG = {};
     fetch(`${WORKER_API}/api/v1/monetization/config`).then(r => r.json()).then(d => { if (d && d.config) MONETIZATION_CFG = d.config; }).catch(() => {});
+    fetch(`${WORKER_API}/api/v1/entitlement?user_id=${encodeURIComponent(uid)}`).then(r => r.json()).then(d => {
+      if (d && d.ok && d.pro && !state.subscribed) { state.subscribed = true; save(); render(); }
+    }).catch(() => {});
 
     (() => {
       const sp = new URLSearchParams(location.search);
@@ -718,7 +735,6 @@
       if (sp.get('wake')) state.wakeMinutes = Number(sp.get('wake'));
       if (sp.get('lang') === 'en' || sp.get('lang') === 'ko') state.lang = sp.get('lang');
       if (sp.get('utm_source')) state.attribution = { channel: sp.get('utm_source'), campaign_id: sp.get('utm_campaign') || sp.get('campaign_id') };
-      if (sp.get('paid') === '1') { state.subscribed = true; state.step = 7; save(); }
     })();
 
     let stepEnteredAt = Date.now(), stepDir = 1, activeOfferType = 'standard', dsInterval = null;
@@ -937,7 +953,7 @@
             <div style="font-family:var(--font-mono); font-size:14px; color:var(--text-secondary);">${L.monthly_p}</div>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:12px; color:var(--text-secondary);">
-            <span>★ 4.9 (12,400+ Reviews)</span><span style="color:var(--sage);">Web-Direct · 3.5% Rail</span>
+            <span>${state.lang === 'ko' ? 'UCL 66일 자동화 연구 기반 · 88일 프로토콜' : 'Based on UCL 66-Day Automaticity Study'}</span><span style="color:var(--sage);">Web-Direct · 3.5% Rail</span>
           </div>
           <button class="pill-btn" style="margin:16px auto 0; border:none; background:transparent; color:var(--text-muted);" onclick="triggerDownsellOrSkip()">${L.skip_txt}</button>`;
         ctaBtn.textContent = state.trialOn ? L.pw_cta_trial : L.pw_cta_now;
@@ -966,17 +982,24 @@
           </div>
           ${state.rituals.map(r => `
             <div class="ritual-item ${r.done ? 'done' : ''}" onclick="toggleRitual(${r.id})">
-              <div>
+              <div style="flex:1; padding-right:10px;">
                 <div style="font-size:10px; font-weight:700; letter-spacing:0.12em; color:var(--gold); margin-bottom:3px;">${r.tag}</div>
                 <div style="font-size:14.5px; font-weight:500; ${r.done ? 'text-decoration:line-through; opacity:0.75;' : ''}">${r.title}</div>
               </div>
-              <div class="ritual-check">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E0D0C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="check-svg-path" d="M5 13l4 4L19 7"/></svg>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button class="pill-btn" style="padding:3px 7px; font-size:11px; border:none; background:transparent;" onclick="event.stopPropagation(); deleteRitual(${r.id})" title="Delete">×</button>
+                <div class="ritual-check">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E0D0C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="check-svg-path" d="M5 13l4 4L19 7"/></svg>
+                </div>
               </div>
             </div>`).join('')}
           <div style="display:flex; gap:8px; margin-top:10px;">
-            <input id="newRitualInput" placeholder="${state.lang === 'ko' ? '새 리추얼 추가...' : 'Add new ritual...'}" style="flex:1; padding:12px 14px; border-radius:14px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-primary); font-family:var(--font-sans); font-size:13.5px;" />
+            <input id="newRitualInput" placeholder="${state.lang === 'ko' ? (state.subscribed ? '새 리추얼 추가...' : '새 리추얼 추가 (무료 최대 2개)...') : (state.subscribed ? 'Add new ritual...' : 'Add ritual (Free max 2)...')}" style="flex:1; padding:12px 14px; border-radius:14px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-primary); font-family:var(--font-sans); font-size:13.5px;" />
             <button class="pill-btn gold" style="padding:0 16px; border-radius:14px;" onclick="addRitual()">+</button>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+            <button class="pill-btn" style="flex:1; justify-content:center; padding:9px;" onclick="downloadWakeIcs()">📅 ${state.lang === 'ko' ? `${formatWake(state.wakeMinutes)} 기상 캘린더 알람 (.ics)` : `Add ${formatWake(state.wakeMinutes)} Wake Alarm (.ics)`}</button>
+            ${!state.subscribed ? `<button class="pill-btn gold" style="padding:9px 14px;" onclick="openUpgradePaywall()">✦ PRO</button>` : ''}
           </div>
           <div class="coach-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px;">
@@ -1008,7 +1031,7 @@
               </div>
             </div>
             <div class="ambient-pills">
-              ${[['off','무음'],['brown','Brown'],['rain','Rain'],['drone432','432Hz']].map(([m, lbl]) =>
+              ${[['off', state.lang === 'ko' ? '무음' : 'Off'], ['brown', 'Brown'], ['rain', state.subscribed ? 'Rain' : '🔒 Rain'], ['drone432', state.subscribed ? '432Hz' : '🔒 432Hz']].map(([m, lbl]) =>
                 `<button class="amb-btn ${state.ambientMode === m ? 'active' : ''}" onclick="setAmbient('${m}')">${lbl}</button>`
               ).join('')}
             </div>
@@ -1074,6 +1097,43 @@
     function selectPlan(p) { state.plan = p; KairaAudio.playDetentTick(); save(); render(); }
 
     const STEP_NAMES = ['', 'identity_goal', 'hidden_friction', 'chronotype_dial', 'ritual_intensity', 'synthesis_88d', 'paywall_standard'];
+    function openUpgradePaywall() { state.step = 6; stepDir = 1; save(); render(); }
+    function syncModalLang() {
+      const ko = state.lang === 'ko';
+      document.getElementById('chkDesc').textContent = ko ? 'App Store 15% 수수료 없이 웹에서 즉시 활성화 · 안전한 결제 레일' : 'Zero App Store 15% tax · Instant Web-Direct activation';
+      document.getElementById('chkTodayLabel').textContent = ko ? '결제 금액' : 'Due Today';
+      document.getElementById('chkEmailInput').placeholder = ko ? '이메일 입력 (88일 프로토콜 백업 & 영수증 수신 · 선택)' : 'Email for 88-day backup & receipt (optional)';
+      document.getElementById('chkConfirmBtn').textContent = ko ? '원탭으로 88일 리추얼 시작하기' : 'Activate 88-Day Ritual OS';
+      document.getElementById('dsHeadline').innerHTML = ko ? '잠깐, 지금 나가면 당신의 <em>88일 프로토콜</em>이 잠깁니다' : "Wait — don't leave your <em>88-day protocol</em> behind";
+      document.getElementById('dsSub').textContent = ko ? '온보딩을 완료하신 분께만 드리는 단 1회 한정 파운더스 기프트 (75% OFF)' : 'One-time Founders Gift unlocked after your onboarding (75% OFF)';
+      document.getElementById('dsStrike').textContent = ko ? '₩118,800 → ₩39,000' : '$143.88 → $44.99';
+      document.getElementById('dsPlanName').textContent = ko ? '연간 파운더스 패스 (75% OFF)' : 'Annual Founders Pass (75% OFF)';
+      document.getElementById('dsDaily').textContent = ko ? '월 ₩2,416 · 하루 ₩79' : '$2.50/mo · $0.08/day';
+      document.getElementById('dsPrice').textContent = ko ? '₩29,000' : '$29.99';
+      document.getElementById('dsAcceptBtn').textContent = ko ? '75% 할인된 ₩29,000으로 즉시 시작하기' : 'Claim 75% Off — $29.99 / Year';
+      document.getElementById('dsDeclineBtn').textContent = ko ? '아니요, 75% 할인을 포기하고 무료 모드로 입장할게요' : 'No thanks, forfeit 75% off and enter Free Mode';
+    }
+    function downloadWakeIcs() {
+      const h = String(Math.floor(state.wakeMinutes / 60)).padStart(2, '0');
+      const m = String(state.wakeMinutes % 60).padStart(2, '0');
+      const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      const ics = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//KAIRA//88-Day Ritual OS//EN',
+        'BEGIN:VEVENT', `DTSTART:${today}T${h}${m}00`, `DTEND:${today}T${h}${m}00`,
+        'RRULE:FREQ=DAILY;COUNT=88', 'SUMMARY:KAIRA — 88-Day Morning Ritual',
+        'DESCRIPTION:Open https://kaira-admath.pages.dev/ for your 3-second ritual check-in.',
+        'END:VEVENT', 'END:VCALENDAR'
+      ].join('\r\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+      a.download = 'kaira-88day-ritual.ics'; a.click();
+      KairaAudio.playCeramicTap(true);
+      showToast(state.lang === 'ko' ? '88일 기상 캘린더(.ics)가 저장되었습니다' : '88-Day Wake Alarm (.ics) saved');
+    }
+    function deleteRitual(id) {
+      state.rituals = state.rituals.filter(x => x.id !== id);
+      KairaAudio.playDetentTick(); save(); render();
+    }
     function handleNext() {
       KairaAudio.playCeramicTap(true);
       if (state.step < 6) {
@@ -1082,6 +1142,7 @@
         trackStep(state.step, STEP_NAMES[state.step]);
         save(); render();
       } else {
+        syncModalLang();
         activeOfferType = 'standard';
         document.getElementById('chkTitle').textContent = state.plan === 'annual' ? 'KAIRA Annual Privilege' : 'KAIRA Monthly Access';
         document.getElementById('chkTodayAmt').textContent = state.trialOn
@@ -1092,6 +1153,7 @@
     }
 
     function triggerDownsellOrSkip() {
+      syncModalLang();
       if (state.downsellShown && state.downsellExpiresAt < Date.now()) { enterOS(false); return; }
       state.downsellShown = true;
       if (!state.downsellExpiresAt || state.downsellExpiresAt < Date.now()) state.downsellExpiresAt = Date.now() + 5 * 60 * 1000;
@@ -1138,7 +1200,9 @@
       // Route to REAL live checkout URL if configured in AD-MATH Studio (Stripe / Polar / Lemon Squeezy / Toss / Gumroad)
       const liveUrl = isDs
         ? (isKr ? MONETIZATION_CFG.checkout_downsell_krw : MONETIZATION_CFG.checkout_downsell_usd)
-        : (state.plan === 'annual' ? (isKr ? MONETIZATION_CFG.checkout_annual_krw : MONETIZATION_CFG.checkout_annual_usd) : MONETIZATION_CFG.checkout_monthly_krw);
+        : (state.plan === 'annual'
+          ? (isKr ? MONETIZATION_CFG.checkout_annual_krw : MONETIZATION_CFG.checkout_annual_usd)
+          : (isKr ? MONETIZATION_CFG.checkout_monthly_krw : MONETIZATION_CFG.checkout_monthly_usd));
       if (liveUrl && liveUrl.startsWith('http')) {
         const sep = liveUrl.includes('?') ? '&' : '?';
         window.location.href = `${liveUrl}${sep}client_reference_id=${encodeURIComponent(uid)}${emailVal ? `&prefilled_email=${encodeURIComponent(emailVal)}` : ''}`;
@@ -1175,14 +1239,28 @@
     }
     function setTab(i) { state.activeTab = i; KairaAudio.playDetentTick(); save(); render(); }
     function inspectDay(i) { state.inspectedDay = i; KairaAudio.playDetentTick(); save(); render(); }
-    function setAmbient(m) { state.ambientMode = m; KairaAudio.playDetentTick(); if (timerRunning) KairaAudio.startAmbient(m); save(); render(); }
+    function setAmbient(m) {
+      if (!state.subscribed && (m === 'rain' || m === 'drone432')) {
+        showToast(state.lang === 'ko' ? '🔒 Rain · 432Hz 사운드는 PRO 전용입니다' : '🔒 Rain & 432Hz Soundscapes are PRO exclusive');
+        openUpgradePaywall();
+        return;
+      }
+      state.ambientMode = m; KairaAudio.playDetentTick(); if (timerRunning) KairaAudio.startAmbient(m); save(); render();
+    }
     function toggleRitual(id) {
       const r = state.rituals.find(x => x.id === id);
       if (r) {
         r.done = !r.done;
         KairaAudio.playCeramicTap(r.done);
-        const doneRatio = state.rituals.filter(x => x.done).length / state.rituals.length;
-        state.heatmap[state.streak] = doneRatio >= 0.75 ? 3 : doneRatio > 0 ? 2 : 0;
+        const today = new Date().toISOString().slice(0, 10);
+        const doneCount = state.rituals.filter(x => x.done).length;
+        const doneRatio = state.rituals.length ? doneCount / state.rituals.length : 0;
+        if (doneCount > 0 && state.lastCheckinDate !== today) {
+          state.streak = Math.min(88, (state.streak || 0) + 1);
+          state.lastCheckinDate = today;
+        }
+        const idx = Math.max(0, Math.min(87, (state.streak || 1) - 1));
+        state.heatmap[idx] = doneRatio >= 0.75 ? 3 : doneRatio > 0 ? 2 : 0;
         if (doneRatio === 1) {
           KairaAudio.playSingingBowl();
           const orb = document.getElementById('ambientOrb');
@@ -1193,6 +1271,11 @@
       }
     }
     function addRitual() {
+      if (!state.subscribed && state.rituals.length >= 2) {
+        showToast(state.lang === 'ko' ? '🔒 무료 모드는 리추얼 2개까지 지원합니다 (PRO 무제한)' : '🔒 Free Mode supports up to 2 rituals (Upgrade to PRO)');
+        openUpgradePaywall();
+        return;
+      }
       const inp = document.getElementById('newRitualInput');
       if (inp && inp.value.trim()) {
         state.rituals.push({ id: Date.now(), title: inp.value.trim(), tag: 'CUSTOM', done: false });
