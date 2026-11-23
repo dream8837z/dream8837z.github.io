@@ -1,10 +1,13 @@
-name: Daily Autonomous Cloud Autopilot (KST 09:00 — 24/365 PC-OFF Execution)
+name: Daily Autonomous Cloud Autopilot & Promo (KST 09:00 — 24/365 PC-OFF)
 
 on:
   schedule:
-    # 매일 KST 09:00 (UTC 00:00) PC 전원과 무관하게 클라우드 무인 실행
+    # 매일 KST 09:00 (UTC 00:00) PC 전원과 무관하게 제작·홍보·색인핑 클라우드 무인 실행
     - cron: "0 0 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 concurrency:
   group: daily-autopilot-cloud
@@ -34,7 +37,7 @@ jobs:
           path: autopilot/ai-company-autopilot/output/
           retention-days: 14
 
-  shortform-agency-autopilot:
+  shortform-agency-and-promo:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -44,17 +47,29 @@ jobs:
           python-version: "3.12"
           cache: "pip"
       - run: pip install pillow imageio-ffmpeg edge-tts
-      - name: Run v4.0 Broadcast Shortform Agency Pipeline & Publish Queue
+      - name: Run v6.0/v7.0 Broadcast Shortform + Daily SEO/GEO Blog + Omnichannel Promo Dispatch
         working-directory: autopilot/shortform-agency-autopilot
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          PROMO_WEBHOOK_URL: ${{ secrets.PROMO_WEBHOOK_URL }}
         run: |
           python -m agency_engine run
+          python -m agency_engine.promo_dispatcher
           python -m agency_engine.youtube_publisher --max 1
+      - name: Auto-Publish Compounding Daily SEO/GEO Blog & Updated Sitemap to GitHub Pages
+        run: |
+          cp -r autopilot/shortform-agency-autopilot/output/public_funnel/blog/* shortform-agency/blog/ 2>/dev/null || true
+          git config user.name "autopilot-promo-bot"
+          git config user.email "autopilot-promo-bot@users.noreply.github.com"
+          git add shortform-agency/blog/ shortform-agency/sitemap.xml
+          git diff --cached --quiet || git commit -m "chore(promo): auto-publish daily B2B SEO/GEO case-study blog [skip ci]"
+          git push origin HEAD
       - uses: actions/upload-artifact@v4
         with:
-          name: shortform-agency-v4-deliverables
+          name: shortform-agency-daily-deliverables
           path: autopilot/shortform-agency-autopilot/output/
           retention-days: 14
