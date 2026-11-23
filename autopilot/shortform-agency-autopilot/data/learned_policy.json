@@ -1,7 +1,7 @@
 {
   "policy_version": 3,
   "generation": 2,
-  "updated_at_kst": "2026-11-23T12:53:25+09:00",
+  "updated_at_kst": "2026-11-23T08:30:02+09:00",
   "tts_rate_pct": 15,
   "caption_max_words": 4,
   "hook_category_weights": {

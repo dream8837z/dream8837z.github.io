@@ -250,11 +250,18 @@ class MonetizationEngine:
             src_img = scene_src_dir / src_name
             img_tag = ""
             if src_img.exists():
-                dst_name = f"{cid}.jpg"
-                shutil.copy2(src_img, assets_local / dst_name)
+                from PIL import Image as _PILImage
+
+                dst_name = f"{cid}.webp"
+                with _PILImage.open(src_img) as im:
+                    im.convert("RGB").resize((540, 960), _PILImage.Resampling.LANCZOS).save(
+                        assets_local / dst_name, format="WEBP", quality=82, method=4
+                    )
+                if cid == "clinic_skin":
+                    shutil.copy2(src_img, assets_local / "clinic_skin.jpg")  # OG tag compatibility
                 img_tag = (
                     f'<div class="reel-frame">'
-                    f'<img src="assets/{_esc(dst_name)}" alt="{_esc(sc["client_name"])} 9:16 릴스 프리뷰" loading="lazy" />'
+                    f'<img src="assets/{_esc(dst_name)}" alt="{_esc(sc["client_name"])} 9:16 릴스 프리뷰" loading="lazy" width="540" height="960" />'
                     f'<span class="reel-pill">{_esc(rc["grade"])}등급 · {_esc(rc["total_score"])}점</span>'
                     f'<div class="reel-sub">"{_esc(sc["selected_hook"][:42])}…"</div>'
                     f'</div>'

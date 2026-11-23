@@ -75,6 +75,9 @@ class FullAutoPromoDispatcher:
         return report
 
     def _publish_daily_seo_blog(self, day_plan: Dict[str, Any], run_date: str, sync_gh_pages: bool) -> Dict[str, Any]:
+        from agency_engine.config import ClientBrief
+        from agency_engine.hooks_library import HooksLibrary
+
         slug = f"{run_date}-{day_plan['industry_slug']}-shortform-guide"
         naver = day_plan["channels"]["naver_blog_seo"]
         kw = day_plan["naver_keyword"]
@@ -82,13 +85,27 @@ class FullAutoPromoDispatcher:
         utm_cta = f"{BASE_PUBLIC_URL}?industry={day_plan['industry_slug']}&utm_source=seo_blog&utm_medium=organic&utm_campaign={run_date}"
         public_url = f"{BASE_PUBLIC_URL}blog/{slug}.html"
 
+        # Generate 5 unique industry-specific hooks so every daily article has distinct, high-value non-duplicate content
+        brief = ClientBrief(
+            client_id=slug, client_name=ind, industry=ind, topic=kw,
+            compare_a=day_plan.get("industry_slug", "A안"), compare_b="기존 방식", cta_action="댓글 DM",
+        )
+        unique_hooks = HooksLibrary().match_for_brief(brief, top_k=5)
+        hooks_li = "".join(f"<li><strong>[{html.escape(h['category_ko'])}]</strong> {html.escape(h['rendered_hook'])}</li>" for h in unique_hooks)
+        naver_paragraphs = "".join(
+            f"<p>{html.escape(line)}</p>"
+            for line in naver["copy"].splitlines()
+            if line.strip() and not line.strip().startswith("#") and not line.strip().startswith("👉")
+        )
+        linkedin_note = html.escape(day_plan["channels"]["linkedin"]["copy"])
+
         article_html = f"""<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{html.escape(kw)} — {html.escape(ind)} 숏폼 마케팅 실전 가이드 ({run_date})</title>
-  <meta name="description" content="{html.escape(kw)}: {html.escape(ind)} 대표님·원장님을 위한 3초 후킹, 무음 45% 자동 컷편집, 방송급 -14 LUFS 릴스 제작 ROI 분석." />
+  <meta name="description" content="{html.escape(kw)}: {html.escape(ind)} 대표님·원장님을 위한 맞춤 3초 후킹 5선, 무음 45% 자동 컷편집, 방송급 -14 LUFS 릴스 제작 ROI 분석." />
   <link rel="canonical" href="{html.escape(public_url)}" />
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0Z7NXJMWJ"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-J0Z7NXJMWJ');</script>
@@ -115,19 +132,13 @@ class FullAutoPromoDispatcher:
 </head>
 <body>
 <article class="wrap">
-  <span class="tag">{html.escape(ind)} · SEO/GEO 리포트 · {run_date}</span>
-  <h1>{html.escape(kw)} — 실패 없는 {html.escape(ind)} 숏폼 제작 기준 3가지</h1>
-  <div class="box">
-    <strong>핵심 인사이트:</strong> {html.escape(day_plan['channels']['threads']['copy'].splitlines()[0])}
-  </div>
-  <h2>1. 왜 기존 홍보 영상은 0.3초 만에 스와이프될까?</h2>
-  <p>시청자는 화면 상단 병원·브랜드 로고나 자기소개가 나오는 순간 광고로 인식하고 즉시 이탈합니다. 첫 2.5초에는 <strong>비교 기준·손실 회피·수치 데이터</strong>를 먼저 제시하고, 한국어 어순(SOV)에 맞춰 핵심 명사를 강조하는 카라오케 자막이 필수입니다.</p>
-  <h2>2. 대표님 촬영 3분 → 방송급 -14 LUFS 릴스 무인 제작 프로세스</h2>
-  <ul>
-    <li><strong>무음·NG 45% 자동 컷편집</strong>: 15ms 클릭 방지 페이드 + 교차 1.07x 펀치 줌</li>
-    <li><strong>방송 표준 오디오 마스터링</strong>: EBU R128 -14 LUFS + 사이드체인 덕킹 BGM</li>
-    <li><strong>납품 ZIP 일괄 제공</strong>: 최종 MP4 + SRT + CapCut JSON + Premiere Pro FCPXML + 5축 성과 리포트</li>
-  </ul>
+  <span class="tag">{html.escape(ind)} · Day {day_plan['day']} 실전 리포트 · {run_date}</span>
+  <h1>{html.escape(kw)} — 실패 없는 {html.escape(ind)} 숏폼 제작 전략</h1>
+  <div class="box">{naver_paragraphs}</div>
+  <h2>1. {html.escape(ind)} 전용 검증된 3초 후킹 TOP 5 ({html.escape(kw)})</h2>
+  <ol>{hooks_li}</ol>
+  <h2>2. B2B 의사결정권자 관점 ROI 요약</h2>
+  <div class="box"><p style="white-space:pre-wrap;margin:0;">{linkedin_note}</p></div>
   <div class="box">
     <h2>3. 우리 업종은 신규 고객 몇 명만 오면 본전일까?</h2>
     <p>3편 파일럿(50만 원, 본계약 전환 시 100% 차감) 및 착수금 50% 분할 결제로 리스크 없이 시작하실 수 있습니다.</p>

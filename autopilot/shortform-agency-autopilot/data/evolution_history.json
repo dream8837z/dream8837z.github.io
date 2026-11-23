@@ -2,15 +2,15 @@
   {
     "generation": 2,
     "policy_version": 3,
-    "evolved_at_kst": "2026-11-23T12:53:25+09:00",
+    "evolved_at_kst": "2026-11-23T08:30:02+09:00",
     "applied_trend": "TR-2026-Q4-02",
     "trend_title": "반전·고정관념 파괴 훅 + 댓글 논쟁형 무한루프",
     "telemetry_snapshot": {
-      "projects_evaluated": 0,
-      "avg_retention_score": 0.0,
-      "avg_compression_pct": 0.0,
-      "crm_leads": 0,
-      "crm_projected_mrr_krw": 0,
+      "projects_evaluated": 3,
+      "avg_retention_score": 99.0,
+      "avg_compression_pct": 32.4,
+      "crm_leads": 1,
+      "crm_projected_mrr_krw": 2500000,
       "youtube_live_stats": {
         "mode": "NO_UPLOADED_VIDEOS_YET",
         "videos_checked": 0,
@@ -27,12 +27,12 @@
       {
         "expert": "B2B Performance Marketing & Funnel Director",
         "score": 91,
-        "finding": "누적 리드 0건 (예상 MRR 0원). DM 트리거 로테이션 및 ROI 앵커링 유지."
+        "finding": "누적 리드 1건 (예상 MRR 2,500,000원). DM 트리거 로테이션 및 ROI 앵커링 유지."
       },
       {
         "expert": "Broadcast AV & Retention Systems Director",
         "score": 95,
-        "finding": "평균 압축 -0.0%, -14 LUFS / 48kHz 규격 통과. 스냅샷 롤백 안전장치 활성화 확인."
+        "finding": "평균 압축 -32.4%, -14 LUFS / 48kHz 규격 통과. 스냅샷 롤백 안전장치 활성화 확인."
       }
     ],
     "llm_advisor_used": false,
@@ -48,7 +48,7 @@
     "policy_snapshot": {
       "policy_version": 3,
       "generation": 2,
-      "updated_at_kst": "2026-11-23T12:53:25+09:00",
+      "updated_at_kst": "2026-11-23T08:30:02+09:00",
       "tts_rate_pct": 15,
       "caption_max_words": 4,
       "hook_category_weights": {
