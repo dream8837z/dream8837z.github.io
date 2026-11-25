@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Company Autopilot HQ — 2026-11-23</title>
+  <style>
+    :root {
+      --bg: #070c18; --panel: #0f172a; --panel-2: #16223b; --border: #243352;
+      --text: #f1f5f9; --muted: #94a3b8; --blue: #38bdf8; --green: #10b981;
+      --amber: #f59e0b; --red: #ef4444; --purple: #a78bfa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
+      background: radial-gradient(circle at top right, #112240 0%, var(--bg) 55%);
+      color: var(--text); line-height: 1.55;
+    }
+    .wrap { max-width: 1320px; margin: 0 auto; padding: 28px 22px 80px; }
+    header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;
+      gap: 16px; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 26px;
+    }
+    h1 { margin: 0; font-size: 28px; letter-spacing: -0.02em; }
+    h2 { margin: 36px 0 14px; font-size: 20px; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+    h3 { margin: 0 0 8px; font-size: 16px; }
+    .sub-id { color: var(--muted); font-size: 13px; font-weight: 500; }
+    .muted { color: var(--muted); font-size: 13px; margin: 4px 0 10px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 26px; }
+    .kpi {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px;
+    }
+    .kpi-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi-val { font-size: 26px; font-weight: 800; margin-top: 6px; color: #fff; }
+    .kpi-sub { font-size: 12px; color: var(--blue); margin-top: 4px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px;
+    }
+    .card-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .pill-green { background: rgba(16,185,129,0.16); color: #34d399; border: 1px solid rgba(16,185,129,0.4); }
+    .pill-red { background: rgba(239,68,68,0.16); color: #f87171; border: 1px solid rgba(239,68,68,0.4); }
+    .pill-blue { background: rgba(56,189,248,0.14); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.35); }
+    .pill-amber { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .evidence-list { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: #cbd5e1; }
+    .evidence-list li { margin-bottom: 5px; }
+    .mono-dim { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 11px; color: var(--muted); }
+    .score-big { font-size: 22px; font-weight: 800; color: var(--amber); }
+    .table-wrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: var(--panel-2); color: var(--blue); font-weight: 700; white-space: nowrap; }
+    .row-highlight { background: rgba(16,185,129,0.08); }
+    .num { font-weight: 700; white-space: nowrap; }
+    .risk-cell { color: #fca5a5; }
+    .sol-cell { color: #a7f3d0; }
+    .draft-cell { max-width: 340px; color: #cbd5e1; }
+    .carousel-box { display: grid; grid-template-columns: 360px 1fr; gap: 22px; align-items: start; }
+    @media (max-width: 900px) { .carousel-box { grid-template-columns: 1fr; } }
+    .slide-frame { background: #040710; border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: center; }
+    .slide-frame img { width: 100%; max-width: 330px; border-radius: 10px; display: block; margin: 0 auto; }
+    .btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    button {
+      background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
+      padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;
+    }
+    button:hover { border-color: var(--blue); color: var(--blue); }
+    button.primary { background: var(--blue); color: #07101e; border-color: var(--blue); }
+    pre {
+      background: #060b16; border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px; overflow-x: auto; font-size: 12px; color: #e2e8f0; max-height: 280px; white-space: pre-wrap;
+    }
+    .tabs { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .tab-btn.active { background: var(--blue); color: #07101e; border-color: var(--blue); }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>AI Company Autopilot HQ <span class="pill pill-blue">v1.0</span></h1>
+      <p class="muted">
+        원본 영상 정밀 해부: <a href="https://youtu.be/EDvnavKiWwI" target="_blank" style="color:#38bdf8">클로드 직원 5명이 제 사이트로 알아서 돈 벌어줍니다 (ai 직원 세팅법 8가지)</a>
+        (혼잡스 (@honjobs)) · 실행일: <strong>2026-11-23</strong>
+      </p>
+    </div>
+    <div><span class="pill pill-green">✔ ALL VERIFIED PASS (SHA-256)</span></div>
+  </header>
+
+  <section class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">마스터 증거 검증률</div>
+      <div class="kpi-val">100.0%</div>
+      <div class="kpi-sub">12 / 12 산출물 SHA-256 검증</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">실제 사이트 스캔</div>
+      <div class="kpi-val">73p</div>
+      <div class="kpi-sub">평균 SEO 점수 76.8점</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">SNS 카드뉴스 렌더링</div>
+      <div class="kpi-val">5장</div>
+      <div class="kpi-sub">1080×1350 PNG · 제작비 $0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">CS 자동 분류 / 에스컬레이션</div>
+      <div class="kpi-val">4건</div>
+      <div class="kpi-sub">스팸 1건 차단 · 승인대기 1건</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">월간 토큰 비용 절감</div>
+      <div class="kpi-val">$134.4</div>
+      <div class="kpi-sub">풀 에이전트 팀($138) 대비 97% 절감</div>
+    </div>
+  </section>
+
+  <h2>1. AI 직원 5개 부서 + 총괄 마스터 증거 검증 현황 (거짓말 방지 게이트)</h2>
+  <div class="grid-3">
+                <div class="card">
+                  <div class="card-head">
+                    <h3>기획팀 <span class="sub-id">@planner</span></h3>
+                    <span class="pill pill-green">APPROVED</span>
+                  </div>
+                  <p class="muted">증거 검증: <strong>1 / 1</strong> 통과</p>
+                  <ul class="evidence-list"><li><code>기획팀 SEO·색인 전략 리포트 JSON</code> — <span class='mono-dim'>c4f1fbaa51649a26… (19,206B)</span></li></ul>
+                </div>
+                
+                <div class="card">
+                  <div class="card-head">
+                    <h3>개발팀 <span class="sub-id">@dev</span></h3>
+                    <span class="pill pill-green">APPROVED</span>
+                  </div>
+                  <p class="muted">증거 검증: <strong>2 / 2</strong> 통과</p>
+                  <ul class="evidence-list"><li><code>개발팀 사이트 헬스체크 리포트 JSON</code> — <span class='mono-dim'>cf314815a64e3d45… (14,171B)</span></li><li><code>개발팀 SEO 안전 패치 제안서 MD</code> — <span class='mono-dim'>1af573650086be9a… (9,597B)</span></li></ul>
+                </div>
+                
+                <div class="card">
+                  <div class="card-head">
+                    <h3>디자인팀 <span class="sub-id">@design</span></h3>
+                    <span class="pill pill-green">APPROVED</span>
+                  </div>
+                  <p class="muted">증거 검증: <strong>6 / 6</strong> 통과</p>
+                  <ul class="evidence-list"><li><code>카드뉴스 1장 (표지)</code> — <span class='mono-dim'>040c84eab1193c09… (56,917B)</span></li><li><code>카드뉴스 2장 (STEP 01 · 기획팀 &amp; 개발팀)</code> — <span class='mono-dim'>0e06a368c2fe9aae… (69,233B)</span></li><li><code>카드뉴스 3장 (STEP 02 · 총괄 마스터 검증)</code> — <span class='mono-dim'>2a0fe5efbe0b103f… (69,214B)</span></li><li><code>카드뉴스 4장 (STEP 03 · 비용 최적화)</code> — <span class='mono-dim'>cb76b855111699f0… (67,965B)</span></li><li><code>카드뉴스 5장 (CTA)</code> — <span class='mono-dim'>ecd832d10f61f7dc… (52,558B)</span></li><li><code>디자인팀 카드뉴스 매니페스트 JSON</code> — <span class='mono-dim'>1c371d2c7cac1d39… (2,226B)</span></li></ul>
+                </div>
+                
+                <div class="card">
+                  <div class="card-head">
+                    <h3>CS팀 <span class="sub-id">@cs</span></h3>
+                    <span class="pill pill-green">APPROVED</span>
+                  </div>
+                  <p class="muted">증거 검증: <strong>1 / 1</strong> 통과</p>
+                  <ul class="evidence-list"><li><code>CS팀 고객 문의 분류·응답 초안 리포트 JSON</code> — <span class='mono-dim'>14258bbd94aa6f01… (2,417B)</span></li></ul>
+                </div>
+                
+                <div class="card">
+                  <div class="card-head">
+                    <h3>마케팅팀 <span class="sub-id">@marketing</span></h3>
+                    <span class="pill pill-green">APPROVED</span>
+                  </div>
+                  <p class="muted">증거 검증: <strong>2 / 2</strong> 통과</p>
+                  <ul class="evidence-list"><li><code>마케팅팀 멀티채널 배포 번들 JSON</code> — <span class='mono-dim'>85ce50669a3d7fea… (3,823B)</span></li><li><code>마케팅팀 채널별 카피·UTM 문서 MD</code> — <span class='mono-dim'>5288a63d0d8bc10e… (2,004B)</span></li></ul>
+                </div>
+                </div>
+
+  <h2>2. 디자인팀 SNS 카드뉴스 5장 캐러셀 &amp; 마케팅팀 배포 패키지</h2>
+  <div class="card carousel-box">
+    <div class="slide-frame">
+      <img id="slideImg" src="" alt="SNS Card News Slide" />
+      <p id="slideMeta" class="muted" style="margin-top:10px;"></p>
+      <div class="btn-row">
+        <button onclick="prevSlide()">← 이전 장</button>
+        <button class="primary" onclick="nextSlide()">다음 장 →</button>
+      </div>
+    </div>
+    <div>
+      <div class="tabs" id="channelTabs"></div>
+      <p id="channelUtm" class="muted"></p>
+      <pre id="channelCaption"></pre>
+      <button class="primary" onclick="copyText('channelCaption')">📋 채널 카피 복사</button>
+    </div>
+  </div>
+
+  <h2>3. 기획팀 &amp; 개발팀 — 실제 보유 사이트 SEO·헬스 감사 결과</h2>
+  <div class="grid-2">
+                <div class="card">
+                  <div class="card-head">
+                    <h3>dream8837z.github.io</h3>
+                    <span class="score-big">63.5점</span>
+                  </div>
+                  <p class="muted">스캔 페이지: <strong>13개</strong> · Sitemap URL: <strong>4개</strong></p>
+                  <div class="pill-row"><span class="pill pill-green">robots.txt</span><span class="pill pill-green">sitemap.xml</span><span class="pill pill-green">ads.txt</span><span class="pill pill-green">llms.txt</span></div>
+                  <ul class="evidence-list"><li><code>boring-marketing-studio/dashboard/index.html</code> — missing_meta_description, missing_canonical, incomplete_opengraph, missing_json_ld <span class='pill pill-amber'>HIGH</span></li><li><code>index.html</code> — missing_canonical, incomplete_opengraph, missing_json_ld <span class='pill pill-amber'>MEDIUM</span></li><li><code>kaira-admath-autopilot/index.html</code> — h1_count_0, missing_json_ld <span class='pill pill-amber'>MEDIUM</span></li><li><code>kaira-admath-autopilot/promo.html</code> — missing_meta_description, missing_canonical, h1_count_0, incomplete_opengraph, missing_json_ld <span class='pill pill-amber'>HIGH</span></li><li><code>kaira-admath-autopilot/studio.html</code> — missing_meta_description, missing_canonical, h1_count_0, incomplete_opengraph, missing_json_ld <span class='pill pill-amber'>HIGH</span></li><li><code>shopshorts-studio/index.html</code> — missing_meta_description, missing_canonical, h1_count_0, incomplete_opengraph, missing_json_ld <span class='pill pill-amber'>HIGH</span></li><li><code>shortform-agency/magnets/clinic-hooks-kit.html</code> — missing_meta_description, missing_canonical, incomplete_opengraph, missing_json_ld <span class='pill pill-amber'>HIGH</span></li><li><code>shortform-agency/magnets/instructor-hooks-kit.html</code> — missing_meta_description, missing_canonical, incomplete_opengraph, missing_json_ld <span class='pill pill-amber'>HIGH</span></li></ul>
+                </div>
+                
+                <div class="card">
+                  <div class="card-head">
+                    <h3>dist</h3>
+                    <span class="score-big">90.0점</span>
+                  </div>
+                  <p class="muted">스캔 페이지: <strong>60개</strong> · Sitemap URL: <strong>505개</strong></p>
+                  <div class="pill-row"><span class="pill pill-green">robots.txt</span><span class="pill pill-green">sitemap.xml</span><span class="pill pill-green">ads.txt</span><span class="pill pill-green">llms.txt</span></div>
+                  <ul class="evidence-list"><li><code>apt/bundang.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li><li><code>apt/gangnam.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li><li><code>apt/haeundae.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li><li><code>apt/mapo.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li><li><code>apt/seocho.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li><li><code>apt/seongdong.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li><li><code>apt/songpa.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li><li><code>apt/yeongdeungpo.html</code> — incomplete_opengraph <span class='pill pill-amber'>MEDIUM</span></li></ul>
+                </div>
+                </div>
+
+  <h2>4. CS팀 — 고객 문의 자동 분류 &amp; 인간 승인 게이트</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>티켓</th><th>고객</th><th>제목</th><th>분류</th><th>이관 부서</th><th>승인 상태</th><th>응답 초안</th></tr>
+      </thead>
+      <tbody>
+            <tr>
+              <td><code>CS-2026-101</code></td>
+              <td>김민수</td>
+              <td><strong>모바일에서 계산기 결과 표가 살짝 잘려 보입니다</strong></td>
+              <td><span class="pill pill-blue">bug_report</span></td>
+              <td><code>@dev</code></td>
+              <td><span class="pill pill-green">자동 초안 완료</span></td>
+              <td class="draft-cell">안녕하세요, 김민수님. 소중한 오류 제보 감사드립니다! 개발팀에 즉시 전달하여 모바일 표 가로 스크롤(overflow-x) 패치를 우선 배정했습니다. 수정 완료 후 다시 안내드리겠습니다.</td>
+            </tr>
+            
+            <tr>
+              <td><code>CS-2026-102</code></td>
+              <td>박지현</td>
+              <td><strong>제휴 광고 및 브랜드 협업 단가 문의</strong></td>
+              <td><span class="pill pill-blue">partnership_billing</span></td>
+              <td><code>@marketing</code></td>
+              <td><span class="pill pill-amber">대표자 승인 필요</span></td>
+              <td class="draft-cell">안녕하세요, 박지현님. AI Autonomous Web Corp 담당팀입니다. 제휴/협업 문의 감사드립니다. 최근 트래픽 지표 및 단가 안내서는 대표자 검토 후 영업일 1일 이내 회신드리겠습니다.</td>
+            </tr>
+            
+            <tr>
+              <td><code>CS-2026-103</code></td>
+              <td>이준호</td>
+              <td><strong>2026년 청년 도약계좌 및 정책지원금 비교표도 올려주세요</strong></td>
+              <td><span class="pill pill-blue">content_request</span></td>
+              <td><code>@planner</code></td>
+              <td><span class="pill pill-green">자동 초안 완료</span></td>
+              <td class="draft-cell">안녕하세요, 이준호님! 유익하게 봐주셔서 감사합니다. 요청하신 주제는 기획팀 콘텐츠 백로그에 등록했으며, 최신 공식 데이터 검증 후 우선 발행하도록 하겠습니다.</td>
+            </tr>
+            
+            <tr>
+              <td><code>CS-2026-104</code></td>
+              <td>unknown_bot_88</td>
+              <td><strong>URGENT! Claim 5000 USDT bonus click here now</strong></td>
+              <td><span class="pill pill-blue">spam_blocked</span></td>
+              <td><code>@cs</code></td>
+              <td><span class="pill pill-green">자동 초안 완료</span></td>
+              <td class="draft-cell">(스팸/피싱 패턴 감지 — 자동 차단 및 미응답 처리)</td>
+            </tr>
+            </tbody>
+    </table>
+  </div>
+
+  <h2>5. 운영 티어별 월간 토큰 원가 &amp; 손익분기점(BEP) 감사</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>운영 티어</th><th>아키텍처</th><th>월 비용</th><th>AdSense BEP</th><th>CPA BEP</th><th>감사 판정</th></tr>
+      </thead>
+      <tbody>
+            <tr class="row-highlight">
+              <td><strong>Tier-0: 하이브리드 무인 오토파일럿 (본 시스템)</strong></td>
+              <td>일일 SEO·헬스체크·카드뉴스·CS분류 Python 무인 엔진($0) + 주간 고난도 기획만 선택적 LLM 호출</td>
+              <td class="num">$3.60/월</td>
+              <td class="num">1,029 PV</td>
+              <td class="num">1건</td>
+              <td>최적 — 월 $3.60(또는 완전 로컬 $0)로 트래픽 초기 단계부터 흑자 구조 확보</td>
+            </tr>
+            
+            <tr class="">
+              <td><strong>Tier-1: Claude Code Pro 단일 세션</strong></td>
+              <td>PC 상시 가동 + 단일 대화창 /schedule 실행 (팀 기능 미사용)</td>
+              <td class="num">$20.00/월</td>
+              <td class="num">5,714 PV</td>
+              <td class="num">2건</td>
+              <td>주의 — PC 절전 시 중단되며 5개 부서 동시 실행 시 5시간 사용량 한도(Rate Limit) 도달</td>
+            </tr>
+            
+            <tr class="">
+              <td><strong>Tier-2: 5인 에이전트 팀 매일 풀가동 (영상 원안 API 기준)</strong></td>
+              <td>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 + 6개 세션(5부서+마스터) 매일 09:00 풀가동</td>
+              <td class="num">$138.00/월</td>
+              <td class="num">39,429 PV</td>
+              <td class="num">12건</td>
+              <td>적자 위험 — 월 39,500 PV 이상 확보 전에는 토큰비가 수익을 초과(영상 8단계 경고와 일치)</td>
+            </tr>
+            </tbody>
+    </table>
+  </div>
+
+  <h2>6. 영상 8단계 세팅법 전수 감사 매트릭스 (리스크 제거 &amp; 고도화)</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>단계</th><th>영상 원안</th><th>판정</th><th>발견된 리스크</th><th>본 시스템의 구조적 해결책</th></tr>
+      </thead>
+      <tbody>
+            <tr>
+              <td><strong>① 채용 공고 쓰기</strong></td>
+              <td>목표·매일 업무·결과물 3줄로 직원의 업무를 명확히 정의</td>
+              <td><span class="pill pill-blue">ADOPT_AND_EXPAND</span></td>
+              <td class="risk-cell">3줄만으로는 월 토큰 예산 상한, 실패 시 폴백, 금지 행동이 누락되어 폭주 가능</td>
+              <td class="sol-cell">3줄 핵심 채용 공고 + KPI/SLA/월간 토큰 상한($15)/보안 금지 조항을 구조화한 job_posting.md 자동 생성</td>
+            </tr>
+            
+            <tr>
+              <td><strong>② 업무 공간 만들기</strong></td>
+              <td>Claude Code PC 버전 설치 후 로컬 폴더에서 새 대화창 세팅</td>
+              <td><span class="pill pill-blue">HYBRID_UPGRADE</span></td>
+              <td class="risk-cell">PC 전원 OFF·절전 모드 시 로컬 스케줄러가 즉시 중단되어 24/365 무인 운영 불가</td>
+              <td class="sol-cell">로컬 워크스페이스 + GitHub Actions 클라우드 Cron(매일 KST 09:00) 이중화 워크플로우 자동 생성</td>
+            </tr>
+            
+            <tr>
+              <td><strong>③ 직원 교육 (회사 매뉴얼)</strong></td>
+              <td>CLAUDE.md 매뉴얼을 공유하고 운영하면서 지속적으로 보완</td>
+              <td><span class="pill pill-blue">ADOPT_CORE</span></td>
+              <td class="risk-cell">남의 템플릿(honjobs.com/47)을 그대로 쓰면 내 사이트 구조·수익화 모델과 괴리 발생</td>
+              <td class="sol-cell">실제 보유 사이트(dream8837z.github.io, pseo-revenue-autopilot) 구조가 반영된 맞춤형 CLAUDE.md 자동 생성</td>
+            </tr>
+            
+            <tr>
+              <td><strong>④ 장비와 권한 주기</strong></td>
+              <td>구글 드라이브/노션 커넥터 연동 + 내 컴퓨터 폴더 접근 &#x27;항상 허용&#x27;</td>
+              <td><span class="pill pill-blue">SECURITY_REPLACE</span></td>
+              <td class="risk-cell">치명적 리스크: 무제한 &#x27;항상 허용&#x27;은 프롬프트 인젝션·오작동 시 파일 삭제/시크릿(.env) 유출 유발</td>
+              <td class="sol-cell">SecurityGuard 최소 권한 정책(부서별 읽기/쓰기 화이트리스트 + 파괴적 명령/시크릿 접근 원천 차단)</td>
+            </tr>
+            
+            <tr>
+              <td><strong>⑤ 에이전트 만들기</strong></td>
+              <td>~/.claude/settings.json에 CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 활성화</td>
+              <td><span class="pill pill-blue">COST_OPTIMIZED</span></td>
+              <td class="risk-cell">실험적 멀티 에이전트 팀을 매일 풀가동하면 토큰 소모가 3~5배 폭증(월 $78~$240+)</td>
+              <td class="sol-cell">settings.json 패치 생성 + 일상 점검/SEO/카드뉴스/CS는 원가 $0 Python 엔진이 수행하는 Tier-0 하이브리드</td>
+            </tr>
+            
+            <tr>
+              <td><strong>⑥ 부서 나누기</strong></td>
+              <td>기획·개발·디자인·CS·마케팅 5개 부서 + 총괄 마스터 대화형 생성</td>
+              <td><span class="pill pill-blue">ADOPT_AND_CODE</span></td>
+              <td class="risk-cell">부서 간 파일 소유권 미지정 시 동일 파일 동시 수정(충돌) 및 책임 소재 불명확</td>
+              <td class="sol-cell">.claude/agents/ 6개 에이전트 정의서 + 소유권 매트릭스 + 실제 실행 가능한 5개 Python 부서 워커 구현</td>
+            </tr>
+            
+            <tr>
+              <td><strong>⑦ 자동화 걸기 + 거짓말 방지</strong></td>
+              <td>/schedule 매일 오전 9시 실행 + 마스터 검수 2줄 규칙(직접 확인·증거 제시)</td>
+              <td><span class="pill pill-blue">HARDENED_GATE</span></td>
+              <td class="risk-cell">프롬프트 2줄만으로는 LLM이 &#x27;확인했다&#x27;고 거짓 보고(환각)할 확률을 0%로 낮출 수 없음</td>
+              <td class="sol-cell">MasterVerifier 코드 레벨 증거 게이트: 실제 파일 재오픈, SHA-256 대조, PNG 해상도·픽셀 검증 미통과 시 강제 REJECT</td>
+            </tr>
+            
+            <tr>
+              <td><strong>⑧ 수익화 세팅</strong></td>
+              <td>GSC 색인/노출 확인 → SEO 코드 반영 + 매일 SNS 카드뉴스 자동 생성</td>
+              <td><span class="pill pill-blue">FULL_AUTOMATION</span></td>
+              <td class="risk-cell">GSC API 미연동 시 멈추거나, 검증 없는 자동 코드 수정으로 라이브 사이트 장애 위험</td>
+              <td class="sol-cell">GSC API 연동 + 오프라인 정밀 SEO/링크/JSON-LD 감사 + 안전한 Diff 패치 생성 + 1080×1350 카드뉴스 5장 즉시 렌더링</td>
+            </tr>
+            </tbody>
+    </table>
+  </div>
+
+  <h2>7. Claude Code 8단계 원클릭 복붙 스타터 팩</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-head"><h3>③ 회사 업무 매뉴얼 (CLAUDE.md)</h3><button onclick="copyText('snipClaude')">복사</button></div>
+      <pre id="snipClaude"># AI Autonomous Web Corp — 회사 업무 매뉴얼 (CLAUDE.md)
+
+&gt; 본 매뉴얼은 모든 AI 직원(기획·개발·디자인·CS·마케팅)과 총괄 마스터가 반드시 준수해야 하는 최상위 운영 헌법입니다.
+
+## 1. 회사 목표 및 수익화 원칙
+- 대상 도메인: `https://dream8837z.github.io`
+- 모든 작업은 **검색 노출(GSC/SEO) → 트래픽 유입(SNS 카드뉴스) → 전환 수익(AdSense/CPA/제휴)** 파이프라인에 기여해야 합니다.
+- 단순 반복 점검(HTML/링크/메타 감사, 카드뉴스 PNG 렌더링, CS 분류)은 토큰 비용 `$0`인 `company_engine`을 우선 사용합니다.
+
+## 2. 부서별 조직도 및 파일 소유권 매트릭스
+| 부서 | 권장 모델 | 쓰기 허용 경로 | 일일 핵심 미션 |
+|---|---|---|---|
+| `master` (총괄 마스터) | sonnet-or-deterministic | `output/master, output/studio` | 매일 KST 09:00 5개 부서 지시 + 모든 산출물 SHA-256·파일 실존·픽셀/HTML 기계적 증거 검수 |
+| `planner` (기획팀) | sonnet | `output/planner` | Google Search Console 색인/노출(또는 로컬 SEO 갭) 점검 + 고단가 키워드·콘텐츠 백로그 수립 |
+| `dev` (개발팀) | sonnet | `output/dev` | 내부 깨진 링크·HTML/JSON-LD 오류·모바일 뷰포트 점검 및 안전한 SEO 자동 패치 번들 생성 |
+| `design` (디자인팀) | haiku-or-pillow | `output/design` | 매일 1080×1350 인스타그램·유튜브 커뮤니티용 SNS 카드뉴스 5장 캐러셀 PNG 무인 렌더링 |
+| `cs` (CS팀) | haiku | `output/cs` | 유입 문의 자동 분류(버그/제휴/콘텐츠요청/스팸), SLA 우선순위 지정, 정책 기반 한국어 응답 초안 작성 |
+| `marketing` (마케팅팀) | haiku | `output/marketing` | 디자인팀 카드뉴스 5장 + 채널별(인스타/유튜브 커뮤니티/스레드/블로그) UTM 배포 패키지 생성 |
+
+## 3. 거짓말 방지 2줄 검증 규칙 (영상 7단계 필수 — 절대 예외 없음)
+1. **다 됐다고 보고하기 전에 결과물을 직접 열어서 확인하고 증거(파일 경로, SHA-256, 테스트/해상도 로그)를 보여 줄 것.**
+2. **확인 못 한 건 못했다고 그대로 말할 것. 추정·환각 완료 보고 시 마스터가 즉시 `UNVERIFIED_REJECTED` 처리한다.**
+
+## 4. 보안 및 최소 권한 원칙 (영상 4단계 보완)
+- 무제한 &#x27;항상 허용(Always Allow)&#x27; 금지 — 각 부서는 위 소유권 매트릭스의 `쓰기 허용 경로` 밖의 파일을 수정할 수 없습니다.
+- `.env`, API 키, SSH 키, 개인정보가 포함된 파일은 읽기·출력·커밋을 원천 금지합니다.
+- 라이브 사이트 코드 수정은 반드시 `output/dev/`에 Diff 패치를 생성하고 테스트 통과 후 반영합니다.
+</pre>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>⑤ settings.json &amp; ⑦ /schedule 명령어</h3><button onclick="copyText('snipSched')">복사</button></div>
+      <pre id="snipSched">{
+  &quot;env&quot;: {
+    &quot;CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS&quot;: &quot;1&quot;
+  }
+}
+
+# ⑦ Claude Code /schedule 자동화 명령 (그대로 복사해 입력)
+
+/schedule 매일 아침 9시 00분에 마스터가 기획팀, 개발팀, 디자인팀, CS팀, 마케팅팀에게 오늘 할 일을 지시하도록 스케줄 걸어줘.
+단, 마스터는 아래 검수 규칙 2줄을 반드시 지켜야 해:
+1) 다 됐다고 보고하기 전에 결과물을 직접 열어서 확인하고 증거(파일 경로, SHA-256, 테스트/해상도 결과)를 보여 줄 것.
+2) 확인 못 한 건 못했다고 그대로 말할 것.
+
+# 권장: PC가 꺼져 있어도 100% 실행되는 완전 무인 실행 커맨드
+.venv/bin/python -m company_engine run
+</pre>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SLIDES = [{"slide_index": 1, "title": "표지 (Hook Cover)", "file_path": "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_01_cover.png", "relative_url": "../design/2026-11-23_card_news/slide_01_cover.png", "sha256": "040c84eab1193c09f75fd4a0d4841e5416d0505282aa919ba4a546aa6615517d", "byte_size": 56917}, {"slide_index": 2, "title": "STEP 01 · 기획팀 & 개발팀", "file_path": "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_02_insight.png", "relative_url": "../design/2026-11-23_card_news/slide_02_insight.png", "sha256": "0e06a368c2fe9aae0778cee207b873427bc2f5ed5687e8c625e4b4648e7a8f1b", "byte_size": 69233}, {"slide_index": 3, "title": "STEP 02 · 총괄 마스터 검증", "file_path": "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_03_insight.png", "relative_url": "../design/2026-11-23_card_news/slide_03_insight.png", "sha256": "2a0fe5efbe0b103f1a048e52d2e8cbd44787afa850e861d3b180ab1d0a06fbc1", "byte_size": 69214}, {"slide_index": 4, "title": "STEP 03 · 비용 최적화", "file_path": "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_04_insight.png", "relative_url": "../design/2026-11-23_card_news/slide_04_insight.png", "sha256": "cb76b855111699f0c3901c32b213bd664382ea9c6a70e707ec92b939909e8647", "byte_size": 67965}, {"slide_index": 5, "title": "CTA 마무리", "file_path": "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_05_cta.png", "relative_url": "../design/2026-11-23_card_news/slide_05_cta.png", "sha256": "ecd832d10f61f7dcb30b8bc47fb35f9b24aa56d061e3dc93760c9b18b5745653", "byte_size": 52558}];
+  const CHANNELS = {"instagram_carousel": {"channel_name": "Instagram 4:5 캐러셀 (5장)", "utm_url": "https://dream8837z.github.io/?utm_source=instagram&utm_medium=card_news&utm_campaign=ai_corp_20261123", "assets": ["/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_01_cover.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_02_insight.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_03_insight.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_04_insight.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_05_cta.png"], "caption": "월급 0원 AI 직원 5명이 매일 아침 사이트를 키우는 법\n\n매일 아침 9시, AI 직원 5명이 사이트 73개 페이지를 자동 점검하고 SEO 평균 76.8점을 유지하는 무인 운영 리포트입니다.\n\n✔ 총괄 마스터 SHA-256 증거 검증으로 거짓 보고 0%\n✔ 토큰비 월 $138 → $3.60 하이브리드 최적화\n\n👉 프로필 링크에서 확인: https://dream8837z.github.io/?utm_source=instagram&utm_medium=card_news&utm_campaign=ai_corp_20261123\n\n#클로드코드 #AI자동화 #AI직원 #사이트운영 #SEO자동화 #부업자동화 #1인기업"}, "youtube_community": {"channel_name": "YouTube 커뮤니티 포스트 (5장)", "utm_url": "https://dream8837z.github.io/?utm_source=youtube&utm_medium=community&utm_campaign=ai_corp_20261123", "assets": ["/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_01_cover.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_02_insight.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_03_insight.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_04_insight.png", "/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_05_cta.png"], "caption": "[오늘의 무인 사이트 운영 리포트 · 2026-11-23]\nAI 직원 5명이 방금 사이트 73개 페이지 SEO 감사를 마쳤습니다!\n거짓말 방지 SHA-256 검증을 통과한 실제 결과와 무료 도구는 아래 링크에서 바로 확인해 보세요 👇\nhttps://dream8837z.github.io/?utm_source=youtube&utm_medium=community&utm_campaign=ai_corp_20261123"}, "threads_x_post": {"channel_name": "Threads / X 단문 스레드", "utm_url": "https://dream8837z.github.io/?utm_source=threads&utm_medium=social&utm_campaign=ai_corp_20261123", "assets": ["/home/dream8837/.gemini/antigravity/scratch/ai-company-autopilot/output/design/2026-11-23_card_news/slide_01_cover.png"], "caption": "AI 직원 5명에게 사이트를 맡길 때 가장 위험한 2가지:\n1) 폴더 '항상 허용' 보안 사고\n2) 일 안 하고 '다 했다'고 거짓 보고\n\n그래서 최소 권한 가드 + SHA-256 기계적 검증 게이트로 완전 자동화했습니다.\n상세 결과 👉 https://dream8837z.github.io/?utm_source=threads&utm_medium=social&utm_campaign=ai_corp_20261123"}};
+  let slideIdx = 0;
+
+  function renderSlide() {
+    if (!SLIDES.length) return;
+    const s = SLIDES[slideIdx];
+    document.getElementById('slideImg').src = s.relative_url;
+    document.getElementById('slideMeta').textContent =
+      `[${s.slide_index} / ${SLIDES.length}] ${s.title} · SHA256: ${s.sha256.slice(0,12)}… (${(s.byte_size/1024).toFixed(1)} KB)`;
+  }
+  function prevSlide() { slideIdx = (slideIdx - 1 + SLIDES.length) % SLIDES.length; renderSlide(); }
+  function nextSlide() { slideIdx = (slideIdx + 1) % SLIDES.length; renderSlide(); }
+
+  function renderChannels() {
+    const tabsEl = document.getElementById('channelTabs');
+    const keys = Object.keys(CHANNELS);
+    keys.forEach((k, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (idx === 0 ? ' active' : '');
+      btn.textContent = CHANNELS[k].channel_name;
+      btn.onclick = () => selectChannel(k, btn);
+      tabsEl.appendChild(btn);
+    });
+    if (keys.length) selectChannel(keys[0], tabsEl.firstChild);
+  }
+
+  function selectChannel(key, activeBtn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    if (activeBtn) activeBtn.classList.add('active');
+    const ch = CHANNELS[key];
+    document.getElementById('channelUtm').textContent = 'UTM 링크: ' + ch.utm_url;
+    document.getElementById('channelCaption').textContent = ch.caption;
+  }
+
+  function copyText(elId) {
+    const txt = document.getElementById(elId).textContent;
+    navigator.clipboard.writeText(txt).then(() => alert('클립보드에 복사되었습니다!'));
+  }
+
+  renderSlide();
+  renderChannels();
+</script>
+</body>
+</html>

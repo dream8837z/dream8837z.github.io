@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shortform Studio Pro v4.0 — Broadcast &amp; Revenue Edition</title>
+  <style>
+    :root {
+      --bg:#09090b; --surface:#111114; --surface-2:#18181c; --border:#27272a;
+      --text:#fafafa; --muted:#a1a1aa; --dim:#71717a;
+      --accent:#ff4d2e; --gold:#f5c451; --green:#22c55e;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; height:100%; background:var(--bg); color:var(--text); font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; }
+    .app { display:grid; grid-template-columns:248px 1fr; min-height:100vh; }
+    @media (max-width:900px) { .app { grid-template-columns:1fr; } .sidebar { display:none; } }
+    .sidebar { background:var(--surface); border-right:1px solid var(--border); padding:24px 16px; display:flex; flex-direction:column; gap:6px; position:sticky; top:0; height:100vh; }
+    .brand { padding:4px 10px 20px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+    .brand-title { font-size:15px; font-weight:800; letter-spacing:-0.02em; display:flex; align-items:center; gap:8px; }
+    .dot { width:8px; height:8px; border-radius:50%; background:var(--accent); display:inline-block; }
+    .brand-sub { font-size:11px; color:var(--dim); margin-top:4px; }
+    .nav-btn { background:transparent; border:1px solid transparent; color:var(--muted); text-align:left; padding:10px 12px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+    .nav-btn:hover { background:var(--surface-2); color:var(--text); }
+    .nav-btn.active { background:var(--surface-2); color:var(--text); border-color:var(--border); }
+    .sidebar-foot { margin-top:auto; padding:12px 10px 0; border-top:1px solid var(--border); font-size:11px; color:var(--dim); }
+
+    .main { padding:30px 36px 72px; max-width:1200px; width:100%; }
+    .topbar { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+    h1 { margin:0; font-size:24px; font-weight:800; letter-spacing:-0.03em; }
+    h2 { margin:0 0 12px; font-size:16px; font-weight:700; }
+    .muted { color:var(--muted); font-size:13px; }
+    .mono { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; }
+    .accent { color:var(--gold); font-weight:700; }
+    .view { display:none; }
+    .view.active { display:block; }
+
+    .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:22px; }
+    .metric { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:15px 17px; }
+    .metric-k { font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:0.06em; }
+    .metric-v { font-size:25px; font-weight:800; margin-top:6px; }
+    .metric-s { font-size:12px; color:var(--muted); margin-top:4px; }
+
+    .panel { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:18px; }
+    .grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:16px; }
+    .studio-split { display:grid; grid-template-columns:312px 1fr; gap:24px; align-items:start; }
+    @media (max-width:900px) { .studio-split { grid-template-columns:1fr; } }
+
+    .phone-stage { position:relative; background:#000; border:1px solid var(--border); border-radius:20px; padding:8px; overflow:hidden; }
+    .phone-stage video { width:100%; border-radius:14px; display:block; background:#000; aspect-ratio:9/16; object-fit:cover; }
+    .safe-zone-overlay { position:absolute; inset:8px; border-radius:14px; pointer-events:none; display:none; overflow:hidden; }
+    .safe-zone-overlay.on { display:block; }
+    .sz-top, .sz-bot, .sz-right { position:absolute; background:rgba(255,77,46,0.22); border:1px dashed rgba(255,77,46,0.85); color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+    .sz-safe { position:absolute; border:1.5px dashed rgba(34,197,94,0.9); }
+
+    .dropzone { border:1.5px dashed #3f3f46; border-radius:12px; padding:34px 20px; text-align:center; background:#0c0c0f; cursor:pointer; }
+    .dropzone:hover, .dropzone.drag { border-color:var(--accent); background:#141112; }
+    .prog-bar { height:6px; background:var(--surface-2); border-radius:999px; overflow:hidden; margin-top:12px; display:none; }
+    .prog-fill { height:100%; width:0%; background:var(--accent); transition:width .15s; }
+
+    .form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:10px; margin-bottom:14px; }
+    label { display:block; font-size:11px; color:var(--dim); margin-bottom:5px; text-transform:uppercase; }
+    input, select { width:100%; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font-size:13px; }
+    .btn { background:var(--surface-2); color:var(--text); border:1px solid var(--border); padding:8px 13px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-block; }
+    .btn:hover { border-color:#52525b; }
+    .btn.primary { background:var(--text); color:var(--bg); border-color:var(--text); }
+    .btn.accent-btn { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .btn.active { background:var(--text); color:var(--bg); border-color:var(--text); }
+    .btn.sm { padding:5px 9px; font-size:11px; }
+
+    .tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+    .tag { display:inline-block; font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; background:var(--surface-2); border:1px solid var(--border); color:var(--muted); }
+    .tag.live { color:#4ade80; border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.1); }
+    .tag.gold { color:var(--gold); border-color:rgba(245,196,81,.35); background:rgba(245,196,81,.08); }
+    .scene-row { border:1px solid var(--border); background:var(--bg); border-radius:10px; padding:11px 13px; margin-bottom:8px; }
+    .variant-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:10px; margin-bottom:14px; }
+    .variant-card { border:1px solid var(--border); background:var(--bg); border-radius:10px; padding:12px; font-size:12px; }
+    .variant-card.win { border-color:var(--gold); }
+    .hook-list { max-height:430px; overflow-y:auto; display:grid; gap:8px; }
+    .hook-row { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px 14px; background:var(--bg); border:1px solid var(--border); border-radius:8px; font-size:13px; }
+    pre { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px; font-size:12px; color:#d4d4d8; white-space:pre-wrap; max-height:280px; overflow-y:auto; margin:10px 0 12px; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:12px; background:var(--surface); }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:11px 13px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; }
+    th { background:var(--surface-2); color:var(--muted); font-size:11px; text-transform:uppercase; }
+    tr.hl { background:rgba(245,196,81,.06); }
+    .toast { position:fixed; bottom:24px; right:24px; background:#fafafa; color:#09090b; padding:11px 16px; border-radius:10px; font-size:13px; font-weight:700; display:none; z-index:99; box-shadow:0 8px 28px rgba(0,0,0,.5); }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-title"><span class="dot"></span> Shortform Studio Pro</div>
+      <div class="brand-sub">v4.0 · Broadcast -14 LUFS &amp; Revenue</div>
+    </div>
+    <button class="nav-btn active" onclick="switchView('deliverables', this)">01 · 릴스 납품 스튜디오</button>
+    <button class="nav-btn" onclick="switchView('autocut', this)">02 · 실제 MP4 무음 컷편집</button>
+    <button class="nav-btn" onclick="switchView('hooks', this)">03 · 140개 3초 후킹 엔진</button>
+    <button class="nav-btn" onclick="switchView('sales', this)">04 · 영업 키트 &amp; 계약서</button>
+    <button class="nav-btn" onclick="switchView('audit', this)">05 · 단가 시뮬레이터 &amp; 감사</button>
+    <button class="nav-btn" onclick="switchView('monetize', this)">06 · 수익화 퍼널 &amp; 리드 CRM</button>
+    <button class="nav-btn" onclick="switchView('evolution', this);refreshEvolution();">07 · 자율학습 &amp; 전문가 진화</button>
+    <div class="sidebar-foot">
+      <div>Broadcast -14 LUFS · Karaoke</div>
+      <div style="margin-top:4px;">Run: 2026-11-23</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Shortform Agency Autopilot v4.0</h1>
+        <div class="muted">WordBoundary 카라오케 자막 · -14 LUFS 사이드체인 BGM · xfade 그레이딩 · Safe-Zone X-Ray · 1클릭 납품 ZIP</div>
+      </div>
+      <span class="tag live" id="healthBadge">● LIVE v4.0 READY</span>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-k">오디오 마스터링</div><div class="metric-v">-14 LUFS</div><div class="metric-s">사이드체인 덕킹 BGM + Whoosh SFX</div></div>
+      <div class="metric"><div class="metric-k">렌더링 납품본</div><div class="metric-v" id="metricProjCount">3편</div><div class="metric-s">MP4 + SRT + CapCut + Premiere ZIP</div></div>
+      <div class="metric"><div class="metric-k">3초 후킹 엔진</div><div class="metric-v">140개</div><div class="metric-s">5축 100점 리텐션 A/B/C 스코어링</div></div>
+      <div class="metric"><div class="metric-k">평균 무음·NG 압축</div><div class="metric-v">-32.4%</div><div class="metric-s">15ms 클릭 방지 + -14 LUFS</div></div>
+    </div>
+
+    <!-- VIEW 1: DELIVERABLES STUDIO -->
+    <section id="view-deliverables" class="view active">
+      <div class="panel">
+        <h2>신규 클라이언트 원클릭 제작 (v4.0 방송급 -14 LUFS + 카라오케 + ZIP)</h2>
+        <div class="form-grid">
+          <div><label>클라이언트명</label><input id="newName" value="서울 강남 연세치과" /></div>
+          <div><label>업종</label><input id="newInd" value="치과·임플란트" /></div>
+          <div><label>주제</label><input id="newTopic" value="임플란트 치과 고를 때 실수 3가지" /></div>
+          <div><label>비교 A</label><input id="newA" value="오스템" /></div>
+          <div><label>비교 B</label><input id="newB" value="스트라우만" /></div>
+          <div>
+            <label>페르소나 톤</label>
+            <select id="newTone">
+              <option value="professional">표준 프로페셔널</option>
+              <option value="friendly">친근한 구어체</option>
+              <option value="busan">부산 사투리</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <button class="btn accent-btn" id="btnGenClient" onclick="generateNewClient()">신규 v4.0 릴스 즉시 제작</button>
+          <span id="genStatus" class="muted">무새로고침 실시간 반영 · 완료 즉시 납품 ZIP 다운로드 가능</span>
+        </div>
+      </div>
+
+      <div class="tabs" id="projectTabs"></div>
+      <div class="panel studio-split">
+        <div>
+          <div class="tabs" style="margin-bottom:8px;">
+            <span class="muted" style="align-self:center;font-size:11px;">Safe-Zone X-Ray:</span>
+            <button class="btn sm active" onclick="setSafeZone('projSZ','off',this)">OFF</button>
+            <button class="btn sm" onclick="setSafeZone('projSZ','yt',this)">YT Shorts</button>
+            <button class="btn sm" onclick="setSafeZone('projSZ','ig',this)">IG Reels</button>
+          </div>
+          <div class="phone-stage">
+            <video id="projVideo" controls playsinline></video>
+            <div id="projSZ" class="safe-zone-overlay"></div>
+          </div>
+          <div id="projStats" class="muted" style="margin-top:12px;"></div>
+          <div id="projExports" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;"></div>
+        </div>
+        <div>
+          <h2>5축 바이럴 리텐션 스코어카드 &amp; A/B/C 후킹 비교</h2>
+          <div id="variantGrid" class="variant-grid"></div>
+          <div class="tabs" id="personaTabs"></div>
+          <div id="sceneList"></div>
+          <h2 style="margin-top:16px;">ChatGPT / Claude 고도화 프롬프트</h2>
+          <pre id="projPrompt"></pre>
+          <button class="btn primary" onclick="copyById('projPrompt')">프롬프트 복사</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: REAL MP4 UPLOAD AUTO-CUT -->
+    <section id="view-autocut" class="view">
+      <div class="panel">
+        <h2>실제 스마트폰 MP4 무음 자동 컷편집 (15ms 클릭 방지 + -14 LUFS + 매직바이트 검증)</h2>
+        <div class="form-grid">
+          <div><label>무음 기준 (dB)</label><input id="cutDb" type="number" value="-32" min="-60" max="-10" /></div>
+          <div><label>최소 무음 길이 (초)</label><input id="cutMin" type="number" step="0.05" value="0.45" min="0.15" max="3.0" /></div>
+        </div>
+        <div id="dropzone" class="dropzone" onclick="document.getElementById('mp4Input').click()">
+          <input id="mp4Input" type="file" accept="video/mp4,video/quicktime,.mp4,.mov,.webm" style="display:none" onchange="handleMp4File(this.files[0])" />
+          <div style="font-size:15px;font-weight:700;margin-bottom:6px;">여기에 원본 MP4 / MOV 파일을 드래그하거나 클릭해 선택하세요 (최대 150MB)</div>
+          <div class="muted" id="cutStatus">업로드 진행률 실시간 표시 · 완료 즉시 Before/After 비교 재생</div>
+          <div id="cutProgBar" class="prog-bar"><div id="cutProgFill" class="prog-fill"></div></div>
+        </div>
+        <div id="cutResult" style="display:none;margin-top:20px;">
+          <div class="grid-2">
+            <div><h2>원본 (Before)</h2><div class="phone-stage" style="max-width:300px;"><video id="vidBefore" controls playsinline></video></div></div>
+            <div><h2>방송급 자동 컷편집 (After)</h2><div class="phone-stage" style="max-width:300px;"><video id="vidAfter" controls playsinline></video></div></div>
+          </div>
+          <p id="cutSummary" class="muted" style="margin-top:14px;"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: 140 HOOKS ENGINE -->
+    <section id="view-hooks" class="view">
+      <div class="panel">
+        <h2>3초 후킹 문장 140개 실시간 생성기</h2>
+        <div class="form-grid">
+          <div><label>업종</label><input id="hkIndustry" value="피부과·의료 전문직" oninput="renderHooks()" /></div>
+          <div><label>주제</label><input id="hkTopic" value="비수술 리프팅 시술 선택법" oninput="renderHooks()" /></div>
+          <div><label>비교 A</label><input id="hkA" value="울쎄라" oninput="renderHooks()" /></div>
+          <div><label>비교 B</label><input id="hkB" value="써마지" oninput="renderHooks()" /></div>
+          <div>
+            <label>카테고리</label>
+            <select id="hkCat" onchange="renderHooks()">
+              <option value="all">전체 (140개)</option>
+              <option value="info_gap">정보 격차·미공개형 (20)</option>
+              <option value="comparison">직접 비교·선택형 (20)</option>
+              <option value="loss_warning">실수·손실 경고형 (20)</option>
+              <option value="listicle_number">숫자·리스트·속도형 (20)</option>
+              <option value="contrarian">반전·고정관념 파괴형 (20)</option>
+              <option value="authority_pro">전문직·신뢰·데이터형 (20)</option>
+              <option value="story_empathy">스토리·공감·경험형 (20)</option>
+            </select>
+          </div>
+        </div>
+        <div id="hookCount" class="muted" style="margin-bottom:10px;"></div>
+        <div id="hookList" class="hook-list"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: SALES & CONTRACT -->
+    <section id="view-sales" class="view">
+      <div class="grid-2">
+        <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;"><h2>Threads 무료 3편 포트폴리오 모객글</h2><button class="btn" onclick="copyById('acq1')">복사</button></div><pre id="acq1">[Threads 무료 포트폴리오 모객 글 — 1편 6분 AI 자동화 전략]
+
+지금 B2B 숏폼(릴스/쇼츠) 레퍼런스 포트폴리오를 새롭게 구축 중이라
+선착순 5분께 **무료로 숏폼 1편** 기획+컷편집+자막까지 완성해 드립니다.
+
+✔ 조건: 스마트폰으로 3~5분 대충 찍어 보내주시면 됩니다 (NG·말더듬 그대로 OK)
+✔ 퀄리티: 무료라고 대충 만들지 않습니다. 제 포트폴리오로 쓸 거라 3초 후킹부터 직접 잡아드립니다.
+✔ 대상: 병원/클리닉·변호사·강사·브랜드 대표님 우선
+
+원하시는 분은 댓글에 **&quot;신청&quot;** 남겨주시면 바로 DM 드리겠습니다!</pre></div>
+        <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;"><h2>Threads 성과 자랑(인사이트 보드)</h2><button class="btn" onclick="copyById('acq2')">복사</button></div><pre id="acq2">[Threads 성과 자랑(인사이트 보드) 인바운드 모객 글]
+
+원본 7분짜리 NG 투성이 스마트폰 영상을
+4단계 대본 구조 + AI 자동 컷편집으로 1분 13초 릴스로 바꿨을 때 생긴 일.
+
+- 최근 30일 도달: 367만+
+- 신규 팔로워 유입: +600명
+- 제작 소요 시간: 기존 4시간 → 15분 단축
+
+전문직 대표님들이 카메라 앞에서 말 잘하실 필요 없습니다.
+기획과 컷편집 구조만 바꾸면 됩니다.
+월간 10편(+2편 보너스) 패키지 문의는 댓글에 **&quot;견적&quot;** 남겨주세요.</pre></div>
+        <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;"><h2>숨고(Soomgo) 10+2 보너스 제안서</h2><button class="btn" onclick="copyById('acq3')">복사</button></div><pre id="acq3">[숨고(Soomgo) 고전환 견적 제안서]
+
+안녕하세요, 대표님! 숏폼(릴스·쇼츠·틱톡) 기획 및 편집 전문 팀입니다.
+많은 대표님들이 &#x27;촬영은 했는데 편집이 너무 오래 걸리고 조회수가 안 나온다&#x27;고 고민하십니다.
+
+저희는 단순 컷편집이 아니라 **4단계 검증 대본(3초 후킹·오픈루프·1컷1메시지·DM CTA)**까지 함께 설계합니다.
+
+📌 제안 패키지 (선착순 런칭 혜택)
+- 기본 10편 패키지 계약 시 → **2편 무료 추가(총 12편 납품)**
+- 스마트폰 원본 영상만 보내주시면 NG·무음 제거 + 강조 자막 + 줌 펀치 완성 납품
+- 원본 수정이 필요하실 경우 CapCut / Premiere Pro 프로젝트 파일 제공 가능
+
+먼저 대표님 업종에 맞는 **3초 후킹 문구 3개**를 무료로 짜드릴까요? 편하게 답장 주세요!</pre></div>
+        <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;"><h2>B2B 표준 계약서 (수정 2회 제한)</h2><button class="btn" onclick="copyById('acq4')">복사</button></div><pre id="acq4"># B2B 숏폼 외주 표준 계약서 핵심 가드레일 (무한 수정·미수금 방지)
+
+1. **납품 범위 명확화**: 월 10편(+프로모션 2편) 세로형 9:16 MP4(30~60초) + 4단계 기획 대본 + 자막 포함.
+2. **수정 횟수 제한 (Anti-Scope-Creep)**: 편당 **무료 수정 최대 2회**(오타·자막 위치·컷 길이 조정)로 제한하며, 기획 전면 변경 또는 3회차부터는 편당 3만원 추가 과금.
+3. **클라이언트 원본 전달 SLA**: 클라이언트가 스마트폰 원본 영상 전달 후 영업일 2일 이내 1차 시안 납품.
+4. **결제 조건**: 착수 전 선결제 100% (또는 착수금 50% / 5편 납품 시 잔금 50%).
+5. **저작권 및 포트폴리오 활용**: 최종 납품물의 상업적 이용권은 잔금 완납 시 클라이언트에 귀속되며, 제작사는 익명/성과 인사이트 포트폴리오로 활용할 수 있음.</pre></div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: ECONOMICS & FORENSIC AUDIT -->
+    <section id="view-audit" class="view">
+      <div class="panel">
+        <h2>현실적 B2B 외주 단가 · CAC · 실질 시급 시뮬레이터</h2>
+        <p class="muted" style="margin-bottom:14px;">영상은 &#x27;6분 편집 = 25만원(시급 250만원)&#x27;처럼 보이지만, 실제로는 기획·클라이언트 소통·수정 2회·영업 CAC를 포함해 편당 약 30~45분이 소요됩니다. 그럼에도 AI 자동 컷편집 덕분에 실질 시급 15만~25만원의 고효율 B2B 모델은 충분히 성립합니다.</p>
+        <div class="table-wrap"><table><thead><tr><th>성장 단계</th><th>편수</th><th>패키지</th><th>편당</th><th>총 시간</th><th>실질 시급</th><th>50만/300만/1천만 고객수</th><th>전략</th></tr></thead><tbody>
+            <tr class="">
+              <td><strong>1단계: 포트폴리오 진입형 (Threads·숨고 초저가)</strong></td>
+              <td class="mono">10편</td>
+              <td class="mono">500,000원</td>
+              <td class="mono">50,000원</td>
+              <td class="mono">5.0h</td>
+              <td class="mono accent">94,000원/h</td>
+              <td class="mono">2 / 7 / 22곳</td>
+              <td class="muted">초기 레퍼런스·후기 10개 확보 구간. Threads 무료 3편 샘플 후 10편 50만원 업셀링</td>
+            </tr>
+            
+            <tr class="hl">
+              <td><strong>2단계: 스탠다드 월간 리테이너 (기획+편집+자막)</strong></td>
+              <td class="mono">10편</td>
+              <td class="mono">1,500,000원</td>
+              <td class="mono">150,000원</td>
+              <td class="mono">6.7h</td>
+              <td class="mono accent">205,970원/h</td>
+              <td class="mono">1 / 3 / 8곳</td>
+              <td class="muted">4단계 대본 기획 + AI 컷편집 + 2회 수정 포함. 1인 부업자 현실 주력 상품</td>
+            </tr>
+            
+            <tr class="">
+              <td><strong>3단계: 전문직 프리미엄 (10편 가격에 12편 보너스 전략)</strong></td>
+              <td class="mono">12편</td>
+              <td class="mono">2,500,000원</td>
+              <td class="mono">208,333원</td>
+              <td class="mono">9.0h</td>
+              <td class="mono accent">250,000원/h</td>
+              <td class="mono">1 / 2 / 5곳</td>
+              <td class="muted">의사·변호사·클리닉 타깃. 영상 속 &#x27;편당 25만(10편 250만)+2편 보너스&#x27; + 성과 리포트 필수</td>
+            </tr>
+            </tbody></table></div>
+      </div>
+      <div class="panel">
+        <h2>원본 영상 정밀 팩트체크 &amp; 감사 매트릭스</h2>
+        <p class="muted" style="margin-bottom:14px;">원본: <a href="https://youtu.be/mF7mxHau5dE" target="_blank" style="color:#fafafa">부산 달동네에서 50만원으로 3년만에 735억 회사 대표가 된 30대 남자의 하루 | &quot;2027년 개꿀통 부업은 바로 이겁니다&quot;</a></p>
+        <div class="table-wrap"><table><thead><tr><th>핵심 주제</th><th>영상 주장</th><th>판정</th><th>리스크·과장</th><th>구조적 해결책</th></tr></thead><tbody>
+            <tr>
+              <td><strong>수익성 주장 (편당 25만원 · 월 3,000만원)</strong></td>
+              <td class="muted">AI 앱으로 6분 만에 1편 편집해 10편 250만원(편당 25만원) 납품, 두 달 만에 월 매출 3,000만원</td>
+              <td><span class="tag">REALITY_CHECK</span></td>
+              <td style="color:#f87171">무료강의→단톡방→고가 유료강의(120만원+) 유도 퍼널 구조. 단순 컷편집만으로는 초보자가 편당 25만원 수주 불가</td>
+              <td style="color:#4ade80">기획(4단계 대본)+성과 리포트+수정 2회 제한 계약서를 묶은 3단계 현실 단가(5만→15만→25만원) 시뮬레이터 구축</td>
+            </tr>
+            
+            <tr>
+              <td><strong>3초 후킹 문장 140개 사전 (단톡방 미끼)</strong></td>
+              <td class="muted">터진 영상에서 뽑은 140개 후킹 사전을 댓글·단톡방 참여자에게만 제공</td>
+              <td><span class="tag">OPEN_AUTOMATED</span></td>
+              <td style="color:#f87171">외부 단톡방 가입·강의 영업에 묶여 있으며 업종별 자동 치환 및 점수화가 수동</td>
+              <td style="color:#4ade80">7대 카테고리 × 20개 = 140개 한국어 검증 후킹 템플릿 사전 + 업종·키워드 실시간 자동 치환 엔진 100% 내장</td>
+            </tr>
+            
+            <tr>
+              <td><strong>4단계 기획·대본 생성기 (멈추고→궁금→알려주고→부탁)</strong></td>
+              <td class="muted">키워드 3줄 입력으로 ChatGPT/Claude에 대본 프롬프트를 자동 전송하고 사투리/페르소나 가미</td>
+              <td><span class="tag">ADOPT_AND_CODE</span></td>
+              <td style="color:#f87171">외부 LLM 의존 시 매번 품질 편차 발생, 컷별 촬영 디렉팅과 오픈루프 검증이 누락됨</td>
+              <td style="color:#4ade80">4단계 구조 + 3종 페르소나(프로페셔널/구어체/부산 사투리) 자동 변환 + ChatGPT/Claude 원클릭 고도화 프롬프트 생성기 구현</td>
+            </tr>
+            
+            <tr>
+              <td><strong>AI 6분 자동 컷편집 + CapCut/Premiere 내보내기</strong></td>
+              <td class="muted">고객이 폰으로 찍은 7분 NG 원본을 앱에 넣으면 1분 완성본 + 자막 + CapCut/Premiere 프로젝트로 출력</td>
+              <td><span class="tag">FULL_AUTOMATION</span></td>
+              <td style="color:#f87171">단순 무음 제거만으로는 &#x27;죄송합니다/다시 할게요&#x27; 같은 발화 NG가 남고, 유료 SaaS 구독료가 발생</td>
+              <td style="color:#4ade80">FFmpeg 오디오 RMS 무음 컷 + NG 키워드 구간 자동 제거 + 1080×1920 자막·줌 MP4 + CapCut JSON &amp; Premiere FCPXML 원가 $0 자동 생성</td>
+            </tr>
+            
+            <tr>
+              <td><strong>3대 고객 모집 (Threads 무료 3편 · 숨고 · Meta 광고)</strong></td>
+              <td class="muted">Threads에 &#x27;포트폴리오용 무료 제작&#x27; 글로 100명 모객 + 인사이트 자랑 + 숨고 견적</td>
+              <td><span class="tag">GUARDRAILED</span></td>
+              <td style="color:#f87171">무료 제작 후 무한 수정 지옥·저작권/초상권 분쟁·숨고 견적 캐시 적자(CAC 미계산) 리스크</td>
+              <td style="color:#4ade80">Threads/숨고/DM 영업 스크립트 + &#x27;10편 가격에 12편&#x27; 보너스 견적서 + 수정 2회 제한 B2B 표준 계약서 조항 자동 생성</td>
+            </tr>
+            </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- VIEW 6: MONETIZATION FUNNEL & DRIP CRM -->
+    <section id="view-monetize" class="view">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h2>B2B 수주 랜딩 퍼널 &amp; 3단계 자동 드립 CRM</h2>
+            <div class="muted">ROI 계산기 + GitHub Pages 정적 무손실 리드 캡처 + D+0/D+2/D+5 팔로업 시퀀스 자동 생성</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <a class="btn primary" href="../public_funnel/index.html" target="_blank">공개 B2B 수주 페이지 열기 ↗</a>
+            <button class="btn accent-btn" onclick="refreshCrm()">CRM 새로고침</button>
+          </div>
+        </div>
+        <div class="metrics" style="margin-top:16px;margin-bottom:0;">
+          <div class="metric"><div class="metric-k">누적 인바운드 리드</div><div class="metric-v" id="crmLeads">0건</div><div class="metric-s">자동 제안서 + 3단계 드립 생성</div></div>
+          <div class="metric"><div class="metric-k">예상 월 매출 (MRR 파이프라인)</div><div class="metric-v accent" id="crmMrr">0원</div><div class="metric-s">확정 MRR: <span id="crmWon">0원</span></div></div>
+          <div class="metric"><div class="metric-k">YouTube Shorts 배포 큐</div><div class="metric-v">3편</div><div class="metric-s">UTM 수주 링크·고정댓글 포함</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>실시간 리드 CRM &amp; 3단계 드립 원클릭 복사</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>리드 ID</th><th>브랜드명</th><th>패키지</th><th>예상 MRR</th><th>단계 전환</th><th>3단계 드립 복사</th></tr></thead>
+            <tbody id="crmTableBody"><tr><td colspan="6" class="muted">불러오는 중...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 7: AUTONOMOUS SELF-EVOLUTION & EXPERT PANEL -->
+    <section id="view-evolution" class="view">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h2>주기적 외부 전문가 자율학습 &amp; 정책 진화 센터 (v5.0)</h2>
+            <div class="muted">매주 월·목 KST 08:30 클라우드 자동 실행 · YouTube 실시간 성과 + 3인 전문가 감사 → 안전 가드레일 내 정책 자율 업그레이드 &amp; 1클릭 롤백</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn accent-btn" id="btnRunEvo" onclick="runEvolutionNow()">⚡ 외부 전문가 진화 사이클 즉시 실행</button>
+            <button class="btn" onclick="rollbackEvolution(0)">↺ 초기 베이스라인 복원</button>
+          </div>
+        </div>
+        <div class="metrics" style="margin-top:16px;margin-bottom:0;">
+          <div class="metric"><div class="metric-k">현재 진화 세대</div><div class="metric-v accent" id="evoGen">Gen #0</div><div class="metric-s" id="evoVer">Policy v1</div></div>
+          <div class="metric"><div class="metric-k">학습된 TTS 속도</div><div class="metric-v" id="evoTts">+14%</div><div class="metric-s">안전 범위 +8% ~ +22%</div></div>
+          <div class="metric"><div class="metric-k">카라오케 청크 단어수</div><div class="metric-v" id="evoWords">5단어</div><div class="metric-s">안전 범위 3 ~ 6단어</div></div>
+          <div class="metric"><div class="metric-k">활성 댓글 DM 키워드</div><div class="metric-v" id="evoDm">비교표</div><div class="metric-s">자동 로테이션 적용</div></div>
+        </div>
+        <div id="evoWeights" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;"></div>
+      </div>
+      <div class="panel">
+        <h2>자율 진화 이력 (Immutable Evolution Ledger)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>세대</th><th>실행 시각</th><th>적용된 최신 트렌드</th><th>파라미터 변경 Diff</th><th>복원</th></tr></thead>
+            <tbody id="evoTableBody"><tr><td colspan="5" class="muted">불러오는 중...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+  const HOOKS = [{"hook_id": "HK-001", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{industry} 전문가들이 {topic} 할 때 다들 숨기는 게 딱 한 가지 있습니다.", "base_score": 97}, {"hook_id": "HK-002", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic}, 진짜 업계 사람들은 절대 이렇게 안 합니다.", "base_score": 97}, {"hook_id": "HK-003", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{industry} 10년 차만 알고 있는 {topic} 핵심 비밀 1가지 알려드릴게요.", "base_score": 97}, {"hook_id": "HK-004", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "남들은 돈 내고 배우는 {topic}, 오늘 30초 만에 싹 다 털어드립니다.", "base_score": 95}, {"hook_id": "HK-005", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic} 검색해도 절대 안 나오는 실제 현장 기준만 말씀드릴게요.", "base_score": 95}, {"hook_id": "HK-006", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{industry}에서 {topic} 잘되는 분들은 시작부터 이 한 가지를 바꿉니다.", "base_score": 95}, {"hook_id": "HK-007", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "아직도 {topic}을 예전 방식대로 하고 계신가요? 지금 당장 멈추세요.", "base_score": 95}, {"hook_id": "HK-008", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic} 관련해서 고객들이 절대 먼저 안 물어보는 치명적 포인트입니다.", "base_score": 95}, {"hook_id": "HK-009", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "솔직히 {industry} 종사자 입장에서 {topic} 이건 말하면 욕먹는데 공개합니다.", "base_score": 94}, {"hook_id": "HK-010", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic}, 상위 1%만 조용히 쓰고 있는 공식이 따로 있습니다.", "base_score": 94}, {"hook_id": "HK-011", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{industry} 대표가 직접 밝히는 {topic} 성공의 숨은 변수 3가지입니다.", "base_score": 94}, {"hook_id": "HK-012", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic} 처음 시작할 때 아무도 안 알려주는 가장 중요한 첫 단추입니다.", "base_score": 94}, {"hook_id": "HK-013", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "똑같이 {topic} 하는데 왜 누구는 터지고 누구는 망할까요? 이유는 딱 하나입니다.", "base_score": 94}, {"hook_id": "HK-014", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic} 때문에 시간만 버렸다면, 지금 이 3초가 전환점이 될 겁니다.", "base_score": 94}, {"hook_id": "HK-015", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{industry} 현장에서 100명 상담해 보니 {topic}의 정답은 의외로 간단했습니다.", "base_score": 94}, {"hook_id": "HK-016", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic}, 무료로 풀면 안 되는 내용인데 오늘만 공개합니다.", "base_score": 94}, {"hook_id": "HK-017", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "지금 {topic} 고민 중이시라면, 돈 쓰기 전에 이 영상부터 저장하세요.", "base_score": 94}, {"hook_id": "HK-018", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{industry} 업계 내부 문서에만 적혀 있는 {topic} 체크리스트입니다.", "base_score": 94}, {"hook_id": "HK-019", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic}에서 가장 많이 놓치는 1% 디테일이 결과를 10배 바꿉니다.", "base_score": 94}, {"hook_id": "HK-020", "category": "info_gap", "category_ko": "정보 격차·미공개형", "template": "{topic}, 진짜 고수들은 절대 입 밖으로 안 내는 실전 노하우입니다.", "base_score": 94}, {"hook_id": "HK-021", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}와 {compare_b} 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "base_score": 96}, {"hook_id": "HK-022", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} vs {compare_b}, 내 상황에서 무조건 이득 보는 선택 기준입니다.", "base_score": 96}, {"hook_id": "HK-023", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} 고르려다 멈추세요. {compare_b}와 실제 차이는 여기서 갈립니다.", "base_score": 96}, {"hook_id": "HK-024", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}와 {compare_b} 둘 다 써본 {industry} 전문가가 결론 내드립니다.", "base_score": 94}, {"hook_id": "HK-025", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "돈 아끼려면 {compare_a}, 결과 뽑으려면 {compare_b}? 진짜 팩트 체크합니다.", "base_score": 94}, {"hook_id": "HK-026", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} 할까 {compare_b} 할까 고민 끝내드립니다. 딱 3가지 기준만 보세요.", "base_score": 94}, {"hook_id": "HK-027", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}와 {compare_b}, 광고 말고 실제 후기 기준으로 비교해 봤습니다.", "base_score": 94}, {"hook_id": "HK-028", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{industry} 전문가가 가족에게 추천하는 건 {compare_a}일까요 {compare_b}일까요?", "base_score": 94}, {"hook_id": "HK-029", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}에서 {compare_b}로 갈아탄 사람들이 공통으로 말하는 이유입니다.", "base_score": 93}, {"hook_id": "HK-030", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} vs {compare_b}, 초보자가 가장 많이 후회하는 선택은 이쪽입니다.", "base_score": 93}, {"hook_id": "HK-031", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "같은 예산으로 {compare_a}와 {compare_b} 중 하나만 고른다면 무조건 이겁니다.", "base_score": 93}, {"hook_id": "HK-032", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}와 {compare_b} 차이, 이 표 하나로 평생 헷갈리지 마세요.", "base_score": 93}, {"hook_id": "HK-033", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} 장점만 듣고 결정하면 큰일 납니다. {compare_b}와 나란히 봤습니다.", "base_score": 93}, {"hook_id": "HK-034", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} vs {compare_b}, 2027년 기준으로 승자가 완전히 바뀌었습니다.", "base_score": 93}, {"hook_id": "HK-035", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{industry} 현장에서 {compare_a}보다 {compare_b}가 더 잘 팔리는 진짜 이유입니다.", "base_score": 93}, {"hook_id": "HK-036", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}와 {compare_b}를 30일 동안 직접 테스트한 결과 공개합니다.", "base_score": 93}, {"hook_id": "HK-037", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} 고민 중이라면 {compare_b} 가격 대비 효율부터 비교해 보세요.", "base_score": 93}, {"hook_id": "HK-038", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}와 {compare_b}, 나에게 맞는 쪽을 10초 만에 찾는 질문 1가지입니다.", "base_score": 93}, {"hook_id": "HK-039", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a} vs {compare_b}, 전문가 10명 중 8명이 선택한 쪽은 따로 있습니다.", "base_score": 93}, {"hook_id": "HK-040", "category": "comparison", "category_ko": "직접 비교·선택형", "template": "{compare_a}와 {compare_b} 실제 데이터 비교, 마지막 숫자가 충격적입니다.", "base_score": 93}, {"hook_id": "HK-041", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "잠깐만요! {topic} 이렇게 하시면 돈과 시간 그대로 날립니다.", "base_score": 98}, {"hook_id": "HK-042", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 할 때 90%가 저지르는 최악의 실수 3가지, 세 번째가 제일 치명적입니다.", "base_score": 98}, {"hook_id": "HK-043", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "지금 {topic} 준비 중이시라면, 이 실수 하나만 피해도 100만원 아낍니다.", "base_score": 98}, {"hook_id": "HK-044", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 망하는 사람들의 공통점, 첫 3초에서 이미 티가 납니다.", "base_score": 96}, {"hook_id": "HK-045", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "제발 {topic} 할 때 이것부터 하지 마세요. 결과 100% 망가집니다.", "base_score": 96}, {"hook_id": "HK-046", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{industry}에서 {topic} 실패하고 찾아오는 분들의 80%가 이걸 놓칩니다.", "base_score": 96}, {"hook_id": "HK-047", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 모르고 계약했다가 후회하는 포인트 딱 3개만 짚어드립니다.", "base_score": 96}, {"hook_id": "HK-048", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "이거 모르면 {topic} 아무리 열심히 해도 제자리걸음입니다.", "base_score": 96}, {"hook_id": "HK-049", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic}에서 가장 비싼 수업료를 내게 만드는 함정 1가지입니다.", "base_score": 95}, {"hook_id": "HK-050", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 할 때 남들 말만 듣고 따라 했다가 큰코다치는 이유입니다.", "base_score": 95}, {"hook_id": "HK-051", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "경고합니다. {topic}에서 이 신호가 보이면 즉시 멈추셔야 합니다.", "base_score": 95}, {"hook_id": "HK-052", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 실패하는 9가지 이유 중 가장 치명적인 상위 3가지만 뽑았습니다.", "base_score": 95}, {"hook_id": "HK-053", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "아직도 {topic}에 불필요한 비용을 쓰고 계신가요? 새는 돈부터 막으세요.", "base_score": 95}, {"hook_id": "HK-054", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 처음 하시는 분들이 제일 많이 속는 마케팅 멘트 3가지입니다.", "base_score": 95}, {"hook_id": "HK-055", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{industry} 전문가가 말리는 {topic} 최악의 선택지 TOP 3입니다.", "base_score": 95}, {"hook_id": "HK-056", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 할 때 이 순서가 뒤바뀌면 처음부터 다시 해야 합니다.", "base_score": 95}, {"hook_id": "HK-057", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "지금 당장 {topic}에서 빼야 할 쓸모없는 습관 2가지 알려드립니다.", "base_score": 95}, {"hook_id": "HK-058", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic} 잘하고 싶다면 잘하는 법보다 '망하는 법'부터 피하세요.", "base_score": 95}, {"hook_id": "HK-059", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic}, 남들 다 하는 방식 그대로 따라 하면 절대 성과 안 납니다.", "base_score": 95}, {"hook_id": "HK-060", "category": "loss_warning", "category_ko": "실수·손실 경고형", "template": "{topic}에서 손해 안 보려면 딱 이 체크리스트 3줄만 확인하세요.", "base_score": 95}, {"hook_id": "HK-061", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 완벽 정리, 딱 3가지만 기억하시면 끝입니다.", "base_score": 94}, {"hook_id": "HK-062", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 초보자도 5분 만에 적용하는 실전 루틴 3단계입니다.", "base_score": 94}, {"hook_id": "HK-063", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 성과를 2배 올리는 핵심 공식 3가지, 3번이 핵심입니다.", "base_score": 94}, {"hook_id": "HK-064", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "하루 10분 투자로 {topic} 끝내는 가장 효율적인 순서 알려드릴게요.", "base_score": 92}, {"hook_id": "HK-065", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 고수들이 매일 아침 체크하는 숫자 3가지입니다.", "base_score": 92}, {"hook_id": "HK-066", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 시작 전 반드시 봐야 할 필수 기준 5가지 중 핵심 3개입니다.", "base_score": 92}, {"hook_id": "HK-067", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "단 30초 만에 이해하는 {topic} 핵심 구조, 이대로만 따라 하세요.", "base_score": 92}, {"hook_id": "HK-068", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 100건 분석해서 뽑은 가장 효과 좋은 패턴 TOP 3입니다.", "base_score": 92}, {"hook_id": "HK-069", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "예산 0원으로 {topic} 퀄리티를 프로 수준으로 올리는 3가지 팁입니다.", "base_score": 91}, {"hook_id": "HK-070", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic}에서 가장 빠르게 결과가 나오는 1단계부터 3단계까지입니다.", "base_score": 91}, {"hook_id": "HK-071", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{industry} 전문가가 정리한 {topic} 필수 용어 3개만 알면 전문가처럼 보입니다.", "base_score": 91}, {"hook_id": "HK-072", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 잘되는 계정의 공통 규칙 4가지, 마지막이 결정타입니다.", "base_score": 91}, {"hook_id": "HK-073", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "단 3줄 입력으로 {topic} 기획을 끝내는 초효율 프레임워크입니다.", "base_score": 91}, {"hook_id": "HK-074", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 1년 걸릴 시행착오를 1분으로 줄여드리는 3가지 원칙입니다.", "base_score": 91}, {"hook_id": "HK-075", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 처음부터 끝까지, 딱 4단계만 지키면 실패할 수가 없습니다.", "base_score": 91}, {"hook_id": "HK-076", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 조회수와 전환을 동시에 잡는 황금 비율 3가지입니다.", "base_score": 91}, {"hook_id": "HK-077", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 실무에서 바로 써먹는 체크포인트 3개, 저장 필수입니다.", "base_score": 91}, {"hook_id": "HK-078", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "초보자도 오늘 바로 시작할 수 있는 {topic} 3단계 실행 가이드입니다.", "base_score": 91}, {"hook_id": "HK-079", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 결과물을 3배 깔끔하게 만드는 디테일 3가지입니다.", "base_score": 91}, {"hook_id": "HK-080", "category": "listicle_number", "category_ko": "숫자·리스트·속도형", "template": "{topic} 상위 노출을 만드는 핵심 요소 3가지, 지금 바로 점검하세요.", "base_score": 91}, {"hook_id": "HK-081", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}에 비싼 장비가 필요하다고요? 완전한 착각입니다.", "base_score": 95}, {"hook_id": "HK-082", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "다들 {topic} 레드오션이라는데, 진짜 돈 버는 분들은 지금 들어옵니다.", "base_score": 95}, {"hook_id": "HK-083", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic} 잘하려면 말을 잘해야 한다? 오히려 반대입니다.", "base_score": 95}, {"hook_id": "HK-084", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic} 길게 설명할수록 망합니다. 짧을수록 돈이 됩니다.", "base_score": 93}, {"hook_id": "HK-085", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "완벽하게 준비해서 {topic} 시작하면 100% 늦습니다.", "base_score": 93}, {"hook_id": "HK-086", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}에서 가장 중요한 건 실력이 아니라 '이 구조'입니다.", "base_score": 93}, {"hook_id": "HK-087", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "남들이 {topic} 어렵다고 포기할 때가 가장 쉽게 이기는 타이밍입니다.", "base_score": 93}, {"hook_id": "HK-088", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic} 공짜로 해주면 손해라고요? 오히려 가장 빨리 돈 버는 전략입니다.", "base_score": 93}, {"hook_id": "HK-089", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{industry}에서 {topic} 싸게 팔면 망한다? 초반엔 정반대가 정답입니다.", "base_score": 92}, {"hook_id": "HK-090", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}, 열심히 하는 사람보다 시스템 만든 사람이 10배 더 법니다.", "base_score": 92}, {"hook_id": "HK-091", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "비싼 외주 맡기지 마세요. {topic} 이제 스마트폰 하나로 충분합니다.", "base_score": 92}, {"hook_id": "HK-092", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic} 디자인 예쁘게 만드는 데 시간 쓰지 마세요. 중요한 건 따로 있습니다.", "base_score": 92}, {"hook_id": "HK-093", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}에 재능이 필요하다는 말, 오늘 완전히 깨드리겠습니다.", "base_score": 92}, {"hook_id": "HK-094", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "대부분 {topic}을 거꾸로 시작합니다. 결과부터 보여줘야 이깁니다.", "base_score": 92}, {"hook_id": "HK-095", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}에서 '자기소개'로 시작하면 3초 만에 전부 이탈합니다.", "base_score": 92}, {"hook_id": "HK-096", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}, 비싼 강의 듣기 전에 이 무료 원리 3개부터 적용해 보세요.", "base_score": 92}, {"hook_id": "HK-097", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "초보자일수록 {topic}에서 이 한 가지를 버려야 성과가 터집니다.", "base_score": 92}, {"hook_id": "HK-098", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic} 시장이 포화됐다고 말하는 사람들의 공통점을 알려드릴게요.", "base_score": 92}, {"hook_id": "HK-099", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}, 잘 찍는 것보다 '어떻게 자르느냐'가 90%를 결정합니다.", "base_score": 92}, {"hook_id": "HK-100", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "template": "{topic}은 전문가의 영역이 아닙니다. 이제는 도구 활용의 영역입니다.", "base_score": 92}, {"hook_id": "HK-101", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{industry} 현장에서 직접 검증한 {topic} 실제 데이터 공개합니다.", "base_score": 93}, {"hook_id": "HK-102", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "월 300만 도달을 만든 {topic} 실제 기획안 그대로 보여드립니다.", "base_score": 93}, {"hook_id": "HK-103", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{industry} 전문가가 클라이언트에게 실제로 납품하는 {topic} 표준안입니다.", "base_score": 93}, {"hook_id": "HK-104", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "의사·변호사 등 전문직 고객들이 {topic}에 지갑을 여는 결정적 이유입니다.", "base_score": 91}, {"hook_id": "HK-105", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{topic} 50편 이상 제작해 보니 터지는 영상엔 분명한 공식이 있었습니다.", "base_score": 91}, {"hook_id": "HK-106", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{industry} 대표가 직접 쓰는 {topic} 실무 템플릿을 그대로 공개합니다.", "base_score": 91}, {"hook_id": "HK-107", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "실제 고객 문의가 3배 늘어난 {topic} 구성 방식, 30초 만에 보세요.", "base_score": 91}, {"hook_id": "HK-108", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{topic}에서 신뢰도를 단번에 끌어올리는 전문가의 화법 3가지입니다.", "base_score": 91}, {"hook_id": "HK-109", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "숫자로 증명합니다. {topic} 구조만 바꿨을 때 달라진 실제 결과입니다.", "base_score": 90}, {"hook_id": "HK-110", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{industry} 현업자가 매일 사용하는 {topic} 자동화 워크플로우입니다.", "base_score": 90}, {"hook_id": "HK-111", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "고객이 먼저 '계약하겠습니다'라고 말하게 만드는 {topic} 제안 포인트입니다.", "base_score": 90}, {"hook_id": "HK-112", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{topic} 품질을 한 단계 끌어올리는 전문가용 마무리 검수 기준입니다.", "base_score": 90}, {"hook_id": "HK-113", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "실전 케이스 스터디: {topic} 하나로 문의가 쏟아진 비결입니다.", "base_score": 90}, {"hook_id": "HK-114", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{industry}에서 단가를 5배 올린 사람들이 {topic}을 다루는 방식입니다.", "base_score": 90}, {"hook_id": "HK-115", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{topic} 포트폴리오가 0개여도 전문성을 증명하는 가장 확실한 방법입니다.", "base_score": 90}, {"hook_id": "HK-116", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "클라이언트 재계약률 90%를 만드는 {topic} 리포팅 노하우입니다.", "base_score": 90}, {"hook_id": "HK-117", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{topic}에서 아마추어와 프로를 가르는 결정적 차이 1가지입니다.", "base_score": 90}, {"hook_id": "HK-118", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "현업 {industry} 팀이 매일 아침 9시에 점검하는 {topic} 지표입니다.", "base_score": 90}, {"hook_id": "HK-119", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{topic}, 감이 아니라 데이터와 구조로 접근해야 매번 성공합니다.", "base_score": 90}, {"hook_id": "HK-120", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "template": "{industry} 전문가가 추천하는 {topic} 가장 안전한 시작 전략입니다.", "base_score": 90}, {"hook_id": "HK-121", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "솔직히 저도 처음엔 {topic} 아무것도 몰라서 3개월을 헤맸습니다.", "base_score": 92}, {"hook_id": "HK-122", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "월급 외에 딱 50만원만 더 벌고 싶어서 시작한 {topic}, 이렇게 바뀌었습니다.", "base_score": 92}, {"hook_id": "HK-123", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "퇴근 후 하루 1시간, {topic}으로 첫 수익을 만들었던 실제 과정입니다.", "base_score": 92}, {"hook_id": "HK-124", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "카메라 앞에서 말도 못 하던 분이 {topic}으로 조회수 15만 터뜨린 비결입니다.", "base_score": 90}, {"hook_id": "HK-125", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "저도 예전에 {topic} 때문에 밤새 고생했는데, 이 방법 알고 6분 만에 끝냈습니다.", "base_score": 90}, {"hook_id": "HK-126", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "50대·60대 초보자도 {topic}을 1주일 만에 따라 할 수 있었던 이유입니다.", "base_score": 90}, {"hook_id": "HK-127", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "출퇴근 지하철에서 스마트폰으로 {topic} 처리하는 제 실제 루틴 보여드릴게요.", "base_score": 90}, {"hook_id": "HK-128", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "처음 {topic} 제안했을 때 거절만 당하다가, 이 한 마디로 계약이 터졌습니다.", "base_score": 90}, {"hook_id": "HK-129", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "시간 없는 직장인이 {topic}으로 가장 현실적으로 결과 내는 법입니다.", "base_score": 89}, {"hook_id": "HK-130", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "과거의 저에게 딱 하나만 알려줄 수 있다면, 무조건 이 {topic} 공식을 말할 겁니다.", "base_score": 89}, {"hook_id": "HK-131", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "솔직히 처음엔 저도 반신반의했습니다. 그런데 {topic} 결과가 숫자로 나왔습니다.", "base_score": 89}, {"hook_id": "HK-132", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "남들 넷플릭스 볼 때 {topic} 1편씩 쌓았더니 3달 뒤에 생긴 변화입니다.", "base_score": 89}, {"hook_id": "HK-133", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "전문 장비 없이 폰 하나로 {topic} 시작해서 첫 고객을 만든 실화입니다.", "base_score": 89}, {"hook_id": "HK-134", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "막막하게만 느껴졌던 {topic}, 딱 이 4단계로 쪼개니 너무 쉬워졌습니다.", "base_score": 89}, {"hook_id": "HK-135", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "내가 잘하는 게 없다고 느꼈을 때, {topic}이 돌파구가 되어주었습니다.", "base_score": 89}, {"hook_id": "HK-136", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "클라이언트가 '너무 자연스럽다'며 극찬한 {topic} 촬영·편집 비하인드입니다.", "base_score": 89}, {"hook_id": "HK-137", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "사투리가 심해서 고민이었는데, 오히려 {topic}에서 최강 무기가 됐습니다.", "base_score": 89}, {"hook_id": "HK-138", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "처음엔 무료로 시작했던 {topic}이 어떻게 고단가 패키지가 되었는지 공개합니다.", "base_score": 89}, {"hook_id": "HK-139", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "오늘 당장 시작하고 싶지만 어디서부터 해야 할지 모를 때 보는 {topic} 가이드입니다.", "base_score": 89}, {"hook_id": "HK-140", "category": "story_empathy", "category_ko": "스토리·공감·경험형", "template": "딱 첫 50만원만 만들어 보세요. {topic}을 보는 눈이 완전히 달라집니다.", "base_score": 89}];
+  const PROJECTS = [{"script": {"client_id": "clinic_skin", "client_name": "청담 리프팅 피부과", "industry": "피부과·의료 전문직", "topic": "연예인이 몰래 받는 비수술 리프팅 시술 3가지", "selected_persona": "professional", "top_hooks": [{"hook_id": "HK-001", "category": "info_gap", "category_ko": "정보 격차·미공개형", "score": 100, "rendered_hook": "피부과·의료 전문직 전문가들이 연예인이 몰래 받는 비수술 리프팅 시술 3가지 할 때 다들 숨기는 게 딱 한 가지 있습니다."}, {"hook_id": "HK-002", "category": "info_gap", "category_ko": "정보 격차·미공개형", "score": 100, "rendered_hook": "연예인이 몰래 받는 비수술 리프팅 시술 3가지, 진짜 업계 사람들은 절대 이렇게 안 합니다."}, {"hook_id": "HK-021", "category": "comparison", "category_ko": "직접 비교·선택형", "score": 100, "rendered_hook": "울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요."}, {"hook_id": "HK-022", "category": "comparison", "category_ko": "직접 비교·선택형", "score": 100, "rendered_hook": "울쎄라 vs 써마지, 내 상황에서 무조건 이득 보는 선택 기준입니다."}, {"hook_id": "HK-041", "category": "loss_warning", "category_ko": "실수·손실 경고형", "score": 100, "rendered_hook": "잠깐만요! 연예인이 몰래 받는 비수술 리프팅 시술 3가지 이렇게 하시면 돈과 시간 그대로 날립니다."}, {"hook_id": "HK-042", "category": "loss_warning", "category_ko": "실수·손실 경고형", "score": 100, "rendered_hook": "연예인이 몰래 받는 비수술 리프팅 시술 3가지 할 때 90%가 저지르는 최악의 실수 3가지, 세 번째가 제일 치명적입니다."}, {"hook_id": "HK-081", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "score": 100, "rendered_hook": "연예인이 몰래 받는 비수술 리프팅 시술 3가지에 비싼 장비가 필요하다고요? 완전한 착각입니다."}, {"hook_id": "HK-082", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "score": 100, "rendered_hook": "다들 연예인이 몰래 받는 비수술 리프팅 시술 3가지 레드오션이라는데, 진짜 돈 버는 분들은 지금 들어옵니다."}, {"hook_id": "HK-101", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "score": 100, "rendered_hook": "피부과·의료 전문직 현장에서 직접 검증한 연예인이 몰래 받는 비수술 리프팅 시술 3가지 실제 데이터 공개합니다."}, {"hook_id": "HK-102", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "score": 100, "rendered_hook": "월 300만 도달을 만든 연예인이 몰래 받는 비수술 리프팅 시술 3가지 실제 기획안 그대로 보여드립니다."}], "hook_variants": [{"variant": "B", "label": "비교·권위형 (Comparison & Authority)", "hook_id": "HK-021", "category_ko": "직접 비교·선택형", "rendered_hook": "울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "scorecard": {"total_score": 100, "grade": "S", "lexical_diversity_ttr": 0.95, "cliche_penalty": 0, "predicted_3s_hold_pct": 86.0, "predicted_completion_pct": 63.0, "axes": {"hook_velocity_25": 25, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}, {"variant": "A", "label": "손실회피·경고형 (Loss Aversion)", "hook_id": "HK-041", "category_ko": "실수·손실 경고형", "rendered_hook": "잠깐만요! 연예인이 몰래 받는 비수술 리프팅 시술 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.", "scorecard": {"total_score": 99, "grade": "S", "lexical_diversity_ttr": 0.97, "cliche_penalty": 0, "predicted_3s_hold_pct": 81.9, "predicted_completion_pct": 62.6, "axes": {"hook_velocity_25": 22, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}, {"variant": "C", "label": "정보격차·비결형 (Curiosity & Info Gap)", "hook_id": "HK-001", "category_ko": "정보 격차·미공개형", "rendered_hook": "피부과·의료 전문직 전문가들이 연예인이 몰래 받는 비수술 리프팅 시술 3가지 할 때 다들 숨기는 게 딱 한 가지 있습니다.", "scorecard": {"total_score": 99, "grade": "S", "lexical_diversity_ttr": 0.92, "cliche_penalty": 0, "predicted_3s_hold_pct": 81.9, "predicted_completion_pct": 62.6, "axes": {"hook_velocity_25": 22, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}], "winning_variant": "B", "retention_scorecard": {"total_score": 100, "grade": "S", "lexical_diversity_ttr": 0.95, "cliche_penalty": 0, "predicted_3s_hold_pct": 86.0, "predicted_completion_pct": 63.0, "axes": {"hook_velocity_25": 25, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}, "selected_hook": "울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "personas": {"professional": {"label": "표준 프로페셔널 (신뢰·전문직 톤)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "highlight_keyword": "울쎄라", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 피부과·의료 전문직 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보세요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 울쎄라와 써마지는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보세요.", "highlight_keyword": "울쎄라 vs 써마지", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 확인하세요.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}, "friendly": {"label": "친근한 구어체 (공감·이탈 방지 톤)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 체크해 보세요!", "highlight_keyword": "울쎄라", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 피부과·의료 전문직 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보셔야 해요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 울쎄라와 써마지는 목적부터 완전히 달라요. 가격보다 내 조건 적합도를 먼저 보셔야 해요.", "highlight_keyword": "울쎄라 vs 써마지", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 체크해 보세요!", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어들어요.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}, "busan": {"label": "부산 사투리 캐릭터 (자연스러운 맛살리기)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 꼭 체크해 보이소.", "highlight_keyword": "울쎄라", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 피부과·의료 전문직 현장에서도 90%가 놓치는 핵심입니다. 끝까지 한번 들어 보이소.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 울쎄라와 써마지는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보셔야 됩니더.", "highlight_keyword": "울쎄라 vs 써마지", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 꼭 체크해 보이소.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}}, "active_scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "highlight_keyword": "울쎄라", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 피부과·의료 전문직 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보세요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 울쎄라와 써마지는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보세요.", "highlight_keyword": "울쎄라 vs 써마지", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 확인하세요.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}], "estimated_duration_sec": 22.9, "llm_upgrade_prompt": "당신은 월 조회수 300만+을 만드는 대한민국 최상위 B2B 숏폼 기획자입니다.\n아래 클라이언트 정보를 바탕으로 30~45초 릴스/쇼츠 대본을 작성해 주세요.\n\n[클라이언트 정보]\n- 브랜드/업종: 청담 리프팅 피부과 (피부과·의료 전문직)\n- 영상 주제: 연예인이 몰래 받는 비수술 리프팅 시술 3가지\n- 비교 대상: 울쎄라 vs 써마지\n- 최종 CTA: 팔로우하고 댓글에 '시술' 남기면 원장님 비교표 DM 발송\n- 말투 페르소나: professional\n\n[참고할 검증된 3초 후킹 후보]\n- [정보 격차·미공개형] 피부과·의료 전문직 전문가들이 연예인이 몰래 받는 비수술 리프팅 시술 3가지 할 때 다들 숨기는 게 딱 한 가지 있습니다.\n- [정보 격차·미공개형] 연예인이 몰래 받는 비수술 리프팅 시술 3가지, 진짜 업계 사람들은 절대 이렇게 안 합니다.\n- [직접 비교·선택형] 울쎄라와 써마지 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.\n- [직접 비교·선택형] 울쎄라 vs 써마지, 내 상황에서 무조건 이득 보는 선택 기준입니다.\n- [실수·손실 경고형] 잠깐만요! 연예인이 몰래 받는 비수술 리프팅 시술 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.\n\n[필수 4단계 구조]\n1) 멈추기 (0~3초): 자기소개 금지, 결과/충격 팩트 먼저 제시\n2) 궁금하게 (3~6초): \"세 번째가 가장 중요합니다\" 같은 오픈 루프 삽입\n3) 알려주기 (6~25초): 한 컷에 한 메시지, 3가지 실전 근거 제시\n4) 부탁하기 (25~30초): 팔로우·저장·댓글 키워드→DM 자동 발송 유도\n"}, "deliverable": {"client_id": "clinic_skin", "client_name": "청담 리프팅 피부과", "voice_engine": "EDGE_TTS_WORDBOUNDARY_LUFS14", "voice_name": "ko-KR-SunHiNeural", "visual_engine": "V4_BROADCAST_XFADE_FILMIC_KARAOKE_LUFS14", "raw_duration_sec": 63.05, "final_duration_sec": 42.6, "removed_duration_sec": 20.45, "compression_pct": 32.4, "ng_takes_removed": 2, "silence_gaps_removed": 3, "mp4_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_clinic_skin/clinic_skin_final_reels.mp4", "mp4_relative_url": "../deliverables/2026-11-23_clinic_skin/clinic_skin_final_reels.mp4", "mp4_byte_size": 16036209, "mp4_sha256": "351825415ce70ec319225ac29d570494eb2b9653a2739d7172d99e239910eebd", "srt_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_clinic_skin/clinic_skin_final_reels.srt", "capcut_draft_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_clinic_skin/capcut_draft_content.json", "premiere_fcpxml_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_clinic_skin/clinic_skin_premiere.fcpxml", "handoff_zip_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/handoff/2026-11-23_clinic_skin_handoff.zip"}}, {"script": {"client_id": "agency_shortform", "client_name": "타이탄 숏폼 에이전시", "industry": "영상 제작 에이전시", "topic": "숏폼 조회수 망치는 치명적 실수 3가지", "selected_persona": "busan", "top_hooks": [{"hook_id": "HK-021", "category": "comparison", "category_ko": "직접 비교·선택형", "score": 100, "rendered_hook": "AI 자동편집와 수동 외주편집 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요."}, {"hook_id": "HK-022", "category": "comparison", "category_ko": "직접 비교·선택형", "score": 100, "rendered_hook": "AI 자동편집 vs 수동 외주편집, 내 상황에서 무조건 이득 보는 선택 기준입니다."}, {"hook_id": "HK-041", "category": "loss_warning", "category_ko": "실수·손실 경고형", "score": 100, "rendered_hook": "잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다."}, {"hook_id": "HK-042", "category": "loss_warning", "category_ko": "실수·손실 경고형", "score": 100, "rendered_hook": "숏폼 조회수 망치는 치명적 실수 3가지 할 때 90%가 저지르는 최악의 실수 3가지, 세 번째가 제일 치명적입니다."}, {"hook_id": "HK-081", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "score": 100, "rendered_hook": "숏폼 조회수 망치는 치명적 실수 3가지에 비싼 장비가 필요하다고요? 완전한 착각입니다."}, {"hook_id": "HK-082", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "score": 100, "rendered_hook": "다들 숏폼 조회수 망치는 치명적 실수 3가지 레드오션이라는데, 진짜 돈 버는 분들은 지금 들어옵니다."}, {"hook_id": "HK-001", "category": "info_gap", "category_ko": "정보 격차·미공개형", "score": 97, "rendered_hook": "영상 제작 에이전시 전문가들이 숏폼 조회수 망치는 치명적 실수 3가지 할 때 다들 숨기는 게 딱 한 가지 있습니다."}, {"hook_id": "HK-002", "category": "info_gap", "category_ko": "정보 격차·미공개형", "score": 97, "rendered_hook": "숏폼 조회수 망치는 치명적 실수 3가지, 진짜 업계 사람들은 절대 이렇게 안 합니다."}, {"hook_id": "HK-101", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "score": 97, "rendered_hook": "영상 제작 에이전시 현장에서 직접 검증한 숏폼 조회수 망치는 치명적 실수 3가지 실제 데이터 공개합니다."}, {"hook_id": "HK-102", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "score": 97, "rendered_hook": "월 300만 도달을 만든 숏폼 조회수 망치는 치명적 실수 3가지 실제 기획안 그대로 보여드립니다."}], "hook_variants": [{"variant": "A", "label": "손실회피·경고형 (Loss Aversion)", "hook_id": "HK-041", "category_ko": "실수·손실 경고형", "rendered_hook": "잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.", "scorecard": {"total_score": 99, "grade": "S", "lexical_diversity_ttr": 0.98, "cliche_penalty": 0, "predicted_3s_hold_pct": 81.9, "predicted_completion_pct": 62.6, "axes": {"hook_velocity_25": 22, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}, {"variant": "B", "label": "비교·권위형 (Comparison & Authority)", "hook_id": "HK-021", "category_ko": "직접 비교·선택형", "rendered_hook": "AI 자동편집와 수동 외주편집 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "scorecard": {"total_score": 99, "grade": "S", "lexical_diversity_ttr": 0.92, "cliche_penalty": 0, "predicted_3s_hold_pct": 81.9, "predicted_completion_pct": 62.6, "axes": {"hook_velocity_25": 22, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}, {"variant": "C", "label": "정보격차·비결형 (Curiosity & Info Gap)", "hook_id": "HK-001", "category_ko": "정보 격차·미공개형", "rendered_hook": "영상 제작 에이전시 전문가들이 숏폼 조회수 망치는 치명적 실수 3가지 할 때 다들 숨기는 게 딱 한 가지 있습니다.", "scorecard": {"total_score": 99, "grade": "S", "lexical_diversity_ttr": 0.92, "cliche_penalty": 0, "predicted_3s_hold_pct": 81.9, "predicted_completion_pct": 62.6, "axes": {"hook_velocity_25": 22, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}], "winning_variant": "A", "retention_scorecard": {"total_score": 99, "grade": "S", "lexical_diversity_ttr": 0.98, "cliche_penalty": 0, "predicted_3s_hold_pct": 81.9, "predicted_completion_pct": 62.6, "axes": {"hook_velocity_25": 22, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}, "selected_hook": "잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.", "personas": {"professional": {"label": "표준 프로페셔널 (신뢰·전문직 톤)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.", "highlight_keyword": "AI 자동편집", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 영상 제작 에이전시 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보세요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, AI 자동편집와 수동 외주편집는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보세요.", "highlight_keyword": "AI 자동편집 vs 수동 외주편집", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 확인하세요.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}, "friendly": {"label": "친근한 구어체 (공감·이탈 방지 톤)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.", "highlight_keyword": "AI 자동편집", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 영상 제작 에이전시 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보셔야 해요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, AI 자동편집와 수동 외주편집는 목적부터 완전히 달라요. 가격보다 내 조건 적합도를 먼저 보셔야 해요.", "highlight_keyword": "AI 자동편집 vs 수동 외주편집", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 체크해 보세요!", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어들어요.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}, "busan": {"label": "부산 사투리 캐릭터 (자연스러운 맛살리기)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.", "highlight_keyword": "AI 자동편집", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 영상 제작 에이전시 현장에서도 90%가 놓치는 핵심입니다. 끝까지 한번 들어 보이소.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, AI 자동편집와 수동 외주편집는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보셔야 됩니더.", "highlight_keyword": "AI 자동편집 vs 수동 외주편집", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 꼭 체크해 보이소.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}}, "active_scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.", "highlight_keyword": "AI 자동편집", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 영상 제작 에이전시 현장에서도 90%가 놓치는 핵심입니다. 끝까지 한번 들어 보이소.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, AI 자동편집와 수동 외주편집는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보셔야 됩니더.", "highlight_keyword": "AI 자동편집 vs 수동 외주편집", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 꼭 체크해 보이소.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}], "estimated_duration_sec": 22.9, "llm_upgrade_prompt": "당신은 월 조회수 300만+을 만드는 대한민국 최상위 B2B 숏폼 기획자입니다.\n아래 클라이언트 정보를 바탕으로 30~45초 릴스/쇼츠 대본을 작성해 주세요.\n\n[클라이언트 정보]\n- 브랜드/업종: 타이탄 숏폼 에이전시 (영상 제작 에이전시)\n- 영상 주제: 숏폼 조회수 망치는 치명적 실수 3가지\n- 비교 대상: AI 자동편집 vs 수동 외주편집\n- 최종 CTA: 팔로우하고 댓글에 '후킹' 남기면 140개 사전 링크 DM 발송\n- 말투 페르소나: busan\n\n[참고할 검증된 3초 후킹 후보]\n- [직접 비교·선택형] AI 자동편집와 수동 외주편집 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.\n- [직접 비교·선택형] AI 자동편집 vs 수동 외주편집, 내 상황에서 무조건 이득 보는 선택 기준입니다.\n- [실수·손실 경고형] 잠깐만요! 숏폼 조회수 망치는 치명적 실수 3가지 이렇게 하시면 돈과 시간 그대로 날립니다.\n- [실수·손실 경고형] 숏폼 조회수 망치는 치명적 실수 3가지 할 때 90%가 저지르는 최악의 실수 3가지, 세 번째가 제일 치명적입니다.\n- [반전·고정관념 파괴형] 숏폼 조회수 망치는 치명적 실수 3가지에 비싼 장비가 필요하다고요? 완전한 착각입니다.\n\n[필수 4단계 구조]\n1) 멈추기 (0~3초): 자기소개 금지, 결과/충격 팩트 먼저 제시\n2) 궁금하게 (3~6초): \"세 번째가 가장 중요합니다\" 같은 오픈 루프 삽입\n3) 알려주기 (6~25초): 한 컷에 한 메시지, 3가지 실전 근거 제시\n4) 부탁하기 (25~30초): 팔로우·저장·댓글 키워드→DM 자동 발송 유도\n"}, "deliverable": {"client_id": "agency_shortform", "client_name": "타이탄 숏폼 에이전시", "voice_engine": "EDGE_TTS_WORDBOUNDARY_LUFS14", "voice_name": "ko-KR-InJoonNeural", "visual_engine": "V4_BROADCAST_XFADE_FILMIC_KARAOKE_LUFS14", "raw_duration_sec": 73.85, "final_duration_sec": 49.9, "removed_duration_sec": 23.95, "compression_pct": 32.4, "ng_takes_removed": 2, "silence_gaps_removed": 3, "mp4_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_agency_shortform/agency_shortform_final_reels.mp4", "mp4_relative_url": "../deliverables/2026-11-23_agency_shortform/agency_shortform_final_reels.mp4", "mp4_byte_size": 15425770, "mp4_sha256": "65d62056bcda6861466dda92f66c7b4f6c26ffb40960b882623ce7e279a95887", "srt_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_agency_shortform/agency_shortform_final_reels.srt", "capcut_draft_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_agency_shortform/capcut_draft_content.json", "premiere_fcpxml_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_agency_shortform/agency_shortform_premiere.fcpxml", "handoff_zip_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/handoff/2026-11-23_agency_shortform_handoff.zip"}}, {"script": {"client_id": "diet_clinic", "client_name": "강남 대사 클리닉", "industry": "비만·건강 클리닉", "topic": "마운자로와 위고비 실제 차이점과 부작용 체크", "selected_persona": "friendly", "top_hooks": [{"hook_id": "HK-021", "category": "comparison", "category_ko": "직접 비교·선택형", "score": 100, "rendered_hook": "마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요."}, {"hook_id": "HK-022", "category": "comparison", "category_ko": "직접 비교·선택형", "score": 100, "rendered_hook": "마운자로 vs 위고비, 내 상황에서 무조건 이득 보는 선택 기준입니다."}, {"hook_id": "HK-041", "category": "loss_warning", "category_ko": "실수·손실 경고형", "score": 100, "rendered_hook": "잠깐만요! 마운자로와 위고비 실제 차이점과 부작용 체크 이렇게 하시면 돈과 시간 그대로 날립니다."}, {"hook_id": "HK-042", "category": "loss_warning", "category_ko": "실수·손실 경고형", "score": 100, "rendered_hook": "마운자로와 위고비 실제 차이점과 부작용 체크 할 때 90%가 저지르는 최악의 실수 3가지, 세 번째가 제일 치명적입니다."}, {"hook_id": "HK-081", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "score": 100, "rendered_hook": "마운자로와 위고비 실제 차이점과 부작용 체크에 비싼 장비가 필요하다고요? 완전한 착각입니다."}, {"hook_id": "HK-082", "category": "contrarian", "category_ko": "반전·고정관념 파괴형", "score": 100, "rendered_hook": "다들 마운자로와 위고비 실제 차이점과 부작용 체크 레드오션이라는데, 진짜 돈 버는 분들은 지금 들어옵니다."}, {"hook_id": "HK-001", "category": "info_gap", "category_ko": "정보 격차·미공개형", "score": 97, "rendered_hook": "비만·건강 클리닉 전문가들이 마운자로와 위고비 실제 차이점과 부작용 체크 할 때 다들 숨기는 게 딱 한 가지 있습니다."}, {"hook_id": "HK-002", "category": "info_gap", "category_ko": "정보 격차·미공개형", "score": 97, "rendered_hook": "마운자로와 위고비 실제 차이점과 부작용 체크, 진짜 업계 사람들은 절대 이렇게 안 합니다."}, {"hook_id": "HK-101", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "score": 97, "rendered_hook": "비만·건강 클리닉 현장에서 직접 검증한 마운자로와 위고비 실제 차이점과 부작용 체크 실제 데이터 공개합니다."}, {"hook_id": "HK-102", "category": "authority_pro", "category_ko": "전문직·신뢰·데이터형", "score": 97, "rendered_hook": "월 300만 도달을 만든 마운자로와 위고비 실제 차이점과 부작용 체크 실제 기획안 그대로 보여드립니다."}], "hook_variants": [{"variant": "B", "label": "비교·권위형 (Comparison & Authority)", "hook_id": "HK-021", "category_ko": "직접 비교·선택형", "rendered_hook": "마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "scorecard": {"total_score": 100, "grade": "S", "lexical_diversity_ttr": 0.95, "cliche_penalty": 0, "predicted_3s_hold_pct": 86.0, "predicted_completion_pct": 63.0, "axes": {"hook_velocity_25": 25, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}, {"variant": "A", "label": "손실회피·경고형 (Loss Aversion)", "hook_id": "HK-041", "category_ko": "실수·손실 경고형", "rendered_hook": "잠깐만요! 마운자로와 위고비 실제 차이점과 부작용 체크 이렇게 하시면 돈과 시간 그대로 날립니다.", "scorecard": {"total_score": 96, "grade": "S", "lexical_diversity_ttr": 0.95, "cliche_penalty": 0, "predicted_3s_hold_pct": 77.8, "predicted_completion_pct": 61.4, "axes": {"hook_velocity_25": 19, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}, {"variant": "C", "label": "정보격차·비결형 (Curiosity & Info Gap)", "hook_id": "HK-001", "category_ko": "정보 격차·미공개형", "rendered_hook": "비만·건강 클리닉 전문가들이 마운자로와 위고비 실제 차이점과 부작용 체크 할 때 다들 숨기는 게 딱 한 가지 있습니다.", "scorecard": {"total_score": 96, "grade": "S", "lexical_diversity_ttr": 0.89, "cliche_penalty": 0, "predicted_3s_hold_pct": 77.8, "predicted_completion_pct": 61.4, "axes": {"hook_velocity_25": 19, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}}], "winning_variant": "B", "retention_scorecard": {"total_score": 100, "grade": "S", "lexical_diversity_ttr": 0.95, "cliche_penalty": 0, "predicted_3s_hold_pct": 86.0, "predicted_completion_pct": 63.0, "axes": {"hook_velocity_25": 25, "open_loop_20": 20, "pacing_cadence_20": 20, "proof_density_15": 15, "cta_conversion_20": 20}}, "selected_hook": "마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "personas": {"professional": {"label": "표준 프로페셔널 (신뢰·전문직 톤)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.", "highlight_keyword": "마운자로", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 비만·건강 클리닉 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보세요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 마운자로와 위고비는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보세요.", "highlight_keyword": "마운자로 vs 위고비", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 확인하세요.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}, "friendly": {"label": "친근한 구어체 (공감·이탈 방지 톤)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 체크해 보세요!", "highlight_keyword": "마운자로", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 비만·건강 클리닉 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보셔야 해요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 마운자로와 위고비는 목적부터 완전히 달라요. 가격보다 내 조건 적합도를 먼저 보셔야 해요.", "highlight_keyword": "마운자로 vs 위고비", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 체크해 보세요!", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어들어요.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}, "busan": {"label": "부산 사투리 캐릭터 (자연스러운 맛살리기)", "scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 꼭 체크해 보이소.", "highlight_keyword": "마운자로", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 비만·건강 클리닉 현장에서도 90%가 놓치는 핵심입니다. 끝까지 한번 들어 보이소.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 마운자로와 위고비는 목적부터 완전히 다릅니다. 가격보다 내 조건 적합도를 먼저 보셔야 됩니더.", "highlight_keyword": "마운자로 vs 위고비", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 꼭 체크해 보이소.", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어듭니다.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}]}}, "active_scenes": [{"stage": "1단계 · 멈추기 (3초 후킹)", "duration_sec": 3.0, "subtitle": "마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 체크해 보세요!", "highlight_keyword": "마운자로", "camera_direction": "빠른 줌인 + 정면 아이컨택 (자기소개 생략, 첫 0.3초 즉시 발화)"}, {"stage": "2단계 · 궁금하게 (오픈 루프)", "duration_sec": 3.5, "subtitle": "특히 세 번째 기준은 비만·건강 클리닉 현장에서도 90%가 놓치는 핵심입니다. 끝까지 보셔야 해요.", "highlight_keyword": "세 번째 기준", "camera_direction": "손가락 3 표시 + 화면 살짝 확대(108% 펀치 줌)"}, {"stage": "3단계 · 알려주기 ① (1컷 1메시지)", "duration_sec": 4.5, "subtitle": "첫째, 마운자로와 위고비는 목적부터 완전히 달라요. 가격보다 내 조건 적합도를 먼저 보셔야 해요.", "highlight_keyword": "마운자로 vs 위고비", "camera_direction": "상단 비교 배지 팝업 + 2초 단위 마이크로 자막 전환"}, {"stage": "3단계 · 알려주기 ② (실전 기준)", "duration_sec": 4.5, "subtitle": "둘째, 겉으로 보이는 홍보 문구 말고 실제 사례와 유지 기간 데이터를 반드시 체크해 보세요!", "highlight_keyword": "실제 데이터", "camera_direction": "증거 카드 오버레이 + 컷 점프(무음 0.1초 이하)"}, {"stage": "3단계 · 알려주기 ③ (핵심 결론)", "duration_sec": 5.0, "subtitle": "셋째, 처음 3초에 던진 질문의 답입니다. 나에게 맞는 기준표 하나만 정하면 시행착오가 절반 이하로 확 줄어들어요.", "highlight_keyword": "시행착오 절반", "camera_direction": "핵심 문구 골드 하이라이트 필 배지 + 강조 효과음"}, {"stage": "4단계 · 루프 브릿지 + DM CTA", "duration_sec": 2.4, "subtitle": "댓글에 '비교표' 남기시면 바로 보내드릴게요. 그래서 우리가 꼭 먼저 봐야 할 게,", "highlight_keyword": "댓글 '비교표' → DM", "camera_direction": "하단 DM 콜아웃 배지 + 0초 훅으로 끊김 없이 무한 루프 연결"}], "estimated_duration_sec": 22.9, "llm_upgrade_prompt": "당신은 월 조회수 300만+을 만드는 대한민국 최상위 B2B 숏폼 기획자입니다.\n아래 클라이언트 정보를 바탕으로 30~45초 릴스/쇼츠 대본을 작성해 주세요.\n\n[클라이언트 정보]\n- 브랜드/업종: 강남 대사 클리닉 (비만·건강 클리닉)\n- 영상 주제: 마운자로와 위고비 실제 차이점과 부작용 체크\n- 비교 대상: 마운자로 vs 위고비\n- 최종 CTA: 저장해 두고 댓글에 '비교' 남기면 처방 기준표 DM 발송\n- 말투 페르소나: friendly\n\n[참고할 검증된 3초 후킹 후보]\n- [직접 비교·선택형] 마운자로와 위고비 직접 비교했습니다. 뭐가 다른지 30초 만에 확인하세요.\n- [직접 비교·선택형] 마운자로 vs 위고비, 내 상황에서 무조건 이득 보는 선택 기준입니다.\n- [실수·손실 경고형] 잠깐만요! 마운자로와 위고비 실제 차이점과 부작용 체크 이렇게 하시면 돈과 시간 그대로 날립니다.\n- [실수·손실 경고형] 마운자로와 위고비 실제 차이점과 부작용 체크 할 때 90%가 저지르는 최악의 실수 3가지, 세 번째가 제일 치명적입니다.\n- [반전·고정관념 파괴형] 마운자로와 위고비 실제 차이점과 부작용 체크에 비싼 장비가 필요하다고요? 완전한 착각입니다.\n\n[필수 4단계 구조]\n1) 멈추기 (0~3초): 자기소개 금지, 결과/충격 팩트 먼저 제시\n2) 궁금하게 (3~6초): \"세 번째가 가장 중요합니다\" 같은 오픈 루프 삽입\n3) 알려주기 (6~25초): 한 컷에 한 메시지, 3가지 실전 근거 제시\n4) 부탁하기 (25~30초): 팔로우·저장·댓글 키워드→DM 자동 발송 유도\n"}, "deliverable": {"client_id": "diet_clinic", "client_name": "강남 대사 클리닉", "voice_engine": "EDGE_TTS_WORDBOUNDARY_LUFS14", "voice_name": "ko-KR-SunHiNeural", "visual_engine": "V4_BROADCAST_XFADE_FILMIC_KARAOKE_LUFS14", "raw_duration_sec": 63.68, "final_duration_sec": 43.03, "removed_duration_sec": 20.65, "compression_pct": 32.4, "ng_takes_removed": 2, "silence_gaps_removed": 3, "mp4_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_diet_clinic/diet_clinic_final_reels.mp4", "mp4_relative_url": "../deliverables/2026-11-23_diet_clinic/diet_clinic_final_reels.mp4", "mp4_byte_size": 16463023, "mp4_sha256": "45921776ac32a44df49ec2e38697f96594ff7bf0b7c3c700a14417fdecd142ab", "srt_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_diet_clinic/diet_clinic_final_reels.srt", "capcut_draft_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_diet_clinic/capcut_draft_content.json", "premiere_fcpxml_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/deliverables/2026-11-23_diet_clinic/diet_clinic_premiere.fcpxml", "handoff_zip_path": "/home/dream8837/.gemini/antigravity/scratch/shortform-agency-autopilot/output/handoff/2026-11-23_diet_clinic_handoff.zip"}}];
+  let activeProjIdx = 0;
+  let activePersona = 'professional';
+
+  function escHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.display = 'block';
+    clearTimeout(t._tid); t._tid = setTimeout(() => t.style.display = 'none', 2600);
+  }
+  function switchView(id, btn) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('view-' + id).classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  function setSafeZone(elId, mode, btn) {
+    if (btn && btn.parentElement) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    const el = document.getElementById(elId);
+    if (mode === 'off') { el.classList.remove('on'); el.innerHTML = ''; return; }
+    const cfg = mode === 'yt'
+      ? { top: 14, bot: 28, right: 18, label: 'YT SHORTS' }
+      : { top: 15, bot: 32, right: 16, label: 'IG REELS' };
+    el.classList.add('on');
+    el.innerHTML = `
+      <div class="sz-top" style="top:0;left:0;right:0;height:${cfg.top}%">TOP UI (${cfg.top}%)</div>
+      <div class="sz-bot" style="bottom:0;left:0;right:0;height:${cfg.bot}%">CAPTION / AUDIO UI (${cfg.bot}%)</div>
+      <div class="sz-right" style="top:${cfg.top}%;bottom:${cfg.bot}%;right:0;width:${cfg.right}%">ACTION</div>
+      <div class="sz-safe" style="top:${cfg.top}%;bottom:${cfg.bot}%;left:0;right:${cfg.right}%"></div>
+    `;
+  }
+
+  function initProjectTabs() {
+    const el = document.getElementById('projectTabs');
+    el.innerHTML = '';
+    PROJECTS.forEach((p, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.textContent = p.script.client_name;
+      btn.onclick = () => selectProject(idx);
+      el.appendChild(btn);
+    });
+    document.getElementById('metricProjCount').textContent = PROJECTS.length + '편';
+    if (PROJECTS.length) selectProject(0);
+  }
+
+  function selectProject(idx) {
+    activeProjIdx = idx;
+    document.querySelectorAll('#projectTabs button').forEach((b, i) => b.classList.toggle('active', i === idx));
+    const p = PROJECTS[idx];
+    activePersona = p.script.selected_persona || 'professional';
+
+    const v = document.getElementById('projVideo');
+    v.src = p.deliverable.mp4_relative_url;
+    v.load();
+
+    document.getElementById('projStats').innerHTML =
+      `성우: <strong>${escHtml(p.deliverable.voice_name || 'KO-Neural')}</strong> · 길이 <strong>${escHtml(p.deliverable.final_duration_sec)}초</strong> ` +
+      `(<span style="color:#4ade80">-${escHtml(p.deliverable.compression_pct)}%</span> · -14 LUFS)`;
+
+    const cid = encodeURIComponent(p.script.client_id);
+    document.getElementById('projExports').innerHTML =
+      `<a class="btn primary sm" href="/api/download-bundle/${cid}" download>📦 납품 ZIP 일괄 다운로드</a>` +
+      `<span class="tag live">MP4 (${(p.deliverable.mp4_byte_size/1024).toFixed(0)}KB)</span>` +
+      `<span class="tag">.SRT</span><span class="tag">CapCut</span><span class="tag">Premiere</span>`;
+
+    // Render 5-Axis A/B/C Variant Scorecard
+    const vg = document.getElementById('variantGrid');
+    const vars = p.script.hook_variants || [];
+    vg.innerHTML = vars.map(vr => `
+      <div class="variant-card ${vr.variant === p.script.winning_variant ? 'win' : ''}">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <strong>Variant ${escHtml(vr.variant)} · ${escHtml(vr.scorecard.total_score)}점 (${escHtml(vr.scorecard.grade)})</strong>
+          ${vr.variant === p.script.winning_variant ? '<span class="tag gold">WINNER</span>' : ''}
+        </div>
+        <div style="color:#e4e4e7;margin-bottom:6px;">${escHtml(vr.rendered_hook)}</div>
+        <div class="muted" style="font-size:11px;">3초 잔존 ${escHtml(vr.scorecard.predicted_3s_hold_pct)}% · 완시 ${escHtml(vr.scorecard.predicted_completion_pct)}%</div>
+      </div>
+    `).join('');
+
+    document.getElementById('projPrompt').textContent = p.script.llm_upgrade_prompt;
+    renderPersonaTabs(p.script.personas);
+    renderScenes(p.script.personas[activePersona].scenes);
+  }
+
+  function renderPersonaTabs(personas) {
+    const el = document.getElementById('personaTabs');
+    el.innerHTML = '';
+    Object.keys(personas).forEach(k => {
+      const btn = document.createElement('button');
+      btn.className = 'btn sm' + (k === activePersona ? ' active' : '');
+      btn.textContent = personas[k].label;
+      btn.onclick = () => { activePersona = k; renderPersonaTabs(personas); renderScenes(personas[k].scenes); };
+      el.appendChild(btn);
+    });
+  }
+
+  function renderScenes(scenes) {
+    document.getElementById('sceneList').innerHTML = scenes.map(s => `
+      <div class="scene-row">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;">
+          <span class="mono" style="color:#a1a1aa">${escHtml(s.stage)}</span>
+          <span class="tag gold">${escHtml(s.highlight_keyword)}</span>
+        </div>
+        <div style="font-size:14px;font-weight:600;">${escHtml(s.subtitle)}</div>
+        <div class="muted" style="font-size:12px;margin-top:4px;">${escHtml(s.camera_direction)}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderHooks() {
+    const ind = document.getElementById('hkIndustry').value || '전문직';
+    const top = document.getElementById('hkTopic').value || '숏폼 마케팅';
+    const a = document.getElementById('hkA').value || 'A안';
+    const b = document.getElementById('hkB').value || 'B안';
+    const cat = document.getElementById('hkCat').value;
+    const filtered = HOOKS.filter(h => cat === 'all' || h.category === cat);
+    document.getElementById('hookCount').textContent = `${filtered.length} / ${HOOKS.length} templates`;
+    document.getElementById('hookList').innerHTML = filtered.map(h => {
+      const txt = h.template.replaceAll('{industry}', ind).replaceAll('{topic}', top).replaceAll('{compare_a}', a).replaceAll('{compare_b}', b);
+      return `<div class="hook-row"><div><span class="tag">${escHtml(h.hook_id)}</span> <span style="margin-left:8px;">${escHtml(txt)}</span></div><button class="btn sm" onclick="navigator.clipboard.writeText(this.dataset.t);toast('후킹 문구 복사 완료')" data-t="${escHtml(txt)}">복사</button></div>`;
+    }).join('');
+  }
+
+  async function generateNewClient() {
+    const btn = document.getElementById('btnGenClient');
+    const st = document.getElementById('genStatus');
+    btn.disabled = true;
+    st.textContent = '⏳ WordBoundary 카라오케 + -14 LUFS 마스터링 + ZIP 패키징 중...';
+    try {
+      const res = await fetch('/api/generate-client', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_name: document.getElementById('newName').value,
+          industry: document.getElementById('newInd').value,
+          topic: document.getElementById('newTopic').value,
+          compare_a: document.getElementById('newA').value,
+          compare_b: document.getElementById('newB').value,
+          persona_tone: document.getElementById('newTone').value,
+        })
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      PROJECTS.unshift(data.project);
+      initProjectTabs();
+      st.textContent = '✅ 제작 완료! 새 클라이언트 릴스와 납품 ZIP이 즉시 반영되었습니다.';
+      toast('신규 v4.0 릴스 + 납품 ZIP 생성 완료');
+    } catch (e) {
+      st.textContent = '❌ 오류: ' + e.message;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  const dz = document.getElementById('dropzone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+  dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); if (e.dataTransfer.files.length) handleMp4File(e.dataTransfer.files[0]); });
+
+  function handleMp4File(file) {
+    if (!file) return;
+    const st = document.getElementById('cutStatus');
+    const bar = document.getElementById('cutProgBar');
+    const fill = document.getElementById('cutProgFill');
+    bar.style.display = 'block'; fill.style.width = '0%';
+    st.textContent = `⏳ "${file.name}" 업로드 중...`;
+
+    const db = document.getElementById('cutDb').value;
+    const minS = document.getElementById('cutMin').value;
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `/api/autocut-upload?filename=${encodeURIComponent(file.name)}&silence_db=${db}&min_silence=${minS}`);
+    xhr.upload.onprogress = ev => {
+      if (ev.lengthComputable) {
+        const pct = Math.round((ev.loaded / ev.total) * 100);
+        fill.style.width = pct + '%';
+        st.textContent = pct < 100 ? `⏳ 업로드 중 (${pct}%)...` : '⏳ FFmpeg 무음 컷편집 + -14 LUFS 마스터링 실행 중...';
+      }
+    };
+    xhr.onload = () => {
+      try {
+        const data = JSON.parse(xhr.responseText);
+        if (!data.ok) throw new Error(data.error);
+        const r = data.result;
+        fill.style.width = '100%';
+        st.textContent = `✅ 완료! 원본 ${r.raw_duration_sec}초 → 컷편집 ${r.final_duration_sec}초 (-${r.compression_pct}%, 무음 ${r.silence_gaps_removed}구간 제거)`;
+        document.getElementById('cutResult').style.display = 'block';
+        document.getElementById('vidBefore').src = r.input_relative_url;
+        document.getElementById('vidAfter').src = r.output_relative_url;
+        document.getElementById('cutSummary').textContent = `15ms 클릭 방지 + -14 LUFS 마스터링 · CapCut & Premiere FCPXML 생성 완료`;
+        toast('실사 MP4 무음 자동 컷편집 완료');
+      } catch (err) {
+        st.textContent = '❌ 실패: ' + err.message;
+      }
+    };
+    xhr.onerror = () => { st.textContent = '❌ 네트워크 오류'; };
+    xhr.send(file);
+  }
+
+  async function updateLeadStage(leadId, stage) {
+    try {
+      const r = await fetch('/api/crm/stage', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ lead_id: leadId, stage })
+      });
+      const d = await r.json();
+      if (d.ok) { toast(`리드 단계 변경: ${stage}`); refreshCrm(); }
+    } catch (e) {}
+  }
+
+  async function refreshCrm() {
+    try {
+      const r = await fetch('/api/crm');
+      const d = await r.json();
+      document.getElementById('crmLeads').textContent = (d.total_leads || 0) + '건';
+      document.getElementById('crmMrr').textContent = (d.projected_mrr_krw || 0).toLocaleString() + '원';
+      document.getElementById('crmWon').textContent = (d.closed_won_mrr_krw || 0).toLocaleString() + '원';
+      const tb = document.getElementById('crmTableBody');
+      if (!d.leads || !d.leads.length) {
+        tb.innerHTML = '<tr><td colspan="6" class="muted">아직 접수된 리드가 없습니다.</td></tr>';
+        return;
+      }
+      window._crmLeads = d.leads;
+      tb.innerHTML = d.leads.map((l, idx) => {
+        const drips = (l.follow_up_drip || []).map((dr, di) =>
+          `<button class="btn sm" onclick="navigator.clipboard.writeText(window._crmLeads[${idx}].follow_up_drip[${di}].message);toast('${escHtml(dr.day)} 메시지 복사됨')">${escHtml(dr.day.split(' ')[0])}</button>`
+        ).join(' ');
+        return `
+          <tr>
+            <td class="mono">${escHtml(l.lead_id)}</td>
+            <td><strong>${escHtml(l.brand_name)}</strong><div class="muted" style="font-size:11px;">${escHtml(l.industry)}</div></td>
+            <td>${escHtml(l.package_label)}</td>
+            <td class="mono accent">${(l.expected_mrr_krw||0).toLocaleString()}원</td>
+            <td>
+              <select style="padding:4px 8px;font-size:12px;" onchange="updateLeadStage('${escHtml(l.lead_id)}', this.value)">
+                ${['PROPOSAL_AUTO_SENT','DRIP_D2_SENT','DRIP_D5_SENT','CLOSED_WON','LOST'].map(st =>
+                  `<option value="${st}" ${l.stage===st?'selected':''}>${st}</option>`).join('')}
+              </select>
+            </td>
+            <td style="display:flex;gap:4px;flex-wrap:wrap;">${drips || '<span class="muted">-</span>'}</td>
+          </tr>`;
+      }).join('');
+    } catch (e) {}
+  }
+
+  function copyById(id) {
+    navigator.clipboard.writeText(document.getElementById(id).textContent);
+    toast('클립보드에 복사되었습니다');
+  }
+
+  async function refreshEvolution() {
+    try {
+      const r = await fetch('/api/evolution');
+      const d = await r.json();
+      const p = d.current_policy || {};
+      document.getElementById('evoGen').textContent = 'Gen #' + (p.generation ?? 0);
+      document.getElementById('evoVer').textContent = 'Policy v' + (p.policy_version ?? 1);
+      document.getElementById('evoTts').textContent = '+' + (p.tts_rate_pct ?? 14) + '%';
+      document.getElementById('evoWords').textContent = (p.caption_max_words ?? 5) + '단어';
+      document.getElementById('evoDm').textContent = p.dm_trigger_keyword || '비교표';
+      const wEl = document.getElementById('evoWeights');
+      const ws = p.hook_category_weights || {};
+      wEl.innerHTML = Object.keys(ws).map(k => `<span class="tag gold">${escHtml(k)}: ${escHtml(ws[k])}x</span>`).join('');
+      const tb = document.getElementById('evoTableBody');
+      const hist = d.history || [];
+      if (!hist.length) {
+        tb.innerHTML = '<tr><td colspan="5" class="muted">아직 진화 이력이 없습니다. 상단 버튼을 눌러 1세대 진화를 실행하세요.</td></tr>';
+        return;
+      }
+      tb.innerHTML = hist.map(h => `
+        <tr>
+          <td class="mono accent">Gen #${escHtml(h.generation)} (v${escHtml(h.policy_version)})</td>
+          <td class="mono muted">${escHtml(h.evolved_at_kst)}</td>
+          <td><strong>${escHtml(h.trend_title)}</strong><div class="muted" style="font-size:11px;">${escHtml(h.applied_trend)}</div></td>
+          <td class="mono">TTS ${escHtml(h.changes.tts_rate_pct)} · 단어 ${escHtml(h.changes.caption_max_words)} · DM ${escHtml(h.changes.dm_trigger_keyword)}</td>
+          <td><button class="btn sm" onclick="rollbackEvolution(${Number(h.generation)})">↺ 롤백</button></td>
+        </tr>
+      `).join('');
+    } catch (e) {}
+  }
+
+  async function runEvolutionNow() {
+    const btn = document.getElementById('btnRunEvo');
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/evolution/run', { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' });
+      const d = await r.json();
+      if (d.ok) { toast(`자율 진화 완료: Gen #${d.generation} (Policy v${d.policy_version})`); refreshEvolution(); }
+    } catch (e) { toast('진화 실행 오류'); }
+    finally { btn.disabled = false; }
+  }
+
+  async function rollbackEvolution(gen) {
+    try {
+      const r = await fetch('/api/evolution/rollback', {
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ generation: gen })
+      });
+      const d = await r.json();
+      if (d.ok) { toast(`Gen #${gen} 정책으로 안전 롤백 완료`); refreshEvolution(); }
+    } catch (e) { toast('롤백 오류'); }
+  }
+
+  initProjectTabs();
+  renderHooks();
+  refreshCrm();
+  refreshEvolution();
+</script>
+</body>
+</html>
