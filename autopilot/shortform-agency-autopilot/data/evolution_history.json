@@ -1,5 +1,78 @@
 [
   {
+    "generation": 3,
+    "policy_version": 4,
+    "evolved_at_kst": "2026-11-26T14:17:39+09:00",
+    "applied_trend": "TR-2026-Q4-03",
+    "trend_title": "정보 격차 미공개 비결 + 3편 파일럿 리스크제로 오퍼",
+    "telemetry_snapshot": {
+      "projects_evaluated": 0,
+      "avg_retention_score": 0.0,
+      "avg_compression_pct": 0.0,
+      "crm_leads": 0,
+      "crm_projected_mrr_krw": 0,
+      "youtube_live_stats": {
+        "mode": "NO_UPLOADED_VIDEOS_YET",
+        "videos_checked": 0,
+        "total_views": 0,
+        "avg_engagement_pct": 0.0
+      }
+    },
+    "expert_reviews": [
+      {
+        "expert": "Viral Shorts Algorithm & Trend Director",
+        "score": 93,
+        "finding": "현재 TTS +15% / 청크 4단어. SOV 명사 타겟 카라오케 + 최신 트렌드 가중치 최적화 적용."
+      },
+      {
+        "expert": "B2B Performance Marketing & Funnel Director",
+        "score": 91,
+        "finding": "누적 리드 0건 (예상 MRR 0원). DM 트리거 로테이션 및 ROI 앵커링 유지."
+      },
+      {
+        "expert": "Broadcast AV & Retention Systems Director",
+        "score": 95,
+        "finding": "평균 압축 -0.0%, -14 LUFS / 48kHz 규격 통과. 스냅샷 롤백 안전장치 활성화 확인."
+      }
+    ],
+    "llm_advisor_used": false,
+    "changes": {
+      "tts_rate_pct": "15% -> 14%",
+      "caption_max_words": "4 -> 5",
+      "dm_trigger_keyword": "비교표 -> 가이드",
+      "boosted_categories": {
+        "info_gap": 0.06,
+        "comparison": 0.04
+      }
+    },
+    "policy_snapshot": {
+      "policy_version": 4,
+      "generation": 3,
+      "updated_at_kst": "2026-11-26T14:17:39+09:00",
+      "tts_rate_pct": 14,
+      "caption_max_words": 5,
+      "hook_category_weights": {
+        "loss_warning": 1.09,
+        "comparison": 1.13,
+        "info_gap": 1.06,
+        "contrarian": 1.05,
+        "authority_pro": 1.03,
+        "listicle_number": 0.95,
+        "story_empathy": 0.93
+      },
+      "active_trend_playbooks": [
+        "정보 격차 미공개 비결 + 3편 파일럿 리스크제로 오퍼",
+        "반전·고정관념 파괴 훅 + 댓글 논쟁형 무한루프",
+        "초고밀도 1.5초 4단어 카라오케 + 데이터 선제 타격",
+        "한국어 SOV 명사 타겟 카라오케 강조",
+        "0~2.5초 패턴 인터럽트 훅 배너 + 워터마크 지연",
+        "Zero-Gap 무한루프 브릿지 + 1-키워드 DM 콜아웃"
+      ],
+      "dm_trigger_keyword": "가이드",
+      "last_expert_summary": "[TR-2026-Q4-03] 신규 리드 초기 장벽을 낮추는 파일럿 오퍼와 정보 격차 훅 결합 시 B2B 상담 전환율이 극대화됨."
+    }
+  },
+  {
     "generation": 2,
     "policy_version": 3,
     "evolved_at_kst": "2026-11-23T08:30:02+09:00",

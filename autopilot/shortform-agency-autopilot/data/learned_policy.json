@@ -1,25 +1,26 @@
 {
-  "policy_version": 3,
-  "generation": 2,
-  "updated_at_kst": "2026-11-23T08:30:02+09:00",
-  "tts_rate_pct": 15,
-  "caption_max_words": 4,
+  "policy_version": 4,
+  "generation": 3,
+  "updated_at_kst": "2026-11-26T14:17:39+09:00",
+  "tts_rate_pct": 14,
+  "caption_max_words": 5,
   "hook_category_weights": {
-    "loss_warning": 1.1,
-    "comparison": 1.09,
-    "info_gap": 1.0,
-    "contrarian": 1.06,
-    "authority_pro": 1.04,
-    "listicle_number": 0.96,
-    "story_empathy": 0.94
+    "loss_warning": 1.09,
+    "comparison": 1.13,
+    "info_gap": 1.06,
+    "contrarian": 1.05,
+    "authority_pro": 1.03,
+    "listicle_number": 0.95,
+    "story_empathy": 0.93
   },
   "active_trend_playbooks": [
+    "정보 격차 미공개 비결 + 3편 파일럿 리스크제로 오퍼",
     "반전·고정관념 파괴 훅 + 댓글 논쟁형 무한루프",
     "초고밀도 1.5초 4단어 카라오케 + 데이터 선제 타격",
     "한국어 SOV 명사 타겟 카라오케 강조",
     "0~2.5초 패턴 인터럽트 훅 배너 + 워터마크 지연",
     "Zero-Gap 무한루프 브릿지 + 1-키워드 DM 콜아웃"
   ],
-  "dm_trigger_keyword": "비교표",
-  "last_expert_summary": "[TR-2026-Q4-02] 전문직(피부과·치과·변호사) B2B 타깃은 통념을 깨는 반전 훅과 실제 데이터 근거 제시 시 DM 전환율이 2.3배 상승함."
+  "dm_trigger_keyword": "가이드",
+  "last_expert_summary": "[TR-2026-Q4-03] 신규 리드 초기 장벽을 낮추는 파일럿 오퍼와 정보 격차 훅 결합 시 B2B 상담 전환율이 극대화됨."
 }
