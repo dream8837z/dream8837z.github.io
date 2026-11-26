@@ -1,5 +1,28 @@
 User-agent: *
 Allow: /
+
+# Stage 1 Boring Marketing: Explicit AI Search & GEO Citation Bots Allowed
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
 Sitemap: https://dream8837z.github.io/sitemap.xml
 Sitemap: https://dream8837z.github.io/pseo-revenue-autopilot/sitemap.xml
 Sitemap: https://dream8837z.github.io/passive-income-microsaas-autopilot/sitemap.xml

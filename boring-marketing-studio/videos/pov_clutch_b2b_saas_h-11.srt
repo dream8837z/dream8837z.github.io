@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:01,650
+Stop paying $29/month for driving school software.
+
+2
+00:00:01,650 --> 00:00:03,300
+I replaced it with this $0 offline web app.
+
+3
+00:00:03,300 --> 00:00:05,050
+① Tap Input: Maya Lin · $65/hr · Test Date: Jan 18
+
+4
+00:00:05,050 --> 00:00:06,850
+② Instant Result: Test Readiness jumps from 60% → 80% Ready!
+
+5
+00:00:06,850 --> 00:00:08,650
+③ Aha! Payoff: Saved $348/yr in SaaS subscriptions!
+
+6
+00:00:08,650 --> 00:00:10,400
+Tap the pinned link to run this free tool in your browser right now!

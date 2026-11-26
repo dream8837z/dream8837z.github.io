@@ -2,8 +2,8 @@ name: Daily Autonomous Cloud Autopilot & Promo (KST 09:00 — 24/365 PC-OFF)
 
 on:
   schedule:
-    # 매일 KST 09:00 (UTC 00:00) PC 전원과 무관하게 제작·홍보·색인핑 클라우드 무인 실행
-    - cron: "0 0 * * *"
+    # 매일 3회 (KST 09:00, 17:00, 01:00 / UTC 00:00, 08:00, 16:00) 고빈도 제작·홍보·블로그 자동 게시
+    - cron: "0 0,8,16 * * *"
   workflow_dispatch:
 
 permissions:

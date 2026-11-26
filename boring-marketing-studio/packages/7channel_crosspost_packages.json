@@ -1,0 +1,402 @@
+[
+  {
+    "channel_id": "youtube_shorts",
+    "channel_name": "YouTube Shorts (유튜브 쇼츠)",
+    "platform_type": "short_video",
+    "delivery_method": "YouTube Data API v3 (videos.insert + publishAt)",
+    "app_id": "moneypin_kr_hub",
+    "hook_id": "H-01",
+    "title_or_first_line": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다. #Shorts",
+    "caption_body": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.\n\n✅ 금융감독원·행안부·국토부 6대 공식 공공 API 기반 500+ 실시간 계산기 3초 원클릭 진단\n📊 핵심 수치: 연 4.15% 세후 이자 & 보조금 15종 3초 매칭\n🔗 로그인·광고 없이 3초 만에 무료 계산하기:\nhttps://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=youtube_shorts&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01\n\n#Shorts #재테크 #금융계산기 #보조금24 #머니핀랩",
+    "hashtags": [
+      "#Shorts",
+      "#재테크",
+      "#금융계산기",
+      "#보조금24",
+      "#머니핀랩"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=youtube_shorts&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_moneypin_kr_hub_h-01.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "instagram_reels",
+    "channel_name": "Instagram Reels (인스타그램 릴스)",
+    "platform_type": "short_video",
+    "delivery_method": "Meta Graph API v21.0 (/media & /media_publish)",
+    "app_id": "moneypin_kr_hub",
+    "hook_id": "H-01",
+    "title_or_first_line": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.",
+    "caption_body": "📌 저장해두고 필요할 때 바로 꺼내 쓰세요!\n\n예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.\n\n• 금융감독원 Finlife 실시간 공시 연동\n• 중위소득·연령별 정부지원금 자동 필터링\n• 가입·로그인 0% 브라우저 즉시 계산\n\n👉 프로필 하단 링크에서 100% 무료로 즉시 실행됩니다:\nhttps://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=instagram_reels&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01\n\n#릴스 #생활꿀팁 #월급관리 #예적금 #정부지원금",
+    "hashtags": [
+      "#릴스",
+      "#생활꿀팁",
+      "#월급관리",
+      "#예적금",
+      "#정부지원금"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=instagram_reels&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_moneypin_kr_hub_h-01.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "tiktok_vertical",
+    "channel_name": "TikTok (틱톡 9:16)",
+    "platform_type": "short_video",
+    "delivery_method": "TikTok Content Posting API v2 (Direct Post)",
+    "app_id": "moneypin_kr_hub",
+    "hook_id": "H-01",
+    "title_or_first_line": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.",
+    "caption_body": "POV: 예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.\n⚡ 연 4.15% 세후 이자 & 보조금 15종 3초 매칭\n🔗 바이오 링크 & 고정 댓글에서 무료 실행:\nhttps://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=tiktok_vertical&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01\n\n#틱톡금융 #꿀팁 #세금절약 #보조금",
+    "hashtags": [
+      "#틱톡금융",
+      "#꿀팁",
+      "#세금절약",
+      "#보조금"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=tiktok_vertical&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_moneypin_kr_hub_h-01.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "naver_clip",
+    "channel_name": "Naver Clip (네이버 클립 · 한국형 숏폼)",
+    "platform_type": "short_video",
+    "delivery_method": "Naver Clip Creator Bundle & Blog Embed Sync",
+    "app_id": "moneypin_kr_hub",
+    "hook_id": "H-01",
+    "title_or_first_line": "[3초 팩트체크] 예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.",
+    "caption_body": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.\n공식 공공데이터 기반 머니핀랩 (MoneyPin Lab KR 500+ Hub)에서 내 조건에 맞는 정확한 숫자를 확인하세요.\n🔗 바로가기:\nhttps://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=naver_clip&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01\n\n#네이버클립 #오늘의머니 #내집마련 #연봉실수령액 #청년지원금",
+    "hashtags": [
+      "#네이버클립",
+      "#오늘의머니",
+      "#내집마련",
+      "#연봉실수령액",
+      "#청년지원금"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=naver_clip&utm_medium=short_video&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_moneypin_kr_hub_h-01.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "meta_threads",
+    "channel_name": "Meta Threads (스레드 텍스트+영상 스레드)",
+    "platform_type": "micro_blog",
+    "delivery_method": "Threads Publishing API (/threads & /threads_publish)",
+    "app_id": "moneypin_kr_hub",
+    "hook_id": "H-01",
+    "title_or_first_line": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.",
+    "caption_body": "1/ 예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.\n\n2/ 대부분 귀찮아서 대충 넘기지만 실제 숫자를 찍어보면 차이가 꽤 큽니다 → 연 4.15% 세후 이자 & 보조금 15종 3초 매칭\n\n3/ 앱 설치나 회원가입 없이 모바일 브라우저에서 바로 돌려볼 수 있게 무료 웹 도구로 만들어 두었습니다:\nhttps://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=meta_threads&utm_medium=micro_blog&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01\n\n#스레드 #1인개발 #재테크꿀팁",
+    "hashtags": [
+      "#스레드",
+      "#1인개발",
+      "#재테크꿀팁"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=meta_threads&utm_medium=micro_blog&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_moneypin_kr_hub_h-01.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "x_twitter",
+    "channel_name": "X / Twitter (인디해커·금융 스레드)",
+    "platform_type": "micro_blog",
+    "delivery_method": "X API v2 (POST /2/tweets)",
+    "app_id": "moneypin_kr_hub",
+    "hook_id": "H-01",
+    "title_or_first_line": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.",
+    "caption_body": "예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.\n\nBuilt a 100% client-side, $0-server web tool for this:\n• 연 4.15% 세후 이자 & 보조금 15종 3초 매칭\n• 금융감독원 Finlife 실시간 공시 연동\n\nTry it live (no login):\nhttps://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=x_twitter&utm_medium=micro_blog&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01\n\n#IndieHackers #MicroSaaS #PersonalFinance",
+    "hashtags": [
+      "#IndieHackers",
+      "#MicroSaaS",
+      "#PersonalFinance"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=x_twitter&utm_medium=micro_blog&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_moneypin_kr_hub_h-01.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "naver_google_seo_blog",
+    "channel_name": "Naver Blog & Google SEO/AIO Post (검색·AI 인용 허브)",
+    "platform_type": "search_blog",
+    "delivery_method": "GitHub Pages Static pSEO + IndexNow Instant Ping",
+    "app_id": "moneypin_kr_hub",
+    "hook_id": "H-01",
+    "title_or_first_line": "[2026 완벽 정리] 예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.",
+    "caption_body": "## 예금 3,000만 원 그냥 주거래 은행에 넣으면 이자 세금으로 19만 원 날립니다.\n\n**핵심 요약 (AI 검색 & 챗GPT 인용 표준 블록)**: 금융감독원·행안부·국토부 6대 공식 공공 API 기반 500+ 실시간 계산기 3초 원클릭 진단 (연 4.15% 세후 이자 & 보조금 15종 3초 매칭)\n\n- 검증 포인트 1: 금융감독원 Finlife 실시간 공시 연동\n- 검증 포인트 2: 중위소득·연령별 정부지원금 자동 필터링\n- 검증 포인트 3: 가입·로그인 0% 브라우저 즉시 계산\n\n👉 실시간 무료 계산기 바로가기:\nhttps://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=naver_google_seo_blog&utm_medium=search_blog&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01\n\n#SEO #AIO #GEO #공공데이터계산기",
+    "hashtags": [
+      "#SEO",
+      "#AIO",
+      "#GEO",
+      "#공공데이터계산기"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/pseo-revenue-autopilot/index.html?utm_source=naver_google_seo_blog&utm_medium=search_blog&utm_campaign=boring_3stage_moneypin_kr_hub&utm_content=h-01",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_moneypin_kr_hub_h-01.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "youtube_shorts",
+    "channel_name": "YouTube Shorts (유튜브 쇼츠)",
+    "platform_type": "short_video",
+    "delivery_method": "YouTube Data API v3 (videos.insert + publishAt)",
+    "app_id": "clutch_b2b_saas",
+    "hook_id": "H-11",
+    "title_or_first_line": "Stop paying $29/month for driving school software. I replaced it with th #Shorts",
+    "caption_body": "Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.\n\n✅ 100% Free, Offline-Ready Browser B2B CRM with 5-Skill Mastery Toggles, Lesson Calendar & 1-Click PDF/JSON Backup\n📊 핵심 수치: $0/mo SaaS Fee · 94% Learner Readiness Tracking\n🔗 로그인·광고 없이 3초 만에 무료 계산하기:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=youtube_shorts&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11\n\n#Shorts #PassiveIncome #MicroSaaS #HYSA #WealthStack",
+    "hashtags": [
+      "#Shorts",
+      "#PassiveIncome",
+      "#MicroSaaS",
+      "#HYSA",
+      "#WealthStack"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=youtube_shorts&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_clutch_b2b_saas_h-11.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "instagram_reels",
+    "channel_name": "Instagram Reels (인스타그램 릴스)",
+    "platform_type": "short_video",
+    "delivery_method": "Meta Graph API v21.0 (/media & /media_publish)",
+    "app_id": "clutch_b2b_saas",
+    "hook_id": "H-11",
+    "title_or_first_line": "Stop paying $29/month for driving school software. I replaced it with this $0 of",
+    "caption_body": "📌 저장해두고 필요할 때 바로 꺼내 쓰세요!\n\nStop paying $29/month for driving school software. I replaced it with this $0 offline web app.\n\n• 30+ Active Learners & Hourly Rate Calculator\n• Instant 5-Stage Driving Skill Mastery Toggles\n• Zero Cloud Lock-in: LocalStorage + JSON Export\n\n👉 프로필 하단 링크에서 100% 무료로 즉시 실행됩니다:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=instagram_reels&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11\n\n#Reels #IndieHacker #FinancialFreedom #DividendETF #B2BSaaS",
+    "hashtags": [
+      "#Reels",
+      "#IndieHacker",
+      "#FinancialFreedom",
+      "#DividendETF",
+      "#B2BSaaS"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=instagram_reels&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_clutch_b2b_saas_h-11.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "tiktok_vertical",
+    "channel_name": "TikTok (틱톡 9:16)",
+    "platform_type": "short_video",
+    "delivery_method": "TikTok Content Posting API v2 (Direct Post)",
+    "app_id": "clutch_b2b_saas",
+    "hook_id": "H-11",
+    "title_or_first_line": "Stop paying $29/month for driving school software. I replaced it with this $0 offline",
+    "caption_body": "POV: Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.\n⚡ $0/mo SaaS Fee · 94% Learner Readiness Tracking\n🔗 바이오 링크 & 고정 댓글에서 무료 실행:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=tiktok_vertical&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11\n\n#TikTokFinance #MoneyTok #SideHustleMath #DrivingInstructor",
+    "hashtags": [
+      "#TikTokFinance",
+      "#MoneyTok",
+      "#SideHustleMath",
+      "#DrivingInstructor"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=tiktok_vertical&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_clutch_b2b_saas_h-11.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "naver_clip",
+    "channel_name": "Naver Clip (네이버 클립 · 한국형 숏폼)",
+    "platform_type": "short_video",
+    "delivery_method": "Naver Clip Creator Bundle & Blog Embed Sync",
+    "app_id": "clutch_b2b_saas",
+    "hook_id": "H-11",
+    "title_or_first_line": "[3초 팩트체크] Stop paying $29/month for driving school software. I replaced it",
+    "caption_body": "Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.\n공식 공공데이터 기반 Clutch — Driving Instructor & Learner B2B Manager에서 내 조건에 맞는 정확한 숫자를 확인하세요.\n🔗 바로가기:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=naver_clip&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11\n\n#NaverClip #GlobalFinance #PassiveCashflow #FreeWebTool",
+    "hashtags": [
+      "#NaverClip",
+      "#GlobalFinance",
+      "#PassiveCashflow",
+      "#FreeWebTool"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=naver_clip&utm_medium=short_video&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_clutch_b2b_saas_h-11.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "meta_threads",
+    "channel_name": "Meta Threads (스레드 텍스트+영상 스레드)",
+    "platform_type": "micro_blog",
+    "delivery_method": "Threads Publishing API (/threads & /threads_publish)",
+    "app_id": "clutch_b2b_saas",
+    "hook_id": "H-11",
+    "title_or_first_line": "Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.",
+    "caption_body": "1/ Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.\n\n2/ 대부분 귀찮아서 대충 넘기지만 실제 숫자를 찍어보면 차이가 꽤 큽니다 → $0/mo SaaS Fee · 94% Learner Readiness Tracking\n\n3/ 앱 설치나 회원가입 없이 모바일 브라우저에서 바로 돌려볼 수 있게 무료 웹 도구로 만들어 두었습니다:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=meta_threads&utm_medium=micro_blog&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11\n\n#Threads #BuildInPublic #BoringMarketing",
+    "hashtags": [
+      "#Threads",
+      "#BuildInPublic",
+      "#BoringMarketing"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=meta_threads&utm_medium=micro_blog&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_clutch_b2b_saas_h-11.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "x_twitter",
+    "channel_name": "X / Twitter (인디해커·금융 스레드)",
+    "platform_type": "micro_blog",
+    "delivery_method": "X API v2 (POST /2/tweets)",
+    "app_id": "clutch_b2b_saas",
+    "hook_id": "H-11",
+    "title_or_first_line": "Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.",
+    "caption_body": "Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.\n\nBuilt a 100% client-side, $0-server web tool for this:\n• $0/mo SaaS Fee · 94% Learner Readiness Tracking\n• 30+ Active Learners & Hourly Rate Calculator\n\nTry it live (no login):\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=x_twitter&utm_medium=micro_blog&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11\n\n#IndieHackers #MicroSaaS #PersonalFinance",
+    "hashtags": [
+      "#IndieHackers",
+      "#MicroSaaS",
+      "#PersonalFinance"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=x_twitter&utm_medium=micro_blog&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_clutch_b2b_saas_h-11.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "naver_google_seo_blog",
+    "channel_name": "Naver Blog & Google SEO/AIO Post (검색·AI 인용 허브)",
+    "platform_type": "search_blog",
+    "delivery_method": "GitHub Pages Static pSEO + IndexNow Instant Ping",
+    "app_id": "clutch_b2b_saas",
+    "hook_id": "H-11",
+    "title_or_first_line": "[2026 완벽 정리] Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.",
+    "caption_body": "## Stop paying $29/month for driving school software. I replaced it with this $0 offline web app.\n\n**핵심 요약 (AI 검색 & 챗GPT 인용 표준 블록)**: 100% Free, Offline-Ready Browser B2B CRM with 5-Skill Mastery Toggles, Lesson Calendar & 1-Click PDF/JSON Backup ($0/mo SaaS Fee · 94% Learner Readiness Tracking)\n\n- 검증 포인트 1: 30+ Active Learners & Hourly Rate Calculator\n- 검증 포인트 2: Instant 5-Stage Driving Skill Mastery Toggles\n- 검증 포인트 3: Zero Cloud Lock-in: LocalStorage + JSON Export\n\n👉 실시간 무료 계산기 바로가기:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=naver_google_seo_blog&utm_medium=search_blog&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11\n\n#SEO #AIO #GEO #공공데이터계산기",
+    "hashtags": [
+      "#SEO",
+      "#AIO",
+      "#GEO",
+      "#공공데이터계산기"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/clutch-driving-instructor.html?utm_source=naver_google_seo_blog&utm_medium=search_blog&utm_campaign=boring_3stage_clutch_b2b_saas&utm_content=h-11",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_clutch_b2b_saas_h-11.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "youtube_shorts",
+    "channel_name": "YouTube Shorts (유튜브 쇼츠)",
+    "platform_type": "short_video",
+    "delivery_method": "YouTube Data API v3 (videos.insert + publishAt)",
+    "app_id": "diviflow_nnn_suite",
+    "hook_id": "H-21",
+    "title_or_first_line": "I asked ChatGPT how much money makes $100/week passive income. Here is t #Shorts",
+    "caption_body": "I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.\n\n✅ Exact Capital-to-Weekly-Cashflow Engine Comparing 4.2% HYSA, 2.97% Dividend ETF DRIP & 7.2% Triple-Net (NNN) Commercial Leases\n📊 핵심 수치: $100/Week Passive Goal = $123,810 @ 4.2% HYSA\n🔗 로그인·광고 없이 3초 만에 무료 계산하기:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=youtube_shorts&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21\n\n#Shorts #PassiveIncome #MicroSaaS #HYSA #WealthStack",
+    "hashtags": [
+      "#Shorts",
+      "#PassiveIncome",
+      "#MicroSaaS",
+      "#HYSA",
+      "#WealthStack"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=youtube_shorts&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_diviflow_nnn_suite_h-21.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "instagram_reels",
+    "channel_name": "Instagram Reels (인스타그램 릴스)",
+    "platform_type": "short_video",
+    "delivery_method": "Meta Graph API v21.0 (/media & /media_publish)",
+    "app_id": "diviflow_nnn_suite",
+    "hook_id": "H-21",
+    "title_or_first_line": "I asked ChatGPT how much money makes $100/week passive income. Here is the exact",
+    "caption_body": "📌 저장해두고 필요할 때 바로 꺼내 쓰세요!\n\nI asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.\n\n• Residential (-$649/mo) vs Commercial NNN (+$2,220/mo) Cashflow Delta\n• 10-Year Dividend DRIP Compounding Simulator\n• 104 Programmatic SEO USD Long-Tail Landing Pages\n\n👉 프로필 하단 링크에서 100% 무료로 즉시 실행됩니다:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=instagram_reels&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21\n\n#Reels #IndieHacker #FinancialFreedom #DividendETF #B2BSaaS",
+    "hashtags": [
+      "#Reels",
+      "#IndieHacker",
+      "#FinancialFreedom",
+      "#DividendETF",
+      "#B2BSaaS"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=instagram_reels&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_diviflow_nnn_suite_h-21.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "tiktok_vertical",
+    "channel_name": "TikTok (틱톡 9:16)",
+    "platform_type": "short_video",
+    "delivery_method": "TikTok Content Posting API v2 (Direct Post)",
+    "app_id": "diviflow_nnn_suite",
+    "hook_id": "H-21",
+    "title_or_first_line": "I asked ChatGPT how much money makes $100/week passive income. Here is the exact math",
+    "caption_body": "POV: I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.\n⚡ $100/Week Passive Goal = $123,810 @ 4.2% HYSA\n🔗 바이오 링크 & 고정 댓글에서 무료 실행:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=tiktok_vertical&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21\n\n#TikTokFinance #MoneyTok #SideHustleMath #DrivingInstructor",
+    "hashtags": [
+      "#TikTokFinance",
+      "#MoneyTok",
+      "#SideHustleMath",
+      "#DrivingInstructor"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=tiktok_vertical&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_diviflow_nnn_suite_h-21.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "naver_clip",
+    "channel_name": "Naver Clip (네이버 클립 · 한국형 숏폼)",
+    "platform_type": "short_video",
+    "delivery_method": "Naver Clip Creator Bundle & Blog Embed Sync",
+    "app_id": "diviflow_nnn_suite",
+    "hook_id": "H-21",
+    "title_or_first_line": "[3초 팩트체크] I asked ChatGPT how much money makes $100/week passive income. H",
+    "caption_body": "I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.\n공식 공공데이터 기반 DiviFlow & PropYield Pro — $100/Week Passive Income Suite에서 내 조건에 맞는 정확한 숫자를 확인하세요.\n🔗 바로가기:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=naver_clip&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21\n\n#NaverClip #GlobalFinance #PassiveCashflow #FreeWebTool",
+    "hashtags": [
+      "#NaverClip",
+      "#GlobalFinance",
+      "#PassiveCashflow",
+      "#FreeWebTool"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=naver_clip&utm_medium=short_video&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_diviflow_nnn_suite_h-21.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "meta_threads",
+    "channel_name": "Meta Threads (스레드 텍스트+영상 스레드)",
+    "platform_type": "micro_blog",
+    "delivery_method": "Threads Publishing API (/threads & /threads_publish)",
+    "app_id": "diviflow_nnn_suite",
+    "hook_id": "H-21",
+    "title_or_first_line": "I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.",
+    "caption_body": "1/ I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.\n\n2/ 대부분 귀찮아서 대충 넘기지만 실제 숫자를 찍어보면 차이가 꽤 큽니다 → $100/Week Passive Goal = $123,810 @ 4.2% HYSA\n\n3/ 앱 설치나 회원가입 없이 모바일 브라우저에서 바로 돌려볼 수 있게 무료 웹 도구로 만들어 두었습니다:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=meta_threads&utm_medium=micro_blog&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21\n\n#Threads #BuildInPublic #BoringMarketing",
+    "hashtags": [
+      "#Threads",
+      "#BuildInPublic",
+      "#BoringMarketing"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=meta_threads&utm_medium=micro_blog&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_diviflow_nnn_suite_h-21.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "x_twitter",
+    "channel_name": "X / Twitter (인디해커·금융 스레드)",
+    "platform_type": "micro_blog",
+    "delivery_method": "X API v2 (POST /2/tweets)",
+    "app_id": "diviflow_nnn_suite",
+    "hook_id": "H-21",
+    "title_or_first_line": "I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.",
+    "caption_body": "I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.\n\nBuilt a 100% client-side, $0-server web tool for this:\n• $100/Week Passive Goal = $123,810 @ 4.2% HYSA\n• Residential (-$649/mo) vs Commercial NNN (+$2,220/mo) Cashflow Delta\n\nTry it live (no login):\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=x_twitter&utm_medium=micro_blog&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21\n\n#IndieHackers #MicroSaaS #PersonalFinance",
+    "hashtags": [
+      "#IndieHackers",
+      "#MicroSaaS",
+      "#PersonalFinance"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=x_twitter&utm_medium=micro_blog&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_diviflow_nnn_suite_h-21.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  },
+  {
+    "channel_id": "naver_google_seo_blog",
+    "channel_name": "Naver Blog & Google SEO/AIO Post (검색·AI 인용 허브)",
+    "platform_type": "search_blog",
+    "delivery_method": "GitHub Pages Static pSEO + IndexNow Instant Ping",
+    "app_id": "diviflow_nnn_suite",
+    "hook_id": "H-21",
+    "title_or_first_line": "[2026 완벽 정리] I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.",
+    "caption_body": "## I asked ChatGPT how much money makes $100/week passive income. Here is the exact math at 4.2% APY.\n\n**핵심 요약 (AI 검색 & 챗GPT 인용 표준 블록)**: Exact Capital-to-Weekly-Cashflow Engine Comparing 4.2% HYSA, 2.97% Dividend ETF DRIP & 7.2% Triple-Net (NNN) Commercial Leases ($100/Week Passive Goal = $123,810 @ 4.2% HYSA)\n\n- 검증 포인트 1: Residential (-$649/mo) vs Commercial NNN (+$2,220/mo) Cashflow Delta\n- 검증 포인트 2: 10-Year Dividend DRIP Compounding Simulator\n- 검증 포인트 3: 104 Programmatic SEO USD Long-Tail Landing Pages\n\n👉 실시간 무료 계산기 바로가기:\nhttps://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=naver_google_seo_blog&utm_medium=search_blog&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21\n\n#SEO #AIO #GEO #공공데이터계산기",
+    "hashtags": [
+      "#SEO",
+      "#AIO",
+      "#GEO",
+      "#공공데이터계산기"
+    ],
+    "tracked_cta_url": "https://dream8837z.github.io/passive-income-microsaas-autopilot/apps/passive-income-planner.html?utm_source=naver_google_seo_blog&utm_medium=search_blog&utm_campaign=boring_3stage_diviflow_nnn_suite&utm_content=h-21",
+    "media_asset_path": "/home/dream8837/.gemini/antigravity/scratch/boring-marketing-autopilot/output/videos/pov_diviflow_nnn_suite_h-21.mp4",
+    "status": "VERIFIED_READY_DRY_RUN"
+  }
+]

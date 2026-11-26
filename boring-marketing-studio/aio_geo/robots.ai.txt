@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Explicit AI Answer Engine & GEO Citation Bots Allowed (Stage 1 Boring Marketing)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+Sitemap: https://dream8837z.github.io/sitemap.xml

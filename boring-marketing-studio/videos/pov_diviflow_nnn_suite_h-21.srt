@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:01,650
+I asked ChatGPT how much money makes $100/week passive
+
+2
+00:00:01,650 --> 00:00:03,300
+income. Here is the exact math at 4.2% APY.
+
+3
+00:00:03,300 --> 00:00:05,050
+① Tap Input: Target: $100/Week ($5,200/Year) Cashflow
+
+4
+00:00:05,050 --> 00:00:06,850
+② Instant Result: Commercial NNN: +$2,220/mo vs Residential: -$649/mo
+
+5
+00:00:06,850 --> 00:00:08,650
+③ Aha! Payoff: 10-Yr Balance: $106,842 · Weekly Dividend Unlocked
+
+6
+00:00:08,650 --> 00:00:10,400
+Tap the pinned link to run this free tool in your browser right now!

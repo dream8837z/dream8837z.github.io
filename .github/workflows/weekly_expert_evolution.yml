@@ -2,8 +2,8 @@ name: Periodic External-Expert Self-Evolution & Upgrade (Mon/Thu KST 08:30)
 
 on:
   schedule:
-    # 매주 월·목 KST 08:30 (UTC 일·수 23:30) — 09:00 프로덕션 실행 30분 전 자율학습·업그레이드
-    - cron: "30 23 * * 0,3"
+    # 매일 2회 (KST 08:30, 20:30 / UTC 23:30, 11:30) 고빈도 자율학습·정책 진화·업그레이드
+    - cron: "30 11,23 * * *"
   workflow_dispatch:
 
 permissions:
