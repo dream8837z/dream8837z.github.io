@@ -1,17 +1,17 @@
 {
-  "policy_version": 5,
-  "generation": 4,
-  "updated_at_kst": "2026-11-27T14:17:07+09:00",
-  "tts_rate_pct": 16,
+  "policy_version": 6,
+  "generation": 5,
+  "updated_at_kst": "2026-11-28T05:13:27+09:00",
+  "tts_rate_pct": 15,
   "caption_max_words": 4,
   "hook_category_weights": {
-    "loss_warning": 1.15,
-    "comparison": 1.18,
-    "info_gap": 1.05,
-    "contrarian": 1.04,
-    "authority_pro": 1.02,
-    "listicle_number": 0.94,
-    "story_empathy": 0.92
+    "loss_warning": 1.14,
+    "comparison": 1.17,
+    "info_gap": 1.04,
+    "contrarian": 1.11,
+    "authority_pro": 1.07,
+    "listicle_number": 0.93,
+    "story_empathy": 0.91
   },
   "active_trend_playbooks": [
     "정보 격차 미공개 비결 + 3편 파일럿 리스크제로 오퍼",
@@ -21,6 +21,6 @@
     "0~2.5초 패턴 인터럽트 훅 배너 + 워터마크 지연",
     "Zero-Gap 무한루프 브릿지 + 1-키워드 DM 콜아웃"
   ],
-  "dm_trigger_keyword": "체크리스트",
-  "last_expert_summary": "[TR-2026-Q4-01] 2026 하반기 쇼츠/릴스 피드에서 4단어 이하 초단문 카라오케와 1.16x 속도가 3초 잔존율을 +14% 개선함."
+  "dm_trigger_keyword": "비교표",
+  "last_expert_summary": "[TR-2026-Q4-02] 전문직(피부과·치과·변호사) B2B 타깃은 통념을 깨는 반전 훅과 실제 데이터 근거 제시 시 DM 전환율이 2.3배 상승함."
 }
